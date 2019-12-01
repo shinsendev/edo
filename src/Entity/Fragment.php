@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Helper\BaseTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,12 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Fragment
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use BaseTrait;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -30,11 +26,6 @@ class Fragment
      * @ORM\Column(type="text", nullable=true)
      */
     private $content;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getCode(): ?string
     {
