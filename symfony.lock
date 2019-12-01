@@ -99,6 +99,9 @@
     "nikic/php-parser": {
         "version": "v4.3.0"
     },
+    "nikolaposa/version": {
+        "version": "3.2.0"
+    },
     "ocramius/package-versions": {
         "version": "1.5.1"
     },
@@ -137,6 +140,9 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "shivas/versioning-bundle": {
+        "version": "3.2.2"
     },
     "symfony/asset": {
         "version": "v4.4.0"
