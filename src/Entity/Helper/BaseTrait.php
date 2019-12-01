@@ -12,8 +12,20 @@ trait BaseTrait
      */
     protected $id;
 
+    /**
+     * @var \DateTime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
     protected $createdAt;
 
+    /**
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
     protected $updatedAt;
 
     /**
