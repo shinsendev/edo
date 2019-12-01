@@ -16,4 +16,5 @@
 
 ###> custom
 /.idea
+.env
 ###> custom
