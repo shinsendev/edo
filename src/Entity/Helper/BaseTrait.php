@@ -2,6 +2,7 @@
 
 namespace App\Entity\Helper;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 
 trait BaseTrait
 {
