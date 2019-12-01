@@ -3,6 +3,9 @@ language: php
 php:
     - '7.3'
 
+addons:
+    postgresql: "12.1"
+
 install:
     - composer install
     - ./bin/phpunit install
