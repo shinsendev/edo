@@ -4,9 +4,13 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Helper\BaseTrait;
+use Doctrine\ORM\Mapping\MappedSuperclass;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ *
+ * @MappedSuperclass
+ * @ORM\HasLifecycleCallbacks
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\FragmentRepository")
  */
@@ -28,6 +32,7 @@ class Fragment
      * @ORM\Column(type="text", nullable=true)
      */
     private $content;
+
 
     public function getCode(): ?string
     {
