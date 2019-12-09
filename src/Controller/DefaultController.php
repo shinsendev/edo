@@ -14,7 +14,6 @@ class DefaultController extends AbstractController
      */
     public function index(VersionManager $manager)
     {
-
         $version = $manager->getVersion();
         $payload = $version;
 
