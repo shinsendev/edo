@@ -5,3 +5,9 @@ test:
 
 start:
 	symfony server:start
+
+diff:
+	php bin/console doctrine:migrations:diff
+
+migrate:
+	php bin/console doctrine:migrations:migrate
