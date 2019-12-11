@@ -5,10 +5,19 @@ namespace App\Component\DataProvider;
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\FragmentDTO as FragmentDTO;
+use App\Entity\Fragment;
+use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 
 final class FragmentCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
         return FragmentDTO::class === $resourceClass;
@@ -20,19 +29,21 @@ final class FragmentCollectionDataProvider implements CollectionDataProviderInte
         //todo : get a collection of fragments and transform them into DTO
 
         // getSource
-        // fromSourceToDTO
-        // expose data
+        $fragments = $this->em->getRepository(Fragment::class)->findBy([], [], 10);
 
-        $uuid1 = Uuid::uuid4();
-        $dto1 = new FragmentDTO();
-        $dto1->setUuid($uuid1);
-        $dto1->setContent('Hellso');
-        $uuid2 = Uuid::uuid4();
-        $dto2 = new FragmentDTO();
-        $dto2->setContent('Bye');
-        $dto2->setUuid($uuid2);
+        foreach ($fragments as $fragment) {
+            $dto = new FragmentDTO();
+            $dto->setTitle($fragment->getTitle());
+            $dto->setCode($fragment->getCode());
+            $dto->setContent($fragment->getContent());
 
-        yield $dto1;
-        yield $dto2;
+            // keep the uuid of the data
+            $uuid = Uuid::uuid4();
+            $uuid->unserialize($fragment->getUuid());
+            $dto->setUuid($uuid);
+
+            yield $dto;
+
+        }
     }
 }
