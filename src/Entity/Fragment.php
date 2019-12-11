@@ -7,13 +7,15 @@ use App\Entity\Helper\TreeEntityTrait;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  *
  * @MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="App\Repository\FragmentRepository")
- * @ApiResource()
+ * @Gedmo\Tree(type="nested")
+ * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  */
 class Fragment
 {
