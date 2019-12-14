@@ -25,10 +25,6 @@ final class FragmentCollectionDataProvider implements CollectionDataProviderInte
 
     public function getCollection(string $resourceClass, string $operationName = null): \Generator
     {
-        // create logic for getting the data from fragment, etc.
-        //todo : get a collection of fragments and transform them into DTO
-
-        // getSource
         $fragments = $this->em->getRepository(Fragment::class)->findBy([], [], 10);
 
         foreach ($fragments as $fragment) {
@@ -43,7 +39,6 @@ final class FragmentCollectionDataProvider implements CollectionDataProviderInte
             $dto->setUuid($uuid);
 
             yield $dto;
-
         }
     }
 }
