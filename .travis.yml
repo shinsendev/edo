@@ -11,6 +11,6 @@ install:
     - composer install
     - ./bin/phpunit install
 
-script:
-    - php bin/console doctrine:database:create --env=test
-    - php bin/console --no-interaction doctrine:schema:update  --force --env=test
+#script:
+#    - php bin/console doctrine:database:create --env=test
+#    - php bin/console --no-interaction doctrine:schema:update  --force --env=test
