@@ -7,5 +7,6 @@ addons:
     postgresql: "12.1"
 
 install:
+    - cp .env.test.dist .env.test
     - composer install
     - ./bin/phpunit install

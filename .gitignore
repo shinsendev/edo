@@ -17,4 +17,5 @@
 ###> custom
 /.idea
 .env
+.env.test
 ###> custom
