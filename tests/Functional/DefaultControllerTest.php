@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Tests;
+declare(strict_types=1);
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+namespace App\Tests\Functional;
 
-class DefaultControllerTest extends WebTestCase
+use App\Tests\EdoWebTestCase;
+
+class DefaultControllerTest extends EdoWebTestCase
 {
     public function testGetDefault()
     {
-        $client = static::createClient();
-        $client->request('GET', '/');
-        $response = $client->getResponse()->getContent();
-
-        $this->assertResponseIsSuccessful();
-        $this->assertEquals('0.1.0', json_decode($response));
+        $response = $this->client->request('GET', $_ENV['EDO_API_URL']);
+        $content = json_decode($response->getContent());
+        $this->assertEquals('0.1.0', $content);
     }
 }
