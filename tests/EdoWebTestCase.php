@@ -9,9 +9,9 @@ class EdoWebTestCase extends WebTestCase
 {
     protected $client;
 
-    public function setUp()
+    public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
-        parent::setUp();
+        parent::__construct($name, $data, $dataName);
         $this->client = HttpClient::create();
     }
 }

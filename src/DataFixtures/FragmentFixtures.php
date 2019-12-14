@@ -10,15 +10,6 @@ class FragmentFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-//        for ($i = 0; $i < 20; $i++) {
-//
-//            $fragment = new Fragment();
-//            $fragment->setCode('fragment '.$i);
-//            $fragment->setTitle('title '.$i);
-//            $fragment->setContent('A simple fragment content.');
-//            $manager->persist($fragment);
-//        }
-
         $fragment = new Fragment();
         $fragment->setCode('parent');
         $fragment->setTitle('title Parent');
