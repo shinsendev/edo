@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Tests\EdoWebTestCase;
+use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 
-class DefaultControllerTest extends EdoWebTestCase
+class DefaultControllerTest extends ApiTestCase
 {
     public function testGetDefault()
     {
-        $response = $this->client->request('GET', $_ENV['EDO_API_URL']);
-        $content = json_decode($response->getContent());
-        $this->assertEquals('0.1.0', $content);
+        $client = self::createClient();
+        $client->request('GET', '/');
+        $this->assertResponseStatusCodeSame(200);
     }
 }
