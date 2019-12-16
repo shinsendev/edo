@@ -7,10 +7,13 @@ namespace App\Tests\Integration;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Ramsey\Uuid\Uuid;
 
 class FragmentResourceTest extends ApiTestCase
 {
+    use ReloadDatabaseTrait;
+
     public function testGetFragments()
     {
         $this->createFragments();
@@ -20,6 +23,9 @@ class FragmentResourceTest extends ApiTestCase
         $this->assertResponseStatusCodeSame(200);
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function createFragments()
     {
         $fragment = new Fragment();
