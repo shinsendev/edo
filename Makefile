@@ -11,3 +11,6 @@ diff:
 
 migrate:
 	php bin/console doctrine:migrations:migrate
+
+fixture:
+	php bin/console doctrine:fixtures:load
