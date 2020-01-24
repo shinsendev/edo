@@ -4,6 +4,7 @@ namespace App\Component\DTO;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
+use App\Entity\Fragment;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -13,7 +14,7 @@ use Ramsey\Uuid\Uuid;
  *     shortName="fragment"
  * )
  */
-class FragmentDTO
+class FragmentOutputDTO
 {
     /**
      * @var Uuid
@@ -21,10 +22,19 @@ class FragmentDTO
      */
     private $uuid;
 
+    /**
+     * @var string
+     */
     private $code;
 
+    /**
+     * @var string
+     */
     private $title;
 
+    /**
+     * @var string
+     */
     private $content;
 
     /**
@@ -91,4 +101,22 @@ class FragmentDTO
         $this->uuid = $uuid;
     }
 
+    /**
+     * @param Fragment $fragment
+     * @return FragmentOutputDTO
+     * @throws \Exception
+     */
+    public function fromEntity(Fragment $fragment):FragmentOutputDTO
+    {
+        $this->setTitle($fragment->getTitle());
+        $this->setCode($fragment->getCode());
+        $this->setContent($fragment->getContent());
+
+        // keep the uuid of the data
+        $uuid = Uuid::uuid4();
+        $uuid->unserialize($fragment->getUuid());
+        $this->setUuid($uuid);
+
+        return $this;
+    }
 }

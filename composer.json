@@ -33,11 +33,11 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "hautelook/alice-bundle": "^2.4",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.14",
-        "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*",
-        "hautelook/alice-bundle": "^2.4"
+        "symfony/profiler-pack": "^1.0",
+        "symfony/test-pack": "*"
     },
     "config": {
         "preferred-install": {
