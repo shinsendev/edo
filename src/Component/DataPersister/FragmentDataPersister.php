@@ -40,8 +40,10 @@ final class FragmentDataPersister implements ContextAwareDataPersisterInterface
         $this->em->persist($fragment);
         $this->em->flush();
 
-        //send back data
-        return $fragment;
+        //send back data with real fragment from database
+        $fragment = $this->em->getRepository(Fragment::class)->findOneByUuid($dto->getUuid());
+        $dto = $dto->fromEntity($fragment);
+        return $dto;
     }
 
     public function remove($data, array $context = [])
