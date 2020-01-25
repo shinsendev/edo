@@ -6,7 +6,7 @@ namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
-use App\Component\DTO\FragmentOutputDTO;
+use App\Component\DTO\FragmentDTO;
 use App\Entity\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -32,7 +32,7 @@ final class FragmentItemDataProvider implements ItemDataProviderInterface, Restr
      */
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return FragmentOutputDTO::class === $resourceClass;
+        return FragmentDTO::class === $resourceClass;
     }
 
     /**
@@ -41,14 +41,14 @@ final class FragmentItemDataProvider implements ItemDataProviderInterface, Restr
      * @param string|null $operationName
      * @param array $context
      *
-     * @return FragmentOutputDTO|null
+     * @return FragmentDTO|null
      * @throws \Exception
      */
-    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?FragmentOutputDTO
+    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?FragmentDTO
     {
         $fragment =  $this->em->getRepository(Fragment::class)->findOneByUuid($id);
 
-        return (new FragmentOutputDTO())->fromEntity($fragment);
+        return (new FragmentDTO())->fromEntity($fragment);
     }
 
 }

@@ -11,15 +11,12 @@ use Ramsey\Uuid\Uuid;
  * Class Fragment
  * @package App\Component\DTO
  * @ApiResource(
- *     shortName="fragmentOutput",
- *     collectionOperations={"get"},
- *     itemOperations={"get"}
+ *     shortName="fragment"
  * )
  */
-class FragmentOutputDTO
+class FragmentDTO
 {
     /**
-     * @var Uuid
      * @ApiProperty(identifier=true)
      */
     private $uuid;
@@ -90,25 +87,25 @@ class FragmentOutputDTO
     /**
      * @return Uuid
      */
-    public function getUuid(): Uuid
+    public function getUuid(): string
     {
         return $this->uuid;
     }
 
     /**
-     * @param Uuid $uuid
+     * @param string $uuid
      */
-    public function setUuid(Uuid $uuid): void
+    public function setUuid(string $uuid): void
     {
         $this->uuid = $uuid;
     }
 
     /**
      * @param Fragment $fragment
-     * @return FragmentOutputDTO
+     * @return FragmentDTO
      * @throws \Exception
      */
-    public function fromEntity(Fragment $fragment):FragmentOutputDTO
+    public function fromEntity(Fragment $fragment):FragmentDTO
     {
         $this->setTitle($fragment->getTitle());
         $this->setCode($fragment->getCode());
@@ -120,5 +117,21 @@ class FragmentOutputDTO
         $this->setUuid($uuid);
 
         return $this;
+    }
+
+    /**
+     * @return Fragment
+     * @throws \Exception
+     */
+    public function toEntity(): Fragment
+    {
+        $fragment = new Fragment();
+
+        $fragment->setCode($this->getCode());
+        $fragment->setTitle($this->getTitle());
+        $fragment->setContent($this->getContent());
+        $fragment->setUuid($this->getUuid());
+
+        return $fragment;
     }
 }

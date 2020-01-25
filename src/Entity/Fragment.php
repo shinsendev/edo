@@ -16,8 +16,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="App\Repository\FragmentRepository")
  * @Gedmo\Tree(type="nested")
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+ *
  */
-class Fragment
+final class Fragment
 {
     use BaseTrait, TreeEntityTrait;
 

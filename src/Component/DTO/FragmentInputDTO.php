@@ -3,8 +3,17 @@
 
 namespace App\Component\DTO;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+
 /**
  * Class FragmentInputDTO
+ *
+ * @ApiResource(
+ *     shortName="fragmentInput",
+ *     collectionOperations={"post"},
+ *     itemOperations={"get"}
+ * )
+ *
  * @package App\Component\DTO
  */
 class FragmentInputDTO

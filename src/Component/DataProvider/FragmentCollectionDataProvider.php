@@ -4,7 +4,7 @@ namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
-use App\Component\DTO\FragmentOutputDTO as FragmentOutputDTO;
+use App\Component\DTO\FragmentDTO;
 use App\Entity\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -23,7 +23,7 @@ final class FragmentCollectionDataProvider implements CollectionDataProviderInte
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return FragmentOutputDTO::class === $resourceClass;
+        return FragmentDTO::class === $resourceClass;
     }
 
     public function getCollection(string $resourceClass, string $operationName = null): \Generator
@@ -31,7 +31,7 @@ final class FragmentCollectionDataProvider implements CollectionDataProviderInte
         $fragments = $this->em->getRepository(Fragment::class)->findBy([], [], 10);
 
         foreach ($fragments as $fragment) {
-            yield (new FragmentOutputDTO())->fromEntity($fragment);
+            yield (new FragmentDTO())->fromEntity($fragment);
         }
     }
 }
