@@ -4,11 +4,14 @@ namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
-use App\Component\DTO\FragmentDTO as FragmentDTO;
+use App\Component\DTO\FragmentDTO;
 use App\Entity\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
-use Ramsey\Uuid\Uuid;
 
+/**
+ * Class FragmentCollectionDataProvider
+ * @package App\Component\DataProvider
+ */
 final class FragmentCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
     private $em;
@@ -28,17 +31,7 @@ final class FragmentCollectionDataProvider implements CollectionDataProviderInte
         $fragments = $this->em->getRepository(Fragment::class)->findBy([], [], 10);
 
         foreach ($fragments as $fragment) {
-            $dto = new FragmentDTO();
-            $dto->setTitle($fragment->getTitle());
-            $dto->setCode($fragment->getCode());
-            $dto->setContent($fragment->getContent());
-
-            // keep the uuid of the data
-            $uuid = Uuid::uuid4();
-            $uuid->unserialize($fragment->getUuid());
-            $dto->setUuid($uuid);
-
-            yield $dto;
+            yield (new FragmentDTO())->fromEntity($fragment);
         }
     }
 }
