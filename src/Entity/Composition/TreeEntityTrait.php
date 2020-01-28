@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Helper;
+namespace App\Entity\Composition;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
