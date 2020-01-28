@@ -1,19 +1,14 @@
 <?php
 
-namespace App\Entity\Helper;
+
+namespace App\Entity\Abstraction;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use Doctrine\ORM\Mapping as ORM;
 
-trait BaseTrait
+class AbstractUniqueEntity extends AbstractBaseEntity
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     */
-    protected $id;
-
     /**
      * @var \DateTime $created
      *
@@ -31,7 +26,8 @@ trait BaseTrait
     protected $updatedAt;
 
     /**
-     * @ORM\Column(type="guid")
+     * @ORM\Column(type="guid", unique=true)
+     *
      */
     protected $uuid;
 

@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Entity\Helper\BaseTrait;
-use App\Entity\Helper\TreeEntityTrait;
+use App\Entity\Abstraction\AbstractUniqueEntity;
+use App\Entity\Composition\TreeEntityTrait;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,9 +18,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  *
  */
-final class Fragment
+final class Fragment extends AbstractUniqueEntity
 {
-    use BaseTrait, TreeEntityTrait;
+    use TreeEntityTrait;
 
     /**
      * @ORM\Column(type="text", nullable=true)
