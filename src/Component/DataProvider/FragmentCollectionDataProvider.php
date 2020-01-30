@@ -5,8 +5,7 @@ namespace App\Component\DataProvider;
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\FragmentDTO;
-use App\Entity\Fragment;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\FragmentRepository;
 
 /**
  * Class FragmentCollectionDataProvider
@@ -14,13 +13,20 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 final class FragmentCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
-    private $em;
+    /** @var FragmentRepository  */
+    private $fragmentRepository;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(FragmentRepository $fragmentRepository)
     {
-        $this->em = $em;
+        $this->fragmentRepository = $fragmentRepository;
     }
 
+    /**
+     * @param string $resourceClass
+     * @param string|null $operationName
+     * @param array $context
+     * @return bool
+     */
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
         return FragmentDTO::class === $resourceClass;
@@ -28,7 +34,7 @@ final class FragmentCollectionDataProvider implements CollectionDataProviderInte
 
     public function getCollection(string $resourceClass, string $operationName = null): \Generator
     {
-        $fragments = $this->em->getRepository(Fragment::class)->findBy([], [], 10);
+        $fragments = $this->fragmentRepository->findAllDistinctFragments(10);
 
         foreach ($fragments as $fragment) {
             yield (new FragmentDTO())->fromEntity($fragment);
