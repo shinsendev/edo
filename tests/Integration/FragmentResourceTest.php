@@ -54,7 +54,25 @@ class FragmentResourceTest extends ApiTestCase
 
     public function testPostFragment()
     {
-        //
+        $container = static::$container;
+        $em = $container->get(EntityManagerInterface::class);
+
+        // before we created our fragment, we have 3 fragments in db
+        $this->assertEquals(3, count($em->getRepository(Fragment::class)->findAll()));
+
+        $data = '{"uuid":"57f107f2-a4cb-4b2d-862e-5c5fd8cf853e","code":"1","title":"First post test","content":"My first content with postman"}';
+
+        $response =  $this->client->request('POST', 'api/fragments', [
+            'json' => json_decode($data),
+            'headers' => ['Content-Type' => 'application/json']
+        ]);
+
+        $arrayResponse = $response->toArray();
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals('My first content with postman', $arrayResponse['content']);
+
+        // we check that we have added another fragment
+        $this->assertEquals(4, count($em->getRepository(Fragment::class)->findAll()));
     }
 
     /**
