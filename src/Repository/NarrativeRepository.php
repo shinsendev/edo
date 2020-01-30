@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Narrative;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**
  * @method Narrative|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,25 @@ class NarrativeRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Narrative::class);
+    }
+
+    public function findAllNarrativesLastFragments(int $limit)
+    {
+        // just a little check to be sure, will need to be refacto and upgrade later
+        if ($limit > 100) {
+            $limit = 100;
+        };
+
+        // we get the last fragment for each code
+        $sql = "SELECT * FROM narrative n LIMIT ".$limit;
+
+        // we map with a ResultSetMapping our result to a PHP Entity
+        $rsm = new ResultSetMappingBuilder($this->getEntityManager());
+        $rsm->addRootEntityFromClassMetadata(Narrative::class, 'fn');
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+
+        // we get the result as usual
+        return $query->getResult();
     }
 
     // /**

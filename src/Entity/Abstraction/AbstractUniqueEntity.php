@@ -7,6 +7,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Class AbstractUniqueEntity
+ * @package App\Entity\Abstraction
+ *
+ * @ORM\HasLifecycleCallbacks()
+ */
 class AbstractUniqueEntity extends AbstractBaseEntity
 {
     /**

@@ -3,41 +3,22 @@
 namespace App\Entity;
 
 use App\Entity\Abstraction\AbstractUniqueEntity;
-use App\Entity\Composition\TreeEntityTrait;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- *
- * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="App\Repository\FragmentRepository")
- * @Gedmo\Tree(type="nested")
- * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  */
-final class Fragment extends AbstractUniqueEntity
+class Fragment extends AbstractUniqueEntity
 {
-    use TreeEntityTrait;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $code;
-
-    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $content;
-
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
 
     /**
      * @return mixed
@@ -53,13 +34,6 @@ final class Fragment extends AbstractUniqueEntity
     public function setTitle($title): void
     {
         $this->title = $title;
-    }
-
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
-
-        return $this;
     }
 
     public function getContent(): ?string
