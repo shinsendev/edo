@@ -28,7 +28,10 @@ class NarrativeRepository extends ServiceEntityRepository
         };
 
         // we get the last fragment for each code
-        $sql = "SELECT * FROM narrative n LIMIT ".$limit;
+        $sql = "SELECT f.* FROM fragment f
+    INNER JOIN qualification q ON q.fragment_id = f.id
+    INNER JOIN narrative n ON q.selected_uuid = n.uuid
+    ORDER BY f.created_at, f.id DESC LIMIT ".$limit;
 
         // we map with a ResultSetMapping our result to a PHP Entity
         $rsm = new ResultSetMappingBuilder($this->getEntityManager());
@@ -38,33 +41,4 @@ class NarrativeRepository extends ServiceEntityRepository
         // we get the result as usual
         return $query->getResult();
     }
-
-    // /**
-    //  * @return Narrative[] Returns an array of Narrative objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('n.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Narrative
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
