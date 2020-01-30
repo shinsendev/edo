@@ -32,6 +32,12 @@ final class FragmentCollectionDataProvider implements CollectionDataProviderInte
         return FragmentDTO::class === $resourceClass;
     }
 
+    /**
+     * @param string $resourceClass
+     * @param string|null $operationName
+     * @return \Generator
+     * @throws \Exception
+     */
     public function getCollection(string $resourceClass, string $operationName = null): \Generator
     {
         $fragments = $this->fragmentRepository->findAllDistinctFragments(10);

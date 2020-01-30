@@ -16,7 +16,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="App\Repository\FragmentRepository")
  * @Gedmo\Tree(type="nested")
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
- *
  */
 final class Fragment extends AbstractUniqueEntity
 {
@@ -36,7 +35,6 @@ final class Fragment extends AbstractUniqueEntity
      * @ORM\Column(type="text", nullable=true)
      */
     private $content;
-
 
     public function getCode(): ?string
     {
