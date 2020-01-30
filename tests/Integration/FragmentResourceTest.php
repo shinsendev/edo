@@ -14,19 +14,35 @@ class FragmentResourceTest extends ApiTestCase
 {
     use ReloadDatabaseTrait;
 
-    public function testGetFragments()
+    private $client;
+
+    public function setUp()
     {
-        // create client first
-        $client = static::createClient();
-
-        // add some data
+        parent::setUp();
+        $this->client = static::createClient();
+        // create fragments fake data
         $this->createFragments();
+    }
 
+    public function testGetFragmentItem()
+    {
+        // send GET request for one specific fragment
+        $uuid = '35be83ef-a35a-4b8f-b59c-4aca2ce461b2';
+
+        $response = $this->client->request('GET', 'api/fragments/'.$uuid);
+
+        $this->assertResponseIsSuccessful();
+        $arrayResponse = $response->toArray();
+        $this->assertEquals('Some content', $arrayResponse['content']);
+        $this->assertEquals('1234', $arrayResponse['code']);
+    }
+
+    public function testGetFragmentsCollection()
+    {
         // send GET request
-        $response =  $client->request('GET', 'api/fragments', [
+        $response =  $this->client->request('GET', 'api/fragments', [
             'headers' => ['Content-Type' => 'application/json']
         ]);
-
 
         // test the fragments, 3 fragments are created but only two should be displayed (one for each code)
         $this->assertResponseIsSuccessful();
@@ -34,6 +50,11 @@ class FragmentResourceTest extends ApiTestCase
         $this->assertCount(2, $arrayResponse['hydra:member']);
         $this->assertEquals('Another Title', $arrayResponse['hydra:member'][0]['title']);
         $this->assertEquals('12345', $arrayResponse['hydra:member'][1]['code']);
+    }
+
+    public function testPostFragment()
+    {
+        //
     }
 
     /**
@@ -56,8 +77,8 @@ class FragmentResourceTest extends ApiTestCase
         // we add 30 seconds to the fragment creation date to be sur it is the last one
         $fragment2->setCreatedAt($now->add(new \DateInterval('PT30S')));
         $fragment2->setUpdatedAt($now->add(new \DateInterval('PT30S')));
-        $uuid2 = Uuid::uuid4();
-        $fragment2->setUuid($uuid2);
+        // we fix an uuid for this fragment
+        $fragment->setUuid('35be83ef-a35a-4b8f-b59c-4aca2ce461b2');
 
         $fragment3 = new Fragment();
         $fragment3->setTitle('Title 2');
