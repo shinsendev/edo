@@ -4,14 +4,12 @@ namespace App\Entity;
 
 use App\Entity\Abstraction\AbstractUniqueEntity;
 use App\Entity\Composition\TreeEntityTrait;
-use Doctrine\ORM\Mapping\MappedSuperclass;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  *
- * @MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="App\Repository\FragmentRepository")
  * @Gedmo\Tree(type="nested")
