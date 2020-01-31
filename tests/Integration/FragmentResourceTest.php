@@ -7,23 +7,10 @@ namespace App\Tests\Integration;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
-use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Ramsey\Uuid\Uuid;
 
-class FragmentResourceTest extends ApiTestCase
+class FragmentResourceTest extends EdoApiTestCase
 {
-    use ReloadDatabaseTrait;
-
-    private $client;
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->client = static::createClient();
-        // create fragments fake data
-        $this->createFragments();
-    }
-
     public function testGetFragmentItem()
     {
         // send GET request for one specific fragment

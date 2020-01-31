@@ -38,6 +38,7 @@ class Qualification
      */
     private $fragment;
 
+
     /**
      * @return mixed
      */
@@ -84,22 +85,6 @@ class Qualification
     public function setFragment($fragment): void
     {
         $this->fragment = $fragment;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param mixed $type
-     */
-    public function setType($type): void
-    {
-        $this->type = $type;
     }
 
 }
