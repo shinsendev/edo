@@ -7,8 +7,8 @@ use App\Entity\Abstraction\AbstractUniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\NarrativeRepository")
  * @Gedmo\Tree(type="nested")
+ * @ORM\Entity(repositoryClass="App\Repository\NarrativeRepository")
  */
 class Narrative extends AbstractUniqueEntity
 {
@@ -146,4 +146,5 @@ class Narrative extends AbstractUniqueEntity
     {
         $this->children = $children;
     }
+
 }

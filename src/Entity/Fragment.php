@@ -21,6 +21,11 @@ class Fragment extends AbstractUniqueEntity
     private $content;
 
     /**
+     * @ORM\OneToMany(targetEntity="Qualification", mappedBy="fragment")
+     */
+    private $qualifications;
+
+    /**
      * @return mixed
      */
     public function getTitle()

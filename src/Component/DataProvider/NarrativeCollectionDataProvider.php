@@ -42,7 +42,9 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
      */
     public function getCollection(string $resourceClass, string $operationName = null): \Generator
     {
-        $fragments = $this->repository->findAllNarrativesLastFragments(10);
+        $narratives = $this->repository->findAllNarrativesLastFragments(10);
+
+        dd($narratives);
 
         foreach ($fragments as $fragment) {
             yield (new NarrativeDTO())->fromEntity($fragment);

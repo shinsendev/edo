@@ -22,13 +22,21 @@ class Qualification
      * @ORM\Column(type="guid")
      * @ORM\Id()
      */
-    protected $selectedUuid;
+    private $selectedUuid;
+
+    /**
+     * @ORM\Column(
+     *     type="string",
+     *     options={"comment": "Selected Type, for instance : narrative, character, etc."}
+     * )
+     */
+    private $selectedType;
 
     /**
      * @ORM\ManyToOne(targetEntity="Fragment", inversedBy="qualifications")
      * @ORM\Id()
      */
-    protected $fragment;
+    private $fragment;
 
     /**
      * @return mixed
@@ -49,6 +57,22 @@ class Qualification
     /**
      * @return mixed
      */
+    public function getSelectedType()
+    {
+        return $this->selectedType;
+    }
+
+    /**
+     * @param mixed $selectedType
+     */
+    public function setSelectedType($selectedType): void
+    {
+        $this->selectedType = $selectedType;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getFragment()
     {
         return $this->fragment;
@@ -61,4 +85,21 @@ class Qualification
     {
         $this->fragment = $fragment;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param mixed $type
+     */
+    public function setType($type): void
+    {
+        $this->type = $type;
+    }
+
 }

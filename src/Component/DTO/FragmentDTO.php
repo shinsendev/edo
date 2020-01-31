@@ -2,29 +2,23 @@
 
 namespace App\Component\DTO;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
+use App\Component\DTO\Composition\DatableTrait;
 use App\Entity\Fragment;
 use Ramsey\Uuid\Uuid;
 
 /**
  * Class Fragment
  * @package App\Component\DTO
- * @ApiResource(
- *     shortName="fragment"
- * )
  */
 class FragmentDTO
 {
+    use DatableTrait;
+
     /**
      * @ApiProperty(identifier=true)
      */
     private $uuid;
-
-    /**
-     * @var string
-     */
-    private $code;
 
     /**
      * @var string
@@ -35,22 +29,6 @@ class FragmentDTO
      * @var string
      */
     private $content;
-
-    /**
-     * @return mixed
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param mixed $code
-     */
-    public function setCode($code): void
-    {
-        $this->code = $code;
-    }
 
     /**
      * @return mixed
@@ -108,7 +86,6 @@ class FragmentDTO
     public function fromEntity(Fragment $fragment):FragmentDTO
     {
         $this->setTitle($fragment->getTitle());
-        $this->setCode($fragment->getCode());
         $this->setContent($fragment->getContent());
 
         // keep the uuid of the data
@@ -127,7 +104,6 @@ class FragmentDTO
     {
         $fragment = new Fragment();
 
-        $fragment->setCode($this->getCode());
         $fragment->setTitle($this->getTitle());
         $fragment->setContent($this->getContent());
         $fragment->setUuid($this->getUuid());
