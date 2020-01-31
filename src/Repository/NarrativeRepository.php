@@ -2,13 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Fragment;
 use App\Entity\Narrative;
-use App\Entity\Qualification;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
@@ -24,29 +19,8 @@ class NarrativeRepository extends NestedTreeRepository
         parent::__construct($manager, $manager->getClassMetadata(Narrative::class));
     }
 
-    public function findNarrativeWithLastFragment(string $narrativeId)
-    {
-        $connection = $this->getEntityManager()->getConnection();
-
-        $sql = '
-            SELECT n.*, f.title, f.content FROM narrative n
-                INNER JOIN qualification q ON n.uuid = q.selected_uuid
-                INNER JOIN fragment f ON f.id = q.fragment_id
-                WHERE n.id = :id
-                ORDER BY f.updated_at DESC
-                LIMIT 1
-        ';
-
-        $stmt = $connection->prepare($sql);
-        $stmt->execute(array('id' => $narrativeId));
-
-        return $stmt->fetch();
-    }
-
     public function findNarrativeWithFragments(string $narrativeId)
     {
-        $connection = $this->getEntityManager()->getConnection();
-
         //we get by default the last 25 fragments
         $sql = '
                 SELECT n.*, f.title, f.content, f.uuid as fragment_uuid FROM narrative n
@@ -57,32 +31,36 @@ class NarrativeRepository extends NestedTreeRepository
             LIMIT 25
         ';
 
-        $stmt = $connection->prepare($sql);
-        $stmt->execute(array('id' => $narrativeId));
+        $stmt = $this->createCustomStatement($sql, ['id' => $narrativeId]);
 
         return $stmt->fetchAll();
-
     }
 
-    public function findAllNarrativesLastFragments(int $limit)
+    public function findNarrativesCollectionWithLastFragments()
     {
-        // just a little check to be sure, will need to be refacto and upgrade later
-        if ($limit > 100) {
-            $limit = 100;
-        };
+        $sql = '
+            SELECT DISTINCT ON (n.id) n.*, f.title, f.content, f.uuid as fragment_uuid FROM narrative n
+    INNER JOIN qualification q ON n.uuid = q.selected_uuid
+    INNER JOIN fragment f ON f.id = q.fragment_id ORDER BY n.id, f.updated_at DESC;
+        ';
 
-        // we get the last fragment for each code
-        $sql = "SELECT f.* FROM fragment f
-    INNER JOIN qualification q ON q.fragment_id = f.id
-    INNER JOIN narrative n ON q.selected_uuid = n.uuid
-    ORDER BY f.created_at, f.id DESC LIMIT ".$limit;
+        $stmt = $this->createCustomStatement($sql);
 
-        // we map with a ResultSetMapping our result to a PHP Entity
-        $rsm = new ResultSetMappingBuilder($this->getEntityManager());
-        $rsm->addRootEntityFromClassMetadata(Narrative::class, 'fn');
-        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        return $stmt->fetchAll();
+    }
 
-        // we get the result as usual
-        return $query->getResult();
+    /**
+     * @param string $sql
+     * @param array $options
+     * @return \Doctrine\DBAL\Driver\Statement
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    private function createCustomStatement(string $sql, array $options = [])
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $stmt = $connection->prepare($sql);
+        $stmt->execute($options);
+
+        return $stmt;
     }
 }

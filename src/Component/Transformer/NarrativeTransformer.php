@@ -12,7 +12,7 @@ class NarrativeTransformer
      * @param array $narratives
      * @return NarrativeDTO
      */
-    public function createNarrativeDTOFromSQLFetchAll(array $narratives)
+    public static function createNarrativeDTOFromSQLFetchAll(array $narratives)
     {
         $narrativeDTO = new NarrativeDTO();
 
