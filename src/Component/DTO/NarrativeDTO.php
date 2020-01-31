@@ -6,6 +6,7 @@ namespace App\Component\DTO;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Component\DTO\Composition\DatableTrait;
+use App\Component\DTO\Composition\TreeableTrait;
 
 /**
  * Class NarrativeDTO
@@ -16,7 +17,7 @@ use App\Component\DTO\Composition\DatableTrait;
  */
 class NarrativeDTO
 {
-    use DatableTrait;
+    use DatableTrait, TreeableTrait;
 
     /**
      * @ApiProperty(identifier=true)
@@ -89,7 +90,7 @@ class NarrativeDTO
     /**
      * @return FragmentDTO[]
      */
-    public function getFragments(): array
+    public function getFragments(): ?array
     {
         return $this->fragments;
     }

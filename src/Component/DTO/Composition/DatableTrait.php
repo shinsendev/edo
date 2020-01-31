@@ -3,6 +3,10 @@
 
 namespace App\Component\DTO\Composition;
 
+/**
+ * Trait DatableTrait
+ * @package App\Component\DTO\Composition
+ */
 trait DatableTrait
 {
     /**

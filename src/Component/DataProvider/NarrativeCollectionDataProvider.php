@@ -46,7 +46,7 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
         $narratives = $this->repository->findNarrativesCollectionWithLastFragments(10);
 
         foreach ($narratives as $narrative) {
-            yield NarrativeTransformer::createNarrativeDTOFromSQLFetchAll($narratives);
+            yield NarrativeTransformer::createNarrativeDTOFromSQLSingleResult($narrative);
         }
     }
 }
