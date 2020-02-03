@@ -1,49 +1,25 @@
 <?php
 
-namespace App\Entity\Composition;
 
-use Gedmo\Mapping\Annotation as Gedmo;
+namespace App\Component\DTO\Composition;
 
-trait TreeEntityTrait
+/**
+ * Trait TreeableTrait
+ * @package App\Component\DTO\Composition
+ */
+trait TreeableTrait
 {
-    /**
-     * @Gedmo\TreeLeft
-     * @ORM\Column(name="lft", type="integer")
-     */
-    private $lft;
+    protected $lft;
 
-    /**
-     * @Gedmo\TreeLevel
-     * @ORM\Column(name="lvl", type="integer")
-     */
-    private $lvl;
+    protected $lvl;
 
-    /**
-     * @Gedmo\TreeRight
-     * @ORM\Column(name="rgt", type="integer")
-     */
-    private $rgt;
+    protected $rgt;
 
-    /**
-     * @Gedmo\TreeRoot
-     * @ORM\ManyToOne(targetEntity="Fragment")
-     * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $root;
+    protected $root;
 
-    /**
-     * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Fragment", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $parent;
+    protected $parent;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Fragment", mappedBy="parent")
-     * @ORM\OrderBy({"lft" = "ASC"})
-     */
-    private $children;
-
+    protected $children;
 
     /**
      * @return mixed
@@ -140,4 +116,5 @@ trait TreeEntityTrait
     {
         $this->children = $children;
     }
+
 }
