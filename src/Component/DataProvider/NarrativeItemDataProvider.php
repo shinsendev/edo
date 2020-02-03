@@ -50,7 +50,9 @@ final class NarrativeItemDataProvider implements ItemDataProviderInterface, Rest
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?NarrativeDTO
     {
-        $narrative =  $this->repository->findOneByUuid($id);
+        if (!$narrative = $this->repository->findOneByUuid($id)) {
+            throw new NotFoundHttpException("Item not found for uuid " . $id);
+        }
 
         // convert narrative into Narrative DTO
         $narrativeDTO = new NarrativeDTO();
