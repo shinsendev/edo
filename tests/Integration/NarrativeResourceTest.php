@@ -43,6 +43,20 @@ class NarrativeResourceTest extends EdoApiTestCase
         $this->assertNotNull($arrayResponse['hydra:member'][1]['uuid']);
     }
 
+    public function testGetNarrativeNotAUUID()
+    {
+        $uuid = 'toto';
+        $response = $this->client->request('GET', 'api/narratives/'.$uuid);
+        $this->assertResponseStatusCodeSame(500);
+    }
+
+    public function testGetNarrativeUnkwnonUUID()
+    {
+        $uuid = '9f6e6490-85f3-4d4e-82fd-e725a884fd8e';
+        $response = $this->client->request('GET', 'api/narratives/'.$uuid);
+        $this->assertResponseStatusCodeSame(404);
+    }
+
     //    public function testPostFragment()
 //    {
 //        $container = static::$container;
