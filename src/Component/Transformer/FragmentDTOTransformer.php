@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Component\Transformer;
 
 use App\Component\DTO\FragmentDTO;
+use App\Component\DTO\NarrativeDTO;
+use App\Entity\Fragment;
 
 /**
- * Class FragmentTransformer
+ * Class FragmentDTOTransformer
  * @package App\Component\Transformer
  */
-class FragmentTransformer
+class FragmentDTOTransformer
 {
     /**
      * @param array $narrative
@@ -22,9 +25,18 @@ class FragmentTransformer
         $fragmentDTO->setContent($narrative['content']);
         $fragmentDTO->setUuid($narrative['uuid']);
         $fragmentDTO->setCreatedAt($narrative['created_at']);
-        $fragmentDTO->setUpdatedAt($narrative['updated_at']);
         $fragmentDTO->setUuid($narrative['fragment_uuid']);
 
         return $fragmentDTO;
     }
+
+    public static function toEntity(NarrativeDTO $narrativeDTO)
+    {
+        $fragment = new Fragment();
+        $fragment->setTitle($narrativeDTO->getTitle());
+        $fragment->setContent($narrativeDTO->getContent());
+
+        return $fragment;
+    }
+
 }

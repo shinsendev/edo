@@ -1,17 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Component\DTO;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Component\DTO\Composition\DatableTrait;
-use App\Entity\Fragment;
 use Ramsey\Uuid\Uuid;
 
 /**
  * Class Fragment
  * @package App\Component\DTO
  */
-class FragmentDTO
+class FragmentDTO implements DTOInterface
 {
     use DatableTrait;
 
@@ -76,38 +77,5 @@ class FragmentDTO
     public function setUuid(string $uuid): void
     {
         $this->uuid = $uuid;
-    }
-
-    /**
-     * @param Fragment $fragment
-     * @return FragmentDTO
-     * @throws \Exception
-     */
-    public function fromEntity(Fragment $fragment):FragmentDTO
-    {
-        $this->setTitle($fragment->getTitle());
-        $this->setContent($fragment->getContent());
-
-        // keep the uuid of the data
-        $uuid = Uuid::uuid4();
-        $uuid->unserialize($fragment->getUuid());
-        $this->setUuid($uuid);
-
-        return $this;
-    }
-
-    /**
-     * @return Fragment
-     * @throws \Exception
-     */
-    public function toEntity(): Fragment
-    {
-        $fragment = new Fragment();
-
-        $fragment->setTitle($this->getTitle());
-        $fragment->setContent($this->getContent());
-        $fragment->setUuid($this->getUuid());
-
-        return $fragment;
     }
 }

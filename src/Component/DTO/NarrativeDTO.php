@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Component\DTO;
 
@@ -7,6 +8,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Component\DTO\Composition\DatableTrait;
 use App\Component\DTO\Composition\TreeableTrait;
+use App\Component\DTO\Composition\UpdatableTrait;
 
 /**
  * Class NarrativeDTO
@@ -15,9 +17,9 @@ use App\Component\DTO\Composition\TreeableTrait;
  *     shortName="narrative"
  * )
  */
-class NarrativeDTO
+class NarrativeDTO implements DTOInterface
 {
-    use DatableTrait, TreeableTrait;
+    use DatableTrait, UpdatableTrait, TreeableTrait;
 
     /**
      * @ApiProperty(identifier=true)

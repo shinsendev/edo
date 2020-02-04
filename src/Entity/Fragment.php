@@ -53,4 +53,20 @@ class Fragment extends AbstractUniqueEntity
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getQualifications()
+    {
+        return $this->qualifications;
+    }
+
+    /**
+     * @param mixed $qualifications
+     */
+    public function setQualifications($qualifications): void
+    {
+        $this->qualifications = $qualifications;
+    }
+
 }
