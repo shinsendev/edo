@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Component\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Component\DTO\FragmentDTO;
 use App\Component\DTO\NarrativeDTO;
+use App\Component\Narrative\NarrativeUpdater;
 use App\Component\Transformer\NarrativeDTOTransformer;
 use App\Entity\Fragment;
+use App\Repository\NarrativeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -16,38 +19,50 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
 {
-    /** @var EntityManagerInterface  */
-    private $em;
+    /** @var NarrativeRepository  */
+    private $repository;
+
+    /** @var NarrativeUpdater  */
+    private $updater;
 
     /**
-     * FragmentItemDataProvider constructor.
-     * @param EntityManagerInterface $em
+     * NarrativeDataPersister constructor.
+     * @param NarrativeRepository $repository
+     * @param NarrativeUpdater $updater
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(NarrativeRepository $repository, NarrativeUpdater $updater)
     {
-        $this->em = $em;
+        $this->repository = $repository;
+        $this->updater = $updater;
     }
 
+    /**
+     * @param $data
+     * @param array $context
+     * @return bool
+     */
     public function supports($data, array $context = []): bool
     {
         return $data instanceof NarrativeDTO;
     }
 
+    /**
+     * @param $dto
+     * @param array $context
+     * @return object|void
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function persist($dto, array $context = [])
     {
-        $narrative = NarrativeDTOTransformer::createEntityFromDTO($dto);
+        if (!$narrative = $this->repository->findOneByUuid($dto->getUuid())) {
+            // this is an insert
+        }
+        else {
+            //this is an update
+            $this->updater->update($dto, $narrative);
+        }
 
-        dd('Narrative from persist');
-        // call your persistence layer to save $data
-        $fragment = $dto->toEntity();
-
-        // persist $fragment
-        $this->em->persist($fragment);
-        $this->em->flush();
-
-        //send back data with real fragment from database
-        $fragment = $this->em->getRepository(Fragment::class)->findOneByUuid($dto->getUuid());
-        $dto = $dto->fromEntity($fragment);
         return $dto;
     }
 

@@ -4,9 +4,11 @@
 namespace App\Component\Transformer;
 
 
+use App\Component\DTO\DTOInterface;
 use App\Component\DTO\NarrativeDTO;
+use App\Entity\Narrative;
 
-class NarrativeDTOTransformer
+class NarrativeDTOTransformer implements TransformerInterface
 {
     /**
      * @param array $narratives
@@ -19,6 +21,16 @@ class NarrativeDTOTransformer
         $narrativeDTO = NarrativeDTOTransformer::addFragments($narratives, $narrativeDTO);
 
         return $narrativeDTO;
+    }
+
+    public static function toEntity(DTOInterface $dto)
+    {
+        $narrative = new Narrative();
+        $narrative->setUuid($dto->getUuid());
+//        $narrative->setTitle($dto->getContent());
+//        $narrative->setContent($dto->getContent());
+        dd($narrative);
+        return $narrative;
     }
 
     /**

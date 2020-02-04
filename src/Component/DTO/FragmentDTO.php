@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Component\DTO;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
@@ -11,7 +13,7 @@ use Ramsey\Uuid\Uuid;
  * Class Fragment
  * @package App\Component\DTO
  */
-class FragmentDTO
+class FragmentDTO implements DTOInterface
 {
     use DatableTrait;
 

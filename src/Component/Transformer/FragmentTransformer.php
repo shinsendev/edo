@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Component\Transformer;
 
@@ -22,7 +23,6 @@ class FragmentTransformer
         $fragmentDTO->setContent($narrative['content']);
         $fragmentDTO->setUuid($narrative['uuid']);
         $fragmentDTO->setCreatedAt($narrative['created_at']);
-        $fragmentDTO->setUpdatedAt($narrative['updated_at']);
         $fragmentDTO->setUuid($narrative['fragment_uuid']);
 
         return $fragmentDTO;
