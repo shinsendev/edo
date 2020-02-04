@@ -8,11 +8,12 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\FragmentDTO;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\Transformer\NarrativeTransformer;
+use App\Component\Transformer\NarrativeDTOTransformer;
 use App\Entity\Fragment;
 use App\Entity\Narrative;
 use App\Repository\NarrativeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class NarrativeItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
@@ -63,7 +64,7 @@ final class NarrativeItemDataProvider implements ItemDataProviderInterface, Rest
         $narratives = $this->repository->findNarrativeWithFragments($narrative->getId());
 
         // create DTO with multiple fragments
-        return NarrativeTransformer::createNarrativeDTOFromSQLFetchAll($narratives);
+        return NarrativeDTOTransformer::fromArray($narratives);
     }
 
 

@@ -6,7 +6,7 @@ use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\FragmentDTO;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\Transformer\NarrativeTransformer;
+use App\Component\Transformer\NarrativeDTOTransformer;
 use App\Repository\FragmentRepository;
 use App\Repository\NarrativeRepository;
 
@@ -46,7 +46,7 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
         $narratives = $this->repository->findNarrativesCollectionWithLastFragments(10);
 
         foreach ($narratives as $narrative) {
-            yield NarrativeTransformer::createNarrativeDTOFromSQLSingleResult($narrative);
+            yield NarrativeDTOTransformer::fromArrayWithoutFragments($narrative);
         }
     }
 }
