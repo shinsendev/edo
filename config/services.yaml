@@ -34,5 +34,6 @@ services:
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
 
-    App\Component\Narrative\NarrativeUpdater:
-        arguments: ['@doctrine.orm.default_entity_manager']
+    App\Component\Selected\Narrative\NarrativeUpdater:
+        arguments:
+        - '@doctrine.orm.default_entity_manager'

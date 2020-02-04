@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace App\Component\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
-use App\Component\DTO\FragmentDTO;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\Narrative\NarrativeUpdater;
-use App\Component\Transformer\NarrativeDTOTransformer;
-use App\Entity\Fragment;
+use App\Component\Selected\Narrative\NarrativeUpdater;
 use App\Repository\NarrativeRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class FragmentDataPersister

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Component\Narrative;
+namespace App\Component\Selected\Narrative;
 
 use App\Component\Date\DateConverter;
 use App\Component\DTO\NarrativeDTO;
+use App\Component\Fragment\FragmentCreator;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManager;
 
@@ -18,6 +19,10 @@ class NarrativeUpdater
     /** @var EntityManager  */
     private $em;
 
+    /**
+     * NarrativeUpdater constructor.
+     * @param EntityManager $em
+     */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
@@ -34,7 +39,13 @@ class NarrativeUpdater
      */
     public function update(NarrativeDTO $narrativeDTO, Narrative $narrative)
     {
-        $this->handleNarrative($narrativeDTO, $narrative);
+        $this->updateNarrative($narrativeDTO, $narrative);
+        $fragment = FragmentCreator::createFragment($narrativeDTO);
+        $this->saveEntity($fragment);
+
+        $qualification = FragmentCreator::createQualification($fragment, $narrative->getUuid());
+        $this->saveEntity($qualification);
+
         return $this->createResponse($narrativeDTO, $narrative);
     }
 
@@ -44,7 +55,7 @@ class NarrativeUpdater
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function handleNarrative(NarrativeDTO $dto, Narrative $narrative)
+    private function updateNarrative(NarrativeDTO $dto, Narrative $narrative)
     {
         // update tree hierarchy with $narrativeDTO
         //todo : to implement
@@ -59,14 +70,10 @@ class NarrativeUpdater
     }
 
     /**
-     * @param NarrativeDTO $narrativeDTO
+     * @param NarrativeDTO $dto
      * @param Narrative $narrative
+     * @return NarrativeDTO
      */
-    private function handleFragments(NarrativeDTO $narrativeDTO, Narrative $narrative)
-    {
-        //todo: to implement
-    }
-
     private function createResponse(NarrativeDTO $dto, Narrative $narrative)
     {
         //from entity to DTO
@@ -74,6 +81,17 @@ class NarrativeUpdater
         $dto->setUpdatedAt(DateConverter::stringifyDatetime($narrative->getUpdatedAt()));
 
         return $dto;
+    }
+
+    /**
+     * @param $entity
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private function saveEntity($entity)
+    {
+        $this->em->persist($entity);
+        $this->em->flush();
     }
 
 }
