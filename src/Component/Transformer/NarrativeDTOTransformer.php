@@ -27,9 +27,13 @@ class NarrativeDTOTransformer implements TransformerInterface
     {
         $narrative = new Narrative();
         $narrative->setUuid($dto->getUuid());
-//        $narrative->setTitle($dto->getContent());
-//        $narrative->setContent($dto->getContent());
-        dd($narrative);
+
+        // set datetimes
+        $narrative->setCreatedAt(new \DateTime());
+        $narrative->setUpdatedAt(new \DateTime());
+
+        //todo : implement tree mapping
+
         return $narrative;
     }
 
@@ -67,7 +71,7 @@ class NarrativeDTOTransformer implements TransformerInterface
 
         // add embedded fragments DTO hydrated
         foreach ($narratives as $narrative) {
-            $fragmentsDTO[] = FragmentTransformer::createEmbeddedFragmentFromSingleSQL($narrative);
+            $fragmentsDTO[] = FragmentDTOTransformer::createEmbeddedFragmentFromSingleSQL($narrative);
         }
 
         $narrativeDTO->setFragments($fragmentsDTO);

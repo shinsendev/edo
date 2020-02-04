@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Component\Transformer;
 
 use App\Component\DTO\FragmentDTO;
+use App\Component\DTO\NarrativeDTO;
+use App\Entity\Fragment;
 
 /**
- * Class FragmentTransformer
+ * Class FragmentDTOTransformer
  * @package App\Component\Transformer
  */
-class FragmentTransformer
+class FragmentDTOTransformer
 {
     /**
      * @param array $narrative
@@ -27,4 +29,14 @@ class FragmentTransformer
 
         return $fragmentDTO;
     }
+
+    public static function toEntity(NarrativeDTO $narrativeDTO)
+    {
+        $fragment = new Fragment();
+        $fragment->setTitle($narrativeDTO->getTitle());
+        $fragment->setContent($narrativeDTO->getContent());
+
+        return $fragment;
+    }
+
 }

@@ -6,7 +6,6 @@ namespace App\Component\DTO;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Component\DTO\Composition\DatableTrait;
-use App\Entity\Fragment;
 use Ramsey\Uuid\Uuid;
 
 /**

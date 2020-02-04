@@ -6,6 +6,7 @@ namespace App\Component\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Component\DTO\NarrativeDTO;
+use App\Component\Selected\Narrative\NarrativeCreator;
 use App\Component\Selected\Narrative\NarrativeUpdater;
 use App\Repository\NarrativeRepository;
 
@@ -21,15 +22,24 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
     /** @var NarrativeUpdater  */
     private $updater;
 
+    /** @var NarrativeCreator  */
+    private $creator;
+
     /**
      * NarrativeDataPersister constructor.
      * @param NarrativeRepository $repository
      * @param NarrativeUpdater $updater
+     * @param NarrativeCreator $creator
      */
-    public function __construct(NarrativeRepository $repository, NarrativeUpdater $updater)
+    public function __construct(
+        NarrativeRepository $repository,
+        NarrativeUpdater $updater,
+        NarrativeCreator $creator
+    )
     {
         $this->repository = $repository;
         $this->updater = $updater;
+        $this->creator = $creator;
     }
 
     /**
@@ -46,16 +56,16 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
      * @param $dto
      * @param array $context
      * @return object|void
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
      */
     public function persist($dto, array $context = [])
     {
         if (!$narrative = $this->repository->findOneByUuid($dto->getUuid())) {
-            // this is an insert
+            // it's a new  narrative, this is an insert
+            $this->creator->save($dto);
         }
         else {
-            //this is an update
+            // narrative already exists, so it is an update
             $this->updater->update($dto, $narrative);
         }
 
