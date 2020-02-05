@@ -223,7 +223,6 @@ class NarrativeResourceTest extends EdoApiTestCase
         // check if there is one more fragment
         $this->assertEquals(3, count($arrayResponse['fragments']));
 
-        dd($arrayResponse);
         // check the fragment data
         $this->assertEquals($arrayResponse['fragments'][0]['title'], $this->title);
         $this->assertNotEquals($arrayResponse['fragments'][0]['title'], $arrayResponse['fragments'][2]['title']);
@@ -233,17 +232,11 @@ class NarrativeResourceTest extends EdoApiTestCase
         $this->assertEquals($arrayResponse['title'], $this->title);
         $this->assertEquals($arrayResponse['content'], $this->content);
         $this->assertEquals($arrayResponse['uuid'], '6284e5ac-09cf-4334-9503-dedf31bafdd0');
-
     }
 
     public function testUpdateNarrativeBaseData()
     {
-        
-    }
-
-    private function myFunction()
-    {
-        return strtotime('12:00');
+        //todo : to implement
     }
 
 }
