@@ -18,4 +18,5 @@
 /.idea
 .env
 .env.test
+/coverage
 ###> custom

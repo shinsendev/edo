@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Composition\EntityDatableTrait;
+use App\Entity\Composition\EntityUpdatableTrait;
 use Gedmo\Mapping\Annotation as Gedmo;
 use App\Entity\Abstraction\AbstractUniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Narrative extends AbstractUniqueEntity
 {
+    use EntityDatableTrait, EntityUpdatableTrait;
     /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")

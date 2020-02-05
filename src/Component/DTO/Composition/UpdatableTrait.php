@@ -3,6 +3,8 @@
 
 namespace App\Component\DTO\Composition;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Trait DatableTrait
  * @package App\Component\DTO\Composition

@@ -10,8 +10,11 @@ namespace App\Component\Date;
  */
 class DateConverter
 {
+    /**
+     * @param \DateTime $datetime
+     * @return string
+     */
     public static function stringifyDatetime(\DateTime $datetime) {
-
         return $datetime->format('Y-m-d H:i:s');
     }
 }
