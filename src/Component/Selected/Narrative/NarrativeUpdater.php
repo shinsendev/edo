@@ -8,6 +8,7 @@ use App\Component\DTO\NarrativeDTO;
 use App\Component\EntityManager\EntityManagerTrait;
 use App\Component\EntityManager\SaveEntityHelper;
 use App\Component\Fragment\FragmentSaver;
+use App\Component\DateTime\DateTimeHelper;
 use App\Entity\Narrative;
 
 /**
@@ -46,8 +47,7 @@ class NarrativeUpdater
         //todo : to implement
 
         // update updatedAt
-        $now = new \DateTime();
-        $narrative->setUpdatedAt($now);
+        $narrative->setUpdatedAt(DateTimeHelper::now());
 
         // save narrative
         SaveEntityHelper::saveEntity($this->em, $narrative);

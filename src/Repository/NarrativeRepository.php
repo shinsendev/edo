@@ -23,11 +23,11 @@ class NarrativeRepository extends NestedTreeRepository
     {
         //we get by default the last 25 fragments
         $sql = '
-                SELECT n.*, f.title, f.content, f.uuid as fragment_uuid FROM narrative n
+                SELECT n.*, f.title, f.content, f.uuid as fragment_uuid, f.created_at as fragment_created_at FROM narrative n
             INNER JOIN qualification q ON n.uuid = q.selected_uuid
             INNER JOIN fragment f ON f.id = q.fragment_id
             WHERE n.id = :id
-            ORDER BY f.updated_at DESC
+            ORDER BY f.created_at DESC
             LIMIT 25
         ';
 
@@ -41,7 +41,7 @@ class NarrativeRepository extends NestedTreeRepository
         $sql = '
             SELECT DISTINCT ON (n.id) n.*, f.title, f.content, f.uuid as fragment_uuid FROM narrative n
     INNER JOIN qualification q ON n.uuid = q.selected_uuid
-    INNER JOIN fragment f ON f.id = q.fragment_id ORDER BY n.id, f.updated_at DESC;
+    INNER JOIN fragment f ON f.id = q.fragment_id ORDER BY n.id, f.created_at DESC;
         ';
 
         $stmt = $this->createCustomStatement($sql);

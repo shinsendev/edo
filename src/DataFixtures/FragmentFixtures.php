@@ -27,7 +27,6 @@ class FragmentFixtures extends Fixture
         $now = new \DateTime();
         // we add 30 seconds to the fragment creation date to be sur it is the last one
         $fragment2->setCreatedAt($now->add(new \DateInterval('PT30S')));
-        $fragment2->setUpdatedAt($now->add(new \DateInterval('PT30S')));
 
         $manager->persist($fragment2);
 
@@ -37,7 +36,6 @@ class FragmentFixtures extends Fixture
         $now = new \DateTime();
         // we add 30 seconds to the fragment creation date to be sur it is the last one
         $fragment2->setCreatedAt($now->add(new \DateInterval('PT35S')));
-        $fragment2->setUpdatedAt($now->add(new \DateInterval('PT35S')));
 
         $manager->persist($fragment3);
 

@@ -6,6 +6,7 @@ namespace App\Component\Transformer;
 
 use App\Component\DTO\FragmentDTO;
 use App\Component\DTO\NarrativeDTO;
+use App\Component\DateTime\DateTimeHelper;
 use App\Entity\Fragment;
 
 /**
@@ -24,7 +25,7 @@ class FragmentDTOTransformer
         $fragmentDTO->setTitle($narrative['title']);
         $fragmentDTO->setContent($narrative['content']);
         $fragmentDTO->setUuid($narrative['uuid']);
-        $fragmentDTO->setCreatedAt($narrative['created_at']);
+        $fragmentDTO->setCreatedAt($narrative['fragment_created_at']);
         $fragmentDTO->setUuid($narrative['fragment_uuid']);
 
         return $fragmentDTO;
@@ -35,6 +36,7 @@ class FragmentDTOTransformer
         $fragment = new Fragment();
         $fragment->setTitle($narrativeDTO->getTitle());
         $fragment->setContent($narrativeDTO->getContent());
+        $fragment->setCreatedAt(DateTimeHelper::now());
 
         return $fragment;
     }

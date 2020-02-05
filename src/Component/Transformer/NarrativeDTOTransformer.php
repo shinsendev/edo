@@ -6,6 +6,7 @@ namespace App\Component\Transformer;
 
 use App\Component\DTO\DTOInterface;
 use App\Component\DTO\NarrativeDTO;
+use App\Component\DateTime\DateTimeHelper;
 use App\Entity\Narrative;
 
 class NarrativeDTOTransformer implements TransformerInterface
@@ -23,14 +24,19 @@ class NarrativeDTOTransformer implements TransformerInterface
         return $narrativeDTO;
     }
 
+    /**
+     * @param DTOInterface $dto
+     * @return Narrative
+     * @throws \Exception
+     */
     public static function toEntity(DTOInterface $dto)
     {
         $narrative = new Narrative();
         $narrative->setUuid($dto->getUuid());
 
         // set datetimes
-        $narrative->setCreatedAt(new \DateTime());
-        $narrative->setUpdatedAt(new \DateTime());
+        $narrative->setCreatedAt(DateTimeHelper::now());
+        $narrative->setUpdatedAt(DateTimeHelper::now());
 
         //todo : implement tree mapping
 
@@ -65,6 +71,11 @@ class NarrativeDTOTransformer implements TransformerInterface
         return $narrativeDTO;
     }
 
+    /**
+     * @param array $narratives
+     * @param NarrativeDTO $narrativeDTO
+     * @return NarrativeDTO
+     */
     public static function addFragments(array $narratives, NarrativeDTO $narrativeDTO)
     {
         $fragmentsDTO = [];

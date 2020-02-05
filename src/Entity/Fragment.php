@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Abstraction\AbstractUniqueEntity;
+use App\Entity\Composition\EntityDatableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Fragment extends AbstractUniqueEntity
 {
+    use EntityDatableTrait;
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */
