@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Component\DateTime\DateTimeHelper;
+use App\Component\Date\DateTimeHelper;
 use App\Entity\Fragment;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;

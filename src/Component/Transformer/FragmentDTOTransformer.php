@@ -6,7 +6,7 @@ namespace App\Component\Transformer;
 
 use App\Component\DTO\FragmentDTO;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\DateTime\DateTimeHelper;
+use App\Component\Date\DateTimeHelper;
 use App\Entity\Fragment;
 
 /**

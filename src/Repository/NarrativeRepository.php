@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Component\Exception\EdoException;
 use App\Entity\Narrative;
+use App\Repository\Helper\RawSQLQueryHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
@@ -19,6 +21,11 @@ class NarrativeRepository extends NestedTreeRepository
         parent::__construct($manager, $manager->getClassMetadata(Narrative::class));
     }
 
+    /**
+     * @param string $narrativeId
+     * @return mixed[]
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function findNarrativeWithFragments(string $narrativeId)
     {
         //we get by default the last 25 fragments
@@ -31,11 +38,16 @@ class NarrativeRepository extends NestedTreeRepository
             LIMIT 25
         ';
 
-        $stmt = $this->createCustomStatement($sql, ['id' => $narrativeId]);
+        $stmt = RawSQLQueryHelper::createCustomStatement($this->getEntityManager(), $sql, ['id' => $narrativeId]);
 
         return $stmt->fetchAll();
     }
 
+    /**
+     * @return mixed[]
+     * @throws EdoException
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function findNarrativesCollectionWithLastFragments()
     {
         $sql = '
@@ -44,23 +56,13 @@ class NarrativeRepository extends NestedTreeRepository
     INNER JOIN fragment f ON f.id = q.fragment_id ORDER BY n.id, f.created_at DESC;
         ';
 
-        $stmt = $this->createCustomStatement($sql);
+        try {
+            $stmt = RawSQLQueryHelper::createCustomStatement($this->getEntityManager(), $sql);
+        }
+        catch(EdoException $e) {
+            throw new EdoException($e);
+        }
 
         return $stmt->fetchAll();
-    }
-
-    /**
-     * @param string $sql
-     * @param array $options
-     * @return \Doctrine\DBAL\Driver\Statement
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function createCustomStatement(string $sql, array $options = [])
-    {
-        $connection = $this->getEntityManager()->getConnection();
-        $stmt = $connection->prepare($sql);
-        $stmt->execute($options);
-
-        return $stmt;
     }
 }

@@ -2,13 +2,12 @@
 
 namespace App\Repository;
 
+use App\Component\Exception\EdoException;
 use App\Entity\Fragment;
-use App\Entity\Narrative;
+use App\Repository\Helper\RawSQLQueryHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\ResultSetMapping;
-use Doctrine\ORM\Query\ResultSetMappingBuilder;
+
 
 /**
  * @method Fragment|null find($id, $lockMode = null, $lockVersion = null)
@@ -24,26 +23,30 @@ class FragmentRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $limit
-     * @return mixed
+     * @param string $narrativeUuid
+     * @return mixed[]
+     * @throws EdoException
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function findAllDistinctFragments(int $limit)
+    public function findNarrativeLastFragment(string $narrativeUuid)
     {
-        // just a little check to be sure, will need to be refacto and upgrade later
-        if ($limit > 100) {
-            $limit = 100;
-        };
+        $sql = '
+            SELECT * FROM fragment f
+            INNER JOIN qualification q ON q.fragment_id = f.id
+            WHERE q.selected_uuid = :uuid
+            ORDER BY f.created_at ASC
+            LIMIT 1;
+        ';
 
-        // we get the last fragment for each code
-        $sql = "SELECT DISTINCT ON (f.code) * FROM fragment f ORDER BY f.code, f.created_at DESC LIMIT ".$limit;
+        try {
+            $stmt = RawSQLQueryHelper::createCustomStatement($this->getEntityManager(), $sql, ['uuid' => $narrativeUuid]);
+        }
+        catch(EdoException $e)
+        {
+            throw new EdoException($e);
+        }
 
-        // we map with a ResultSetMapping our result to a PHP Entity
-        $rsm = new ResultSetMappingBuilder($this->getEntityManager());
-        $rsm->addRootEntityFromClassMetadata(Fragment::class, 'f');
-        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
-
-        // we get the result as usual
-        return $query->getResult();
+        return $stmt->fetch();
     }
 
 }

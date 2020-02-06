@@ -4,7 +4,7 @@
 namespace App\Tests\Unit;
 
 
-use App\Component\DateTime\DateTimeHelper;
+use App\Component\Date\DateTimeHelper;
 use App\Component\Selected\Narrative\NarrativeUpdater;
 use App\Tests\Helper\NarrativeTestGenerator;
 use App\Tests\Integration\EdoApiTestCase;

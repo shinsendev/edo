@@ -24,7 +24,7 @@ class Fragment extends AbstractUniqueEntity
     private $content;
 
     /**
-     * @ORM\OneToMany(targetEntity="Qualification", mappedBy="fragment")
+     * @ORM\OneToMany(targetEntity="Qualification", mappedBy="fragment", cascade={"remove"})
      */
     private $qualifications;
 

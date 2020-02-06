@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Qualification
  * @package App\Entity
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\QualificationRepository")
  * @ORM\Table(name="qualification",
  *     uniqueConstraints={
         @ORM\UniqueConstraint(name="qualification_unique", columns={"selected_uuid", "fragment_id"})
