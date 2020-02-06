@@ -19,4 +19,5 @@ class DefaultController extends AbstractController
 
         return new JsonResponse($payload);
     }
+
 }
