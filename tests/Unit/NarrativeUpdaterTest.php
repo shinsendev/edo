@@ -1,19 +1,18 @@
 <?php
 
-
 namespace App\Tests\Unit;
-
 
 use App\Component\Date\DateTimeHelper;
 use App\Component\Selected\Narrative\NarrativeUpdater;
+use App\Tests\AbstractEdoApiTestCase;
 use App\Tests\Helper\NarrativeTestGenerator;
-use App\Tests\Integration\EdoApiTestCase;
+
 
 /**
  * Class NarrativeUpdaterTest
  * @package App\Tests\Unit
  */
-class NarrativeUpdaterTest extends EdoApiTestCase
+class NarrativeUpdaterTest extends AbstractEdoApiTestCase
 {
     public function testNarrativeUpdaterUpdate()
     {

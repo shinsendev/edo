@@ -5,14 +5,14 @@ namespace App\Tests\Unit;
 
 use App\Component\Date\DateTimeHelper;
 use App\Component\Selected\Narrative\NarrativeCreator;
+use App\Tests\AbstractEdoApiTestCase;
 use App\Tests\Helper\NarrativeTestGenerator;
-use App\Tests\Integration\EdoApiTestCase;
 
 /**
  * Class NarrativeCreator
  * @package App\Tests\Unit
  */
-class NarrativeCreatorTest extends EdoApiTestCase
+class NarrativeCreatorTest extends AbstractEdoApiTestCase
 {
     public function testNarrativeCreatorSave()
     {

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\HasLifecycleCallbacks()
  */
-class AbstractUniqueEntity extends AbstractBaseEntity
+abstract class AbstractUniqueEntity extends AbstractBaseEntity
 {
     /**
      * @ORM\Column(type="guid", unique=true)
