@@ -6,7 +6,7 @@ namespace App\Component\Transformer;
 
 use App\Component\DTO\DTOInterface;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\DateTime\DateTimeHelper;
+use App\Component\Date\DateTimeHelper;
 use App\Entity\Narrative;
 
 class NarrativeDTOTransformer implements TransformerInterface

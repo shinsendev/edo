@@ -8,8 +8,9 @@ use App\Component\DTO\NarrativeDTO;
 use App\Component\EntityManager\EntityManagerTrait;
 use App\Component\EntityManager\SaveEntityHelper;
 use App\Component\Fragment\FragmentSaver;
-use App\Component\DateTime\DateTimeHelper;
+use App\Component\Date\DateTimeHelper;
 use App\Entity\Narrative;
+use App\Entity\Qualification;
 
 /**
  * Class NarrativeUpdater
@@ -32,6 +33,11 @@ class NarrativeUpdater
         $this->updateNarrative($narrativeDTO, $narrative);
         FragmentSaver::save($this->em, $narrativeDTO, $narrative->getUuid());
         SaveEntityHelper::saveEntity($this->em, $narrative);
+        dd($narrative);
+
+        // count fragments
+        $qualifications = $this->em->getRepository(Qualification::class)->findAll();
+
 
         return NarrativeResponseCreator::createResponse($narrativeDTO, $narrative);
     }

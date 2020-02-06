@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Component\DateTime;
+namespace App\Component\Date;
 
 /**
  * Class DateTimeHelper
