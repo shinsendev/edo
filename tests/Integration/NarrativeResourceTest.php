@@ -193,7 +193,10 @@ class NarrativeResourceTest extends EdoApiTestCase
         $this->assertResponseStatusCodeSame(500);
     }
 
-    public function testCreateNewFragmentForExistingNarrative()
+    /**
+     * @Description: we create a new fragment for an existing narrative, it's like updating this narrative
+     */
+    public function testUpdateNarrative()
     {
         // at first, we count the number of existing narratives
         $this->assertEquals(2, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
@@ -232,11 +235,6 @@ class NarrativeResourceTest extends EdoApiTestCase
         $this->assertEquals($arrayResponse['title'], $this->title);
         $this->assertEquals($arrayResponse['content'], $this->content);
         $this->assertEquals($arrayResponse['uuid'], '6284e5ac-09cf-4334-9503-dedf31bafdd0');
-    }
-
-    public function testUpdateNarrativeBaseData()
-    {
-        //todo : to implement
     }
 
 }
