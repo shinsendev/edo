@@ -13,4 +13,10 @@ class DateTimeHelper
     {
         return new \DateTime();
     }
+
+    public static function humanNow()
+    {
+        $datetime = new \DateTime();
+        return $datetime->format('Y-m-d H:i:s');
+    }
 }
