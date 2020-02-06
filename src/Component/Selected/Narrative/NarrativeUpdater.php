@@ -45,14 +45,13 @@ class NarrativeUpdater
         $this->updateNarrative($narrativeDTO, $narrative);
         SaveEntityHelper::saveEntity($this->em, $narrative);
 
-        // count fragments
-        if ($this->countFragments($narrative) > NarrativeConfiguration::MAX_VERSIONNING_FRAGMENTS) {
+        // as long as there are more fragments than authorized, we delete them one by one
+        while ($this->countFragments($narrative) >=  NarrativeConfiguration::MAX_VERSIONNING_FRAGMENTS)
+        {
             // delete oldest fragment and its qualification
-            $arrayLastFragment = $this->fragmentRepository->findNarrativeLastFragment($narrative->getUuid());
-            $lastFragment = $this->fragmentRepository->findOneByUuid($arrayLastFragment['uuid']);
-            $this->em->remove($lastFragment);
-            $this->em->flush();
+            $this->deleteFragment($narrative);
         }
+
         FragmentSaver::save($this->em, $narrativeDTO, $narrative->getUuid());
 
         return NarrativeResponseCreator::createResponse($narrativeDTO, $narrative);
@@ -83,6 +82,19 @@ class NarrativeUpdater
     {
         $qualifications = $this->em->getRepository(Qualification::class)->findBySelectedUuid($narrative->getUuid());
         return count($qualifications);
+    }
+
+    /**
+     * @param Narrative $narrative
+     * @throws \App\Component\Exception\EdoException
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function deleteFragment(Narrative $narrative)
+    {
+        $arrayLastFragment = $this->fragmentRepository->findNarrativeLastFragment($narrative->getUuid());
+        $lastFragment = $this->fragmentRepository->findOneByUuid($arrayLastFragment['uuid']);
+        $this->em->remove($lastFragment);
+        $this->em->flush();
     }
 
 }
