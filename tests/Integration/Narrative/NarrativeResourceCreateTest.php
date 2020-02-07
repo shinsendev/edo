@@ -7,7 +7,11 @@ namespace App\Tests\Integration\Narrative;
 use App\Repository\FragmentRepository;
 use App\Repository\NarrativeRepository;
 
-class NarraticeResourceCreateTest extends AbstractNarrativeResourceTest
+/**
+ * Class NarrativeResourceCreateTest
+ * @package App\Tests\Integration\Narrative
+ */
+class NarrativeResourceCreateTest extends AbstractNarrativeResource
 {
     public function testCreateNarrative()
     {
