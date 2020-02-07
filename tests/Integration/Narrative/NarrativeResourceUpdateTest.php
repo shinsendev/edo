@@ -6,7 +6,7 @@ namespace App\Tests\Integration\Narrative;
 
 use App\Component\Fragment\FragmentSaver;
 
-class NarraticeResourceUpdateTest extends AbstractNarrativeResource
+class NarrativeResourceUpdateTest extends AbstractNarrativeResource
 {
     /**
      * @Description: we create a new fragment for an existing narrative, it's like updating this narrative
