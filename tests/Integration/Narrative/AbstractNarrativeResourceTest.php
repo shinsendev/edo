@@ -6,7 +6,9 @@ namespace App\Tests\Integration\Narrative;
 
 use App\Repository\FragmentRepository;
 use App\Repository\NarrativeRepository;
+use App\Repository\QualificationRepository;
 use App\Tests\AbstractEdoApiTestCase;
+use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 
 /**
@@ -17,17 +19,28 @@ class AbstractNarrativeResourceTest extends AbstractEdoApiTestCase
 {
     use FixturesTrait;
 
+    /** @var EntityManagerInterface|object|null  */
+    protected $em;
+
+    /** @var array  */
     protected $data;
 
+    /** @var string  */
     protected $title;
 
+    /** @var string  */
     protected $content;
 
+    /** @var NarrativeRepository|object|null  */
     protected $narrativeRepository;
 
+    /** @var FragmentRepository|object|null  */
     protected $fragmentRepository;
 
-    public function setUp()
+    /** @var FragmentRepository|object|null  */
+    protected $qualificationRepository;
+
+    public function setUp():void
     {
         parent::setUp();
 
@@ -41,7 +54,12 @@ class AbstractNarrativeResourceTest extends AbstractEdoApiTestCase
         ];
 
         $container = self::$container;
+
+        $this->em = $container->get(EntityManagerInterface::class);
+
+        // list of repositories
         $this->narrativeRepository = $container->get(NarrativeRepository::class);
         $this->fragmentRepository = $container->get(FragmentRepository::class);
+        $this->qualificationRepository = $container->get(QualificationRepository::class);
     }
 }
