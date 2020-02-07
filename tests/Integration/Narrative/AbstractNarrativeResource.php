@@ -15,7 +15,7 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
  * Class AbstractNarrativeResourceTest
  * @package App\Tests\Integration\Narrative
  */
-class AbstractNarrativeResourceTest extends AbstractEdoApiTestCase
+class AbstractNarrativeResource extends AbstractEdoApiTestCase
 {
     use FixturesTrait;
 

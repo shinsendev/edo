@@ -4,14 +4,9 @@
 namespace App\Tests\Integration\Narrative;
 
 
-use App\Component\EntityManager\SaveEntityHelper;
 use App\Component\Fragment\FragmentSaver;
-use App\Component\Generator\FragmentGenerator;
-use App\Component\Generator\QualificationGenerator;
-use App\Entity\Qualification;
-use Doctrine\ORM\EntityManagerInterface;
 
-class NarraticeResourceUpdateTest extends AbstractNarrativeResourceTest
+class NarrativeResourceUpdateTest extends AbstractNarrativeResource
 {
     /**
      * @Description: we create a new fragment for an existing narrative, it's like updating this narrative

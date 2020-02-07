@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Narrative;
 
-use App\Repository\FragmentRepository;
-use App\Repository\NarrativeRepository;
-
 /**
  * Class NarrativeResourceTest
  * @package App\Tests\Integration
  */
-class NarrativeResourceGetTest extends AbstractNarrativeResourceTest
+class NarrativeResourceGetTest extends AbstractNarrativeResource
 {
     /**
      * @Description = send GET request for one specific fragment
