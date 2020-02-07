@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration;
 
-class DefaultControllerTest extends EdoApiTestCase
+use App\Tests\AbstractEdoApiTestCase;
+
+class DefaultControllerTest extends AbstractEdoApiTestCase
 {
     public function testGetDefault()
     {

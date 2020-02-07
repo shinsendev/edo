@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Helper;
-
+namespace App\Component\Generator;
 
 use App\Component\DTO\NarrativeDTO;
 use App\Entity\Fragment;
@@ -13,7 +12,7 @@ use App\Entity\Narrative;
  * Class NarrativeTestGenerator
  * @package App\Tests\Helper
  */
-class NarrativeTestGenerator
+class NarrativeGenerator
 {
     /**
      * @return NarrativeDTO

@@ -46,7 +46,7 @@ class NarrativeUpdater
         SaveEntityHelper::saveEntity($this->em, $narrative);
 
         // as long as there are more fragments than authorized, we delete them one by one
-        while ($this->countFragments($narrative) >=  NarrativeConfiguration::MAX_VERSIONNING_FRAGMENTS)
+        while ($this->countFragments($narrative) >=  NarrativeConfiguration::getMaxVersionningFragments())
         {
             // delete oldest fragment and its qualification
             $this->deleteFragment($narrative);

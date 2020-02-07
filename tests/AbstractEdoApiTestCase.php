@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Tests\Integration;
+namespace App\Tests;
 
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 
-class EdoApiTestCase extends ApiTestCase
+abstract class AbstractEdoApiTestCase extends ApiTestCase
 {
     use FixturesTrait;
 
