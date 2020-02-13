@@ -53,6 +53,12 @@ class Narrative extends AbstractUniqueEntity
      */
     private $children;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Fiction", inversedBy="narratives")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $fiction;
+
 
     /**
      * @return mixed
@@ -148,6 +154,18 @@ class Narrative extends AbstractUniqueEntity
     public function setChildren($children): void
     {
         $this->children = $children;
+    }
+
+    public function getFiction(): ?Fiction
+    {
+        return $this->fiction;
+    }
+
+    public function setFiction(?Fiction $fiction): self
+    {
+        $this->fiction = $fiction;
+
+        return $this;
     }
 
 }

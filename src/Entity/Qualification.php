@@ -38,7 +38,6 @@ class Qualification
      */
     private $fragment;
 
-
     /**
      * @return mixed
      */

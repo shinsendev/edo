@@ -14,7 +14,7 @@ class Fragment extends AbstractUniqueEntity
     use EntityDatableTrait;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $title;
 
