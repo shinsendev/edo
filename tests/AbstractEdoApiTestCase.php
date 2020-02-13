@@ -19,8 +19,9 @@ abstract class AbstractEdoApiTestCase extends ApiTestCase
         parent::setUp();
         $this->client = static::createClient();
         $this->loadFixtures([
-            'App\DataFixtures\FragmentFixtures',
-            'App\DataFixtures\NarrativeFixtures'
+            'App\DataFixtures\FictionFixtures',
+            'App\DataFixtures\NarrativeFixtures',
+            'App\DataFixtures\FragmentFixtures'
         ]);
     }
 }

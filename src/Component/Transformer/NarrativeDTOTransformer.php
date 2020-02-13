@@ -44,6 +44,34 @@ class NarrativeDTOTransformer implements TransformerInterface
     }
 
     /**
+     * @param Narrative $narrative
+     * @return NarrativeDTO
+     */
+    public static function fromEntity(Narrative $narrative): NarrativeDTO
+    {
+        $narrativeDTO = new NarrativeDTO();
+        $narrativeDTO->setUuid($narrative->getUuid());
+
+        // the last fragment set the title and content of the narrative
+        $narrativeDTO->setTitle($narrative->getFragments()[0]->getTitle());
+        $narrativeDTO->setContent($narrative->getFragments()[0]->getContent());
+        $narrativeDTO->setCreatedAt(($narrative->getCreatedAt())->format('Y-m-d H:i:s'));
+        $narrativeDTO->setUpdatedAt(($narrative->getUpdatedAt())->format('Y-m-d H:i:s'));
+
+        // todo : implement tree mapping using only ids
+        // set tree info
+        $narrativeDTO->setRoot($narrative->getRoot()->getUuid());
+        if ($narrative->getParent()) {
+            $narrativeDTO->setParent($narrative->getParent()->getUuid());
+        }
+        $narrativeDTO->setLft($narrative->getLft());
+        $narrativeDTO->setLvl($narrative->getLvl());
+        $narrativeDTO->setRgt($narrative->getRgt());
+
+        return $narrativeDTO;
+    }
+
+    /**
      * @param array $data
      * @return NarrativeDTO
      * @throws \Exception

@@ -6,6 +6,7 @@ namespace App\Component\Generator;
 
 use App\Component\Date\DateTimeHelper;
 use App\Entity\Fragment;
+use App\Entity\Narrative;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -17,18 +18,21 @@ class FragmentGenerator
     /**
      * @Description generate fragment for existing narrative
      *
-     * @param $narrativeUuid
+     * @param Narrative $narrative
      *
      * @return Fragment
      * @throws \Exception
      */
-    public static function generateFragment($narrativeUuid)
+    public static function generateFragment(Narrative $narrative): Fragment
     {
         $fragment = new Fragment();
+
+        // let the possibility to manually add uuid
         $fragment->setUuid(Uuid::uuid4());
-        $fragment->setTitle('Title for '.$narrativeUuid);
-        $fragment->setContent('Content for '.$narrativeUuid);
+        $fragment->setTitle('Title for '.$narrative->getUuid());
+        $fragment->setContent('Content for '.$narrative->getUuid());
         $fragment->setCreatedAt(DateTimeHelper::now());
+        $fragment->setNarrative($narrative);
 
         return $fragment;
     }

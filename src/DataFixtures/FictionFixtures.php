@@ -10,6 +10,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class FictionFixtures extends Fixture
 {
+    public const FICTION_REFERENCE_1 = 'fiction1';
+    public const FICTION_REFERENCE_2 = 'fiction2';
+
+    /**
+     * @param ObjectManager $manager
+     * @throws \Exception
+     */
     public function load(ObjectManager $manager)
     {
         $fiction = new Fiction();

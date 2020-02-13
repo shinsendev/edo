@@ -29,6 +29,12 @@ class Fragment extends AbstractUniqueEntity
     private $qualifications;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Narrative", inversedBy="fragments")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $narrative;
+
+    /**
      * @return mixed
      */
     public function getTitle()
@@ -70,6 +76,18 @@ class Fragment extends AbstractUniqueEntity
     public function setQualifications($qualifications): void
     {
         $this->qualifications = $qualifications;
+    }
+
+    public function getNarrative(): ?Narrative
+    {
+        return $this->narrative;
+    }
+
+    public function setNarrative(?Narrative $narrative): self
+    {
+        $this->narrative = $narrative;
+
+        return $this;
     }
 
 }
