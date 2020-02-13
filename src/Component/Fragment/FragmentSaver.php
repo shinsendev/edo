@@ -36,7 +36,7 @@ class FragmentSaver
      */
     public static function addFragmentToNarrative(EntityManagerInterface $em, string $uuid)
     {
-        $fragment = FragmentGenerator::generateFragment($uuid);
+        $fragment = FragmentGenerator::generate($uuid);
         SaveEntityHelper::saveEntity($em, $fragment);
         $qualification = QualificationGenerator::generateQualification($fragment, $uuid);
         SaveEntityHelper::saveEntity($em, $qualification);

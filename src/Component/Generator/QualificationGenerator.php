@@ -20,7 +20,7 @@ class QualificationGenerator
      * @param int $type
      * @return Qualification
      */
-    public static function generateQualification($fragment, $selectedUuid, $type = 1)
+    public static function generate($fragment, $selectedUuid, $type = 1)
     {
         $qualification = new Qualification();
         $qualification->setFragment($fragment);

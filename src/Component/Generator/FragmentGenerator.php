@@ -10,6 +10,8 @@ use App\Entity\Narrative;
 use Ramsey\Uuid\Uuid;
 
 /**
+ * todo: implement the interface by using Entity and add a check instance
+ *
  * Class FragmentTextGenerator
  * @package App\Component\Generator
  */
@@ -23,7 +25,7 @@ class FragmentGenerator
      * @return Fragment
      * @throws \Exception
      */
-    public static function generateFragment(Narrative $narrative): Fragment
+    public static function generate(Narrative $narrative): Fragment
     {
         $fragment = new Fragment();
 
