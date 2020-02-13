@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Component\Date\DateTimeHelper;
+use App\Entity\Fiction;
 use App\Entity\Fragment;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;

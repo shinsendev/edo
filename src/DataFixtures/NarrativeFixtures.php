@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-
 use App\Component\Selected\SelectedType;
+use App\Entity\Fiction;
 use App\Entity\Narrative;
 use App\Entity\Qualification;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -14,8 +15,11 @@ class NarrativeFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
+        $fiction = $manager->getRepository(Fiction::class)->findOneByUuid('1b7df281-ae2a-40bf-ad6a-ac60409a9ce6');
+
         $narrative = new Narrative();
         $narrative->setUuid('6284e5ac-09cf-4334-9503-dedf31bafdd0');
+        $narrative->setFiction($fiction);
         $manager->persist($narrative);
 
         $fragment = $this->getReference(FragmentFixtures::FRAGMENT_REFERENCE_1);
@@ -36,6 +40,8 @@ class NarrativeFixtures extends Fixture
 
         $child = new Narrative();
         $child->setParent($narrative);
+        $child->setFiction($fiction);
+
         $qualification = new Qualification();
         $qualification->setFragment($fragment3);
         $qualification->setSelectedUuid($child->getUuid());
