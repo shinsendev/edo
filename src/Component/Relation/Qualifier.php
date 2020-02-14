@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Relation;
 
-use App\Component\Selected\SelectedType;
+use App\Component\Narratable\SelectedType;
 use App\Entity\Fragment;
 use App\Entity\Qualification;
 

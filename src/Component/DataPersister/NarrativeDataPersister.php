@@ -6,8 +6,8 @@ namespace App\Component\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\Selected\Narrative\NarrativeCreator;
-use App\Component\Selected\Narrative\NarrativeUpdater;
+use App\Component\Narratable\Narrative\NarrativeCreator;
+use App\Component\Narratable\Narrative\NarrativeUpdater;
 use App\Repository\FictionRepository;
 use App\Repository\NarrativeRepository;
 

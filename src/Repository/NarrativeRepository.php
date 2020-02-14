@@ -36,22 +36,6 @@ class NarrativeRepository extends NestedTreeRepository
         return $query->getResult();
     }
 
-    /**
-     * @param string $narrativeUuid
-     * @param int $limit
-     * @return mixed
-     */
-    public function findLastFragments(string $narrativeUuid, int $limit = 10)
-    {
-       $query = $this->getEntityManager()->createQuery('
-            SELECT f FROM '.Fragment::class.' f JOIN f.narrative n WHERE n.uuid = :uuid ORDER BY f.createdAt DESC
-        ')
-           ->setParameter('uuid', $narrativeUuid)
-           ->setMaxResults($limit);
-
-       return $query->getResult();
-    }
-
 //    /**
 //     * @param string $narrativeId
 //     * @return mixed[]

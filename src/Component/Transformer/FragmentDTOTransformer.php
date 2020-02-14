@@ -21,22 +21,6 @@ use Doctrine\ORM\Mapping\Entity;
  */
 class FragmentDTOTransformer extends AbstractTransformer implements TransformerInterface
 {
-//    /**
-//     * @param array $narrative
-//     * @return FragmentDTO
-//     */
-//    public static function createEmbeddedFragmentFromSingleSQL(array $narrative)
-//    {
-//        $fragmentDTO = new FragmentDTO();
-//        $fragmentDTO->setTitle($narrative['title']);
-//        $fragmentDTO->setContent($narrative['content']);
-//        $fragmentDTO->setUuid($narrative['uuid']);
-//        $fragmentDTO->setCreatedAt($narrative['fragment_created_at']);
-//        $fragmentDTO->setUuid($narrative['fragment_uuid']);
-//
-//        return $fragmentDTO;
-//    }
-
     public static function fromEntity(EntityInterface $fragment)
     {
         if(!$fragment instanceof Fragment)

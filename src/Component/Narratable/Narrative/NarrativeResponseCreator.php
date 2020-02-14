@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Component\Selected\Narrative;
+namespace App\Component\Narratable\Narrative;
 
 
 use App\Component\Date\DateConverter;

@@ -4,8 +4,9 @@
 namespace App\Tests\Unit;
 
 use App\Component\Date\DateTimeHelper;
-use App\Component\Generator\NarrativeGenerator;
-use App\Component\Selected\Narrative\NarrativeCreator;
+use App\Component\DTO\NarrativeDTO;
+use App\Component\Generator\NarrativeDTOGenerator;
+use App\Component\Narratable\Narrative\NarrativeCreator;
 use App\Tests\AbstractEdoApiTestCase;
 
 /**
@@ -18,7 +19,7 @@ class NarrativeCreatorTest extends AbstractEdoApiTestCase
     {
         $container = self::$container;
         $creator = $container->get(NarrativeCreator::class);
-        $response = $creator->save(NarrativeGenerator::generateDTO());
+        $response = $creator->save($this->generateNarrativeDTO());
 
         $this->assertEquals('Narrative title generated', $response->getTitle());
         $this->assertEquals('Narrative content generated for test', $response->getContent());
@@ -27,5 +28,20 @@ class NarrativeCreatorTest extends AbstractEdoApiTestCase
         $this->assertEquals(DateTimeHelper::humanNow(), $response->getUpdatedAt());
 
         //todo: implement the tree logic
+    }
+
+    /**
+     * @return NarrativeDTO
+     */
+    protected function generateNarrativeDTO()
+    {
+        $dto = new NarrativeDTO();
+        $dto->setUuid('6153ca18-47a9-4b38-ae72-29e8340060cb');
+        $dto->setTitle('Narrative title generated');
+        $dto->setContent('Narrative content generated for test');
+        // we use the fiction created with the fixtures
+        $dto->setFictionUuid('1b7df281-ae2a-40bf-ad6a-ac60409a9ce6');
+
+        return $dto;
     }
 }

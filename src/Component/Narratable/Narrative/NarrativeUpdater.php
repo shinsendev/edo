@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Component\Selected\Narrative;
+namespace App\Component\Narratable\Narrative;
 
 use App\Component\Configuration\NarrativeConfiguration;
 use App\Component\DTO\NarrativeDTO;
 use App\Component\EntityManager\SaveEntityHelper;
-use App\Component\Fragment\FragmentSaver;
 use App\Component\Date\DateTimeHelper;
+use App\Component\Transformer\FragmentDTOTransformer;
+use App\Entity\Fragment;
 use App\Entity\Narrative;
-use App\Entity\Qualification;
 use App\Repository\FragmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -52,7 +52,7 @@ class NarrativeUpdater
             $this->deleteFragment($narrative);
         }
 
-        FragmentSaver::save($this->em, $narrativeDTO, $narrative->getUuid());
+        SaveEntityHelper::saveEntity($this->em, FragmentDTOTransformer::toEntity($narrativeDTO, $this->em));
 
         return NarrativeResponseCreator::createResponse($narrativeDTO, $narrative);
     }
@@ -80,8 +80,7 @@ class NarrativeUpdater
      */
     public function countFragments(Narrative $narrative)
     {
-        $qualifications = $this->em->getRepository(Qualification::class)->findBySelectedUuid($narrative->getUuid());
-        return count($qualifications);
+        return $this->em->getRepository(Fragment::class)->countNarrativeFragments($narrative->getUuid());
     }
 
     /**

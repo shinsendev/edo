@@ -7,7 +7,6 @@ namespace App\Tests\Integration\Narrative;
 use App\Repository\FictionRepository;
 use App\Repository\FragmentRepository;
 use App\Repository\NarrativeRepository;
-use App\Repository\QualificationRepository;
 use App\Tests\AbstractEdoApiTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
@@ -38,9 +37,6 @@ class AbstractNarrativeResource extends AbstractEdoApiTestCase
     /** @var FragmentRepository|object|null  */
     protected $fragmentRepository;
 
-    /** @var FragmentRepository|object|null  */
-    protected $qualificationRepository;
-
     /** @var FictionRepository|object|null  */
     protected $fictionRepository;
 
@@ -54,7 +50,8 @@ class AbstractNarrativeResource extends AbstractEdoApiTestCase
         $this->data = [
             'uuid' => '6153ca18-47a9-4b38-ae72-29e8340060cb',
             'title' => $this->title,
-            'content' => $this->content
+            'content' => $this->content,
+            'fiction_uuid' => '1b7df281-ae2a-40bf-ad6a-ac60409a9ce6'
         ];
 
         // we use the container for test of Symfony that let us use "private" services
@@ -65,7 +62,6 @@ class AbstractNarrativeResource extends AbstractEdoApiTestCase
         // list of repositories
         $this->narrativeRepository = $container->get(NarrativeRepository::class);
         $this->fragmentRepository = $container->get(FragmentRepository::class);
-        $this->qualificationRepository = $container->get(QualificationRepository::class);
         $this->fictionRepository = $container->get(FictionRepository::class);
     }
 }

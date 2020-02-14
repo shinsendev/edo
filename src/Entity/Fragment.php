@@ -24,11 +24,6 @@ class Fragment extends AbstractUniqueEntity
     private $content;
 
     /**
-     * @ORM\OneToMany(targetEntity="Qualification", mappedBy="fragment", cascade={"remove"})
-     */
-    private $qualifications;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Narrative", inversedBy="fragments")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -60,22 +55,6 @@ class Fragment extends AbstractUniqueEntity
         $this->content = $content;
 
         return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQualifications()
-    {
-        return $this->qualifications;
-    }
-
-    /**
-     * @param mixed $qualifications
-     */
-    public function setQualifications($qualifications): void
-    {
-        $this->qualifications = $qualifications;
     }
 
     public function getNarrative(): ?Narrative
