@@ -9,7 +9,5 @@ use Doctrine\ORM\EntityManagerInterface;
 
 interface TransformerInterface
 {
-    static function fromArray(array $source);
-
     static function toEntity(DTOInterface $dto, EntityManagerInterface $em);
 }
