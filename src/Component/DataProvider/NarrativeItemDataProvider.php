@@ -9,21 +9,27 @@ use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\FragmentDTO;
 use App\Component\DTO\NarrativeDTO;
 use App\Component\Transformer\NarrativeDTOTransformer;
+use App\Repository\FragmentRepository;
 use App\Repository\NarrativeRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class NarrativeItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
+    /** @var FragmentRepository  */
+    private $fragmentRepository;
+
     /** @var NarrativeRepository  */
-    private $repository;
+    private $narrativeRepository;
 
     /**
-     * FragmentItemDataProvider constructor.
-     * @param NarrativeRepository $repository
+     * NarrativeItemDataProvider constructor.
+     * @param FragmentRepository $fragmentRepository
+     * @param NarrativeRepository $narrativeRepository
      */
-    public function __construct(NarrativeRepository $repository)
+    public function __construct(FragmentRepository $fragmentRepository, NarrativeRepository $narrativeRepository)
     {
-        $this->repository = $repository;
+        $this->fragmentRepository = $fragmentRepository;
+        $this->narrativeRepository = $narrativeRepository;
     }
 
     /**
@@ -48,20 +54,14 @@ final class NarrativeItemDataProvider implements ItemDataProviderInterface, Rest
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?NarrativeDTO
     {
-        if (!$narrative = $this->repository->findOneByUuid($id)) {
-            throw new NotFoundHttpException("Item not found for uuid " . $id);
+        if (!$narrative = $this->narrativeRepository->findOneByUuid($id)) {
+            throw new NotFoundHttpException("Narrative not found for uuid " . $id);
         }
 
         // convert narrative into Narrative DTO
-        $narrativeDTO = new NarrativeDTO();
-        $narrativeDTO->setUuid($narrative->getUuid());
-        $narrativeDTO->setFragments([]);
-
-        // get all fragments of a narrative
-        $narratives = $this->repository->findNarrativeWithFragments($narrative->getId());
-
-        // create DTO with multiple fragments
-        return NarrativeDTOTransformer::fromArray($narratives);
+        return NarrativeDTOTransformer::fromEntity($narrative, [
+            "fragments" => $this->fragmentRepository->findNarrativeLastFragments($id ,10)
+        ]);
     }
 
 }

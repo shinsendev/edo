@@ -14,7 +14,7 @@ class Fragment extends AbstractUniqueEntity
     use EntityDatableTrait;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $title;
 
@@ -24,9 +24,10 @@ class Fragment extends AbstractUniqueEntity
     private $content;
 
     /**
-     * @ORM\OneToMany(targetEntity="Qualification", mappedBy="fragment", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Narrative", inversedBy="fragments")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $qualifications;
+    private $narrative;
 
     /**
      * @return mixed
@@ -56,20 +57,16 @@ class Fragment extends AbstractUniqueEntity
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getQualifications()
+    public function getNarrative(): ?Narrative
     {
-        return $this->qualifications;
+        return $this->narrative;
     }
 
-    /**
-     * @param mixed $qualifications
-     */
-    public function setQualifications($qualifications): void
+    public function setNarrative(?Narrative $narrative): self
     {
-        $this->qualifications = $qualifications;
+        $this->narrative = $narrative;
+
+        return $this;
     }
 
 }

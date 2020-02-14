@@ -6,8 +6,9 @@ namespace App\Component\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\Selected\Narrative\NarrativeCreator;
-use App\Component\Selected\Narrative\NarrativeUpdater;
+use App\Component\Narratable\Narrative\NarrativeCreator;
+use App\Component\Narratable\Narrative\NarrativeUpdater;
+use App\Repository\FictionRepository;
 use App\Repository\NarrativeRepository;
 
 /**
@@ -43,33 +44,33 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
     }
 
     /**
-     * @param $data
+     * @param $narrativeDTO
      * @param array $context
      * @return bool
      */
-    public function supports($data, array $context = []): bool
+    public function supports($narrativeDTO, array $context = []): bool
     {
-        return $data instanceof NarrativeDTO;
+        return $narrativeDTO instanceof NarrativeDTO;
     }
 
     /**
-     * @param $dto
+     * @param $narrativeDTO
      * @param array $context
      * @return object|void
      * @throws \Exception
      */
-    public function persist($dto, array $context = [])
+    public function persist($narrativeDTO, array $context = [])
     {
-        if (!$narrative = $this->repository->findOneByUuid($dto->getUuid())) {
+        if (!$narrative = $this->repository->findOneByUuid($narrativeDTO->getUuid())) {
             // it's a new  narrative, this is an insert
-            $this->creator->save($dto);
+            $this->creator->save($narrativeDTO);
         }
         else {
             // narrative already exists, so it is an update
-            $this->updater->update($dto, $narrative);
+            $this->updater->update($narrativeDTO, $narrative);
         }
 
-        return $dto;
+        return $narrativeDTO;
     }
 
     public function remove($data, array $context = [])

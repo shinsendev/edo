@@ -21,11 +21,12 @@ class NarrativeResourceGetTest extends AbstractNarrativeResource
 
         $this->assertResponseIsSuccessful();
         $arrayResponse = $response->toArray();
+
         $this->assertEquals(2, count($arrayResponse['fragments']));
         $this->assertEquals($arrayResponse['fragments'][1]['title'], 'Fragment title');
         $this->assertEquals($arrayResponse['fragments'][0]['title'], 'Fragment title 2');
         $this->assertEquals($arrayResponse['uuid'], '6284e5ac-09cf-4334-9503-dedf31bafdd0');
-        $this->assertEquals($arrayResponse['content'], $arrayResponse['fragments'][0]['content']);
+        $this->assertEquals($arrayResponse['content'], $arrayResponse['fragments'][0]['content'], 'Not the correct content');
     }
 
     public function testGetNarrativesCollection()

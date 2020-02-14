@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Component\Selected;
+namespace App\Component\Narratable;
 
 
 class SelectedType

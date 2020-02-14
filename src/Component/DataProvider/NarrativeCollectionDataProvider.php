@@ -16,12 +16,16 @@ use App\Repository\NarrativeRepository;
  */
 final class NarrativeCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
-    /** @var NarrativeRepository  */
-    private $repository;
+    /** @var FragmentRepository  */
+    private $fragmentRepository;
 
-    public function __construct(NarrativeRepository $repository)
+    /** @var NarrativeRepository  */
+    private $narrativeRepository;
+
+    public function __construct(FragmentRepository $fragmentRepository, NarrativeRepository $narrativeRepository)
     {
-        $this->repository = $repository;
+        $this->fragmentRepository = $fragmentRepository;
+        $this->narrativeRepository = $narrativeRepository;
     }
 
     /**
@@ -43,10 +47,13 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
      */
     public function getCollection(string $resourceClass, string $operationName = null): \Generator
     {
-        $narratives = $this->repository->findNarrativesCollectionWithLastFragments(10);
+        $narratives = $this->narrativeRepository->findLastNarratives(10);
 
         foreach ($narratives as $narrative) {
-            yield NarrativeDTOTransformer::fromArrayWithoutFragments($narrative);
+            yield $narrativeDTO= NarrativeDTOTransformer::fromEntity($narrative, [
+                // we only keep the last fragment to set the title and the content
+                "fragments" => $this->fragmentRepository->findNarrativeLastFragments($narrative->getUuid() ,10)
+            ]);
         }
     }
 }

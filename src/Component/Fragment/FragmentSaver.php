@@ -4,9 +4,8 @@
 namespace App\Component\Fragment;
 
 
+use App\Component\DTO\NarrativeDTO;
 use App\Component\EntityManager\SaveEntityHelper;
-use App\Component\Generator\FragmentGenerator;
-use App\Component\Generator\QualificationGenerator;
 use App\Component\Relation\Qualifier;
 use App\Component\Transformer\FragmentDTOTransformer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,30 +14,13 @@ class FragmentSaver
 {
     /**
      * @param EntityManagerInterface $em
-     * @param $narrativeDTO
-     * @param $uuid
+     * @param NarrativeDTO $narrativeDTO
+     * @throws \App\Component\Exception\EdoException
      */
-    public static function save(EntityManagerInterface $em, $narrativeDTO, $uuid)
+    public static function save(EntityManagerInterface $em, NarrativeDTO $narrativeDTO)
     {
         // create Fragment
-        $fragment = FragmentDTOTransformer::toEntity($narrativeDTO);
+        $fragment = FragmentDTOTransformer::toEntity($narrativeDTO, $em);
         SaveEntityHelper::saveEntity($em, $fragment);
-
-        // create Qualification
-        $qualification = Qualifier::createQualification($fragment, $uuid);
-        SaveEntityHelper::saveEntity($em, $qualification);
-    }
-
-    /**
-     * @param EntityManagerInterface $em
-     * @param string $uuid
-     * @throws \Exception
-     */
-    public static function addFragmentToNarrative(EntityManagerInterface $em, string $uuid)
-    {
-        $fragment = FragmentGenerator::generateFragment($uuid);
-        SaveEntityHelper::saveEntity($em, $fragment);
-        $qualification = QualificationGenerator::generateQualification($fragment, $uuid);
-        SaveEntityHelper::saveEntity($em, $qualification);
     }
 }

@@ -3,8 +3,7 @@
 
 namespace App\Tests\Integration\Narrative;
 
-
-use App\Component\Fragment\FragmentSaver;
+use App\DataFixtures\FragmentFixtures;
 
 class NarrativeResourceUpdateTest extends AbstractNarrativeResource
 {
@@ -33,7 +32,6 @@ class NarrativeResourceUpdateTest extends AbstractNarrativeResource
         // there are no more narratives but one more fragments
         $this->assertEquals(2, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
         $this->assertEquals(4, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
-        $this->assertEquals(4, count($this->qualificationRepository->findAll()), 'Uncorrect number of qualifiacations');
 
         // get the updated narrative
         $response = $this->client->request('GET', 'api/narratives/'.$this->data['uuid']);
@@ -59,20 +57,22 @@ class NarrativeResourceUpdateTest extends AbstractNarrativeResource
         $this->assertEquals(2, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
 
         // we select an existing narrative and count the number of fragments
-        $uuid = '6284e5ac-09cf-4334-9503-dedf31bafdd0';
-        $this->assertEquals(2, count($this->qualificationRepository->findBySelectedUuid($uuid)), 'Uncorrect number of fragments');
+        $narrativeUuid = '6284e5ac-09cf-4334-9503-dedf31bafdd0';
+        $this->assertEquals(2, count($this->fragmentRepository->findNarrativeLastFragments($narrativeUuid)), 'Uncorrect number of fragments');
+
+        $narrative = $this->narrativeRepository->findOneByUuid($narrativeUuid);
 
         // we add 8 fragments
         for ($i=0; $i < 8; $i++) {
-            FragmentSaver::addFragmentToNarrative($this->em, $uuid);
+            $this->em->persist(FragmentFixtures::generateFragment($narrative));
+            $this->em->flush();
         }
 
         // check we have 10 fragments now
-        $this->assertEquals(10, count($this->qualificationRepository->findBySelectedUuid($uuid)), 'Uncorrect number of fragments');
-
+        $this->assertEquals(10, count($this->fragmentRepository->findNarrativeLastFragments($narrativeUuid)), 'Uncorrect number of fragments');
 
         // send request to create a new fragment for an existing narrative
-        $this->data['uuid'] = $uuid;
+        $this->data['uuid'] = $narrativeUuid;
 
         // create a new fragment for an existing narrative
         $this->client->request('POST', 'api/narratives', [
@@ -81,6 +81,6 @@ class NarrativeResourceUpdateTest extends AbstractNarrativeResource
         ]);
 
         // check if we have still max numbers of fragments, VERSIONING_MAX variable in .env.test defines the limit
-        $this->assertEquals(10, count($this->qualificationRepository->findBySelectedUuid($uuid)), 'Uncorrect number of fragments');
+        $this->assertEquals(10, count($this->fragmentRepository->findNarrativeLastFragments($narrativeUuid)), 'Uncorrect number of fragments');
     }
 }

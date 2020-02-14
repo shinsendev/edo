@@ -36,3 +36,5 @@ services:
 
     App\Component\Selected\Narrative\NarrativeUpdater:
         arguments: ['@doctrine.orm.default_entity_manager']
+
+    'Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter': ~

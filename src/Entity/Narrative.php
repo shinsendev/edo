@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Composition\EntityDatableTrait;
 use App\Entity\Composition\EntityUpdatableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use App\Entity\Abstraction\AbstractUniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -53,7 +55,23 @@ class Narrative extends AbstractUniqueEntity
      */
     private $children;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Fiction", inversedBy="narratives")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $fiction;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Fragment", mappedBy="narrative", orphanRemoval=true)
+     */
+    private $fragments;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->fragments = new ArrayCollection();
+    }
+    
     /**
      * @return mixed
      */
@@ -148,6 +166,49 @@ class Narrative extends AbstractUniqueEntity
     public function setChildren($children): void
     {
         $this->children = $children;
+    }
+
+    public function getFiction(): ?Fiction
+    {
+        return $this->fiction;
+    }
+
+    public function setFiction(?Fiction $fiction): self
+    {
+        $this->fiction = $fiction;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Fragment[]
+     */
+    public function getFragments(): Collection
+    {
+        return $this->fragments;
+    }
+
+    public function addFragment(Fragment $fragment): self
+    {
+        if (!$this->fragments->contains($fragment)) {
+            $this->fragments[] = $fragment;
+            $fragment->setNarrative($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFragment(Fragment $fragment): self
+    {
+        if ($this->fragments->contains($fragment)) {
+            $this->fragments->removeElement($fragment);
+            // set the owning side to null (unless already changed)
+            if ($fragment->getNarrative() === $this) {
+                $fragment->setNarrative(null);
+            }
+        }
+
+        return $this;
     }
 
 }
