@@ -42,6 +42,11 @@ class NarrativeDTO implements DTOInterface
     private $fragments;
 
     /**
+     * @var string
+     */
+    private $fictionUuid;
+
+    /**
      * @return mixed
      */
     public function getUuid()
@@ -105,4 +110,19 @@ class NarrativeDTO implements DTOInterface
         $this->fragments = $fragments;
     }
 
+    /**
+     * @return string
+     */
+    public function getFictionUuid(): string
+    {
+        return $this->fictionUuid;
+    }
+
+    /**
+     * @param string $fictionUuid
+     */
+    public function setFictionUuid(string $fictionUuid): void
+    {
+        $this->fictionUuid = $fictionUuid;
+    }
 }

@@ -53,15 +53,9 @@ final class NarrativeItemDataProvider implements ItemDataProviderInterface, Rest
         }
 
         // convert narrative into Narrative DTO
-        $narrativeDTO = new NarrativeDTO();
-        $narrativeDTO->setUuid($narrative->getUuid());
-        $narrativeDTO->setFragments([]);
-
-        // get all fragments of a narrative
-        $narratives = $this->repository->findNarrativeWithFragments($narrative->getId());
-
-        // create DTO with multiple fragments
-        return NarrativeDTOTransformer::fromArray($narratives);
+        return NarrativeDTOTransformer::fromEntity($narrative, [
+            "fragments" => $this->repository->findLastFragments($id ,10)
+        ]);
     }
 
 }

@@ -3,6 +3,7 @@
 
 namespace App\Entity\Abstraction;
 
+use App\Entity\EntityInterface;
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\HasLifecycleCallbacks()
  */
-abstract class AbstractUniqueEntity extends AbstractBaseEntity
+abstract class AbstractUniqueEntity extends AbstractBaseEntity implements EntityInterface
 {
     /**
      * @ORM\Column(type="guid", unique=true)

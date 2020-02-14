@@ -18,3 +18,5 @@ api_platform:
     swagger:
         versions: [3]
 
+    # Convert Camel case into snake case
+    name_converter: 'Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter'

@@ -16,22 +16,22 @@ class Character extends AbstractUniqueEntity
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $firstname;
+    private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $lastname;
+    private $lastName;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $birthyear;
+    private $birthYear;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $deathyear;
+    private $deathYear;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Fiction", inversedBy="characters")
@@ -39,64 +39,83 @@ class Character extends AbstractUniqueEntity
      */
     private $fiction;
 
-
-    public function getFirstname(): ?string
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
     {
-        return $this->firstname;
+        return $this->firstName;
     }
 
-    public function setFirstname(string $firstname): self
+    /**
+     * @param mixed $firstName
+     */
+    public function setFirstName($firstName): void
     {
-        $this->firstname = $firstname;
-
-        return $this;
+        $this->firstName = $firstName;
     }
 
-    public function getLastname(): ?string
+    /**
+     * @return mixed
+     */
+    public function getLastName()
     {
-        return $this->lastname;
+        return $this->lastName;
     }
 
-    public function setLastname(?string $lastname): self
+    /**
+     * @param mixed $lastName
+     */
+    public function setLastName($lastName): void
     {
-        $this->lastname = $lastname;
-
-        return $this;
+        $this->lastName = $lastName;
     }
 
-    public function getBirthyear(): ?int
+    /**
+     * @return mixed
+     */
+    public function getBirthYear()
     {
-        return $this->birthyear;
+        return $this->birthYear;
     }
 
-    public function setBirthyear(?int $birthyear): self
+    /**
+     * @param mixed $birthYear
+     */
+    public function setBirthYear($birthYear): void
     {
-        $this->birthyear = $birthyear;
-
-        return $this;
+        $this->birthYear = $birthYear;
     }
 
-    public function getDeathyear(): ?int
+    /**
+     * @return mixed
+     */
+    public function getDeathYear()
     {
-        return $this->deathyear;
+        return $this->deathYear;
     }
 
-    public function setDeathyear(?int $deathyear): self
+    /**
+     * @param mixed $deathYear
+     */
+    public function setDeathYear($deathYear): void
     {
-        $this->deathyear = $deathyear;
-
-        return $this;
+        $this->deathYear = $deathYear;
     }
 
-    public function getFiction(): ?Fiction
+    /**
+     * @return mixed
+     */
+    public function getFiction()
     {
         return $this->fiction;
     }
 
-    public function setFiction(?Fiction $fiction): self
+    /**
+     * @param mixed $fiction
+     */
+    public function setFiction($fiction): void
     {
         $this->fiction = $fiction;
-
-        return $this;
     }
 }

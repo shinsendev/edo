@@ -4,6 +4,7 @@
 namespace App\Tests\Integration\Narrative;
 
 
+use App\Repository\FictionRepository;
 use App\Repository\FragmentRepository;
 use App\Repository\NarrativeRepository;
 use App\Repository\QualificationRepository;
@@ -40,6 +41,9 @@ class AbstractNarrativeResource extends AbstractEdoApiTestCase
     /** @var FragmentRepository|object|null  */
     protected $qualificationRepository;
 
+    /** @var FictionRepository|object|null  */
+    protected $fictionRepository;
+
     public function setUp():void
     {
         parent::setUp();
@@ -53,6 +57,7 @@ class AbstractNarrativeResource extends AbstractEdoApiTestCase
             'content' => $this->content
         ];
 
+        // we use the container for test of Symfony that let us use "private" services
         $container = self::$container;
 
         $this->em = $container->get(EntityManagerInterface::class);
@@ -61,5 +66,6 @@ class AbstractNarrativeResource extends AbstractEdoApiTestCase
         $this->narrativeRepository = $container->get(NarrativeRepository::class);
         $this->fragmentRepository = $container->get(FragmentRepository::class);
         $this->qualificationRepository = $container->get(QualificationRepository::class);
+        $this->fictionRepository = $container->get(FictionRepository::class);
     }
 }

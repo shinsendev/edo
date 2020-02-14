@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Component\Exception\EdoException;
+use App\Entity\Fragment;
 use App\Entity\Narrative;
 use App\Repository\Helper\RawSQLQueryHelper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,47 +23,77 @@ class NarrativeRepository extends NestedTreeRepository
     }
 
     /**
-     * @param string $narrativeId
-     * @return mixed[]
-     * @throws \Doctrine\DBAL\DBALException
+     * @param int $limit
+     * @return mixed
      */
-    public function findNarrativeWithFragments(string $narrativeId)
+    public function findLastNarratives(int $limit = 10)
     {
-        //we get by default the last 25 fragments
-        $sql = '
-                SELECT n.*, f.title, f.content, f.uuid as fragment_uuid, f.created_at as fragment_created_at FROM narrative n
-            INNER JOIN qualification q ON n.uuid = q.selected_uuid
-            INNER JOIN fragment f ON f.id = q.fragment_id
-            WHERE n.id = :id
-            ORDER BY f.created_at DESC
-            LIMIT 25
-        ';
+        $query = $this->getEntityManager()->createQuery('
+            SELECT n FROM App\Entity\Narrative n 
+        ')
+        ->setMaxResults($limit);
 
-        $stmt = RawSQLQueryHelper::createCustomStatement($this->getEntityManager(), $sql, ['id' => $narrativeId]);
-
-        return $stmt->fetchAll();
+        return $query->getResult();
     }
 
     /**
-     * @return mixed[]
-     * @throws EdoException
-     * @throws \Doctrine\DBAL\DBALException
+     * @param string $narrativeUuid
+     * @param int $limit
+     * @return mixed
      */
-    public function findNarrativesCollectionWithLastFragments()
+    public function findLastFragments(string $narrativeUuid, int $limit = 10)
     {
-        $sql = '
-            SELECT DISTINCT ON (n.id) n.*, f.title, f.content, f.uuid as fragment_uuid FROM narrative n
-    INNER JOIN qualification q ON n.uuid = q.selected_uuid
-    INNER JOIN fragment f ON f.id = q.fragment_id ORDER BY n.id, f.created_at DESC;
-        ';
+       $query = $this->getEntityManager()->createQuery('
+            SELECT f FROM '.Fragment::class.' f JOIN f.narrative n WHERE n.uuid = :uuid ORDER BY f.createdAt DESC
+        ')
+           ->setParameter('uuid', $narrativeUuid)
+           ->setMaxResults($limit);
 
-        try {
-            $stmt = RawSQLQueryHelper::createCustomStatement($this->getEntityManager(), $sql);
-        }
-        catch(EdoException $e) {
-            throw new EdoException($e);
-        }
-
-        return $stmt->fetchAll();
+       return $query->getResult();
     }
+
+//    /**
+//     * @param string $narrativeId
+//     * @return mixed[]
+//     * @throws \Doctrine\DBAL\DBALException
+//     */
+//    public function findNarrativeWithFragments(string $narrativeId)
+//    {
+//        //we get by default the last 25 fragments
+//        $sql = '
+//                SELECT n.*, f.title, f.content, f.uuid as fragment_uuid, f.created_at as fragment_created_at FROM narrative n
+//            INNER JOIN qualification q ON n.uuid = q.selected_uuid
+//            INNER JOIN fragment f ON f.id = q.fragment_id
+//            WHERE n.id = :id
+//            ORDER BY f.created_at DESC
+//            LIMIT 25
+//        ';
+//
+//        $stmt = RawSQLQueryHelper::createCustomStatement($this->getEntityManager(), $sql, ['id' => $narrativeId]);
+//
+//        return $stmt->fetchAll();
+//    }
+//
+//    /**
+//     * @return mixed[]
+//     * @throws EdoException
+//     * @throws \Doctrine\DBAL\DBALException
+//     */
+//    public function findNarrativesCollectionWithLastFragments()
+//    {
+//        $sql = '
+//            SELECT DISTINCT ON (n.id) n.*, f.title, f.content, f.uuid as fragment_uuid FROM narrative n
+//    INNER JOIN qualification q ON n.uuid = q.selected_uuid
+//    INNER JOIN fragment f ON f.id = q.fragment_id ORDER BY n.id, f.created_at DESC;
+//        ';
+//
+//        try {
+//            $stmt = RawSQLQueryHelper::createCustomStatement($this->getEntityManager(), $sql);
+//        }
+//        catch(EdoException $e) {
+//            throw new EdoException($e);
+//        }
+//
+//        return $stmt->fetchAll();
+//    }
 }

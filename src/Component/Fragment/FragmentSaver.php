@@ -4,6 +4,7 @@
 namespace App\Component\Fragment;
 
 
+use App\Component\DTO\NarrativeDTO;
 use App\Component\EntityManager\SaveEntityHelper;
 use App\Component\Generator\FragmentGenerator;
 use App\Component\Generator\QualificationGenerator;
@@ -18,10 +19,10 @@ class FragmentSaver
      * @param $narrativeDTO
      * @param $uuid
      */
-    public static function save(EntityManagerInterface $em, $narrativeDTO, $uuid)
+    public static function save(EntityManagerInterface $em, NarrativeDTO $narrativeDTO, string $uuid)
     {
         // create Fragment
-        $fragment = FragmentDTOTransformer::toEntity($narrativeDTO);
+        $fragment = FragmentDTOTransformer::toEntity($narrativeDTO, $em);
         SaveEntityHelper::saveEntity($em, $fragment);
 
         // create Qualification
