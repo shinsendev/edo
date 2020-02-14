@@ -49,17 +49,23 @@ class FragmentDTOTransformer extends AbstractTransformer implements TransformerI
     //todo : correct not supposed to be Narrative DTO here
     public static function toEntity(DTOInterface $narrativeDTO, EntityManagerInterface $em)
     {
+        // we check if it is the correct DTO
         if(!$narrativeDTO instanceof NarrativeDTO)
         {
             throw new EdoException('Not a narrative DTO');
+        }
+
+        // check if narrative really exists
+        if (!$narrative = $em->getRepository(Narrative::class)->findOneByUuid($narrativeDTO->getUuid())) {
+            throw new EdoException('There are no Narrative '.$narrativeDTO->getUuid());
         }
 
         $fragment = new Fragment();
         $fragment->setTitle($narrativeDTO->getTitle());
         $fragment->setContent($narrativeDTO->getContent());
         $fragment->setCreatedAt(DateTimeHelper::now());
-        $fragment->setNarrative($em->getRepository(Narrative::class)->findOneByUuid($narrativeDTO->getUuid()));
 
+        $fragment->setNarrative($narrative);
         return $fragment;
     }
 
