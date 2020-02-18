@@ -26,12 +26,23 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
         $fictionDTO->setUuid($entity->getUuid());
         $fictionDTO->setTitle($entity->getTitle());
         $fictionDTO->setContent(''); // todo: get description narrative
-        $fictionDTO->setNarratives([]);
+        $fictionDTO->setCreatedAt(DateTimeHelper::stringify($entity->getCreatedAt()));
+        $fictionDTO->setUpdatedAt(DateTimeHelper::stringify($entity->getUpdatedAt()));
+
+        // manage embedded
+        $narrativesDTO = [];
+
+        foreach ($nested['narratives'] as $narrative) {
+            $narrativesDTO[]= NarrativeDTOTransformer::fromEntity($narrative,
+                ['fragments' => $narrative->getFragments()]
+            ); // needs fragment
+        }
+
+        $fictionDTO->setNarratives($narrativesDTO);
         $fictionDTO->setOrigins([]);
         $fictionDTO->setFollowings([]);
         $fictionDTO->setCharacters([]);
-        $fictionDTO->setCreatedAt(DateTimeHelper::stringify($entity->getCreatedAt()));
-        $fictionDTO->setUpdatedAt(DateTimeHelper::stringify($entity->getUpdatedAt()));
+
 
         return $fictionDTO;
     }
