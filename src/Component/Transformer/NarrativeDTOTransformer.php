@@ -8,6 +8,7 @@ use App\Component\DTO\DTOInterface;
 use App\Component\DTO\NarrativeDTO;
 use App\Component\Date\DateTimeHelper;
 use App\Component\Exception\EdoException;
+use App\Entity\EntityInterface;
 use App\Entity\Fiction;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +27,7 @@ class NarrativeDTOTransformer implements TransformerInterface
 
         try {
             $narrativeUuid = $narrativeDTO->getUuid();
-        } catch(EdoException $e) {
+        } catch(\Exception $e) {
             throw new EdoException('No uuid found for the narrative : ' . $e);
         }
         $narrative->setUuid($narrativeUuid);
@@ -50,13 +51,13 @@ class NarrativeDTOTransformer implements TransformerInterface
     }
 
     /**
-     * @param Narrative $narrative
+     * @param EntityInterface $narrative
      * @param array $nested
      * @return NarrativeDTO
      *
-     * @throws \App\Component\Exception\EdoException
+     * @throws EdoException
      */
-    public static function fromEntity(Narrative $narrative, array $nested = []): NarrativeDTO
+    public static function fromEntity(EntityInterface $narrative, array $nested = []): NarrativeDTO
     {
         // create DTO and add basics
         $narrativeDTO = new NarrativeDTO();
