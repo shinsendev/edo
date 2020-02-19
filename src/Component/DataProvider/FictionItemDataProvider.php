@@ -45,12 +45,14 @@ class FictionItemDataProvider implements ItemDataProviderInterface, RestrictedDa
         }
 
         $narratives = $this->em->getRepository(Narrative::class)->findByFiction($fiction);
-        $characters = $this->em->getRepository(Character::class)->findByFiction($fiction);
+        $origins = $this->em->getRepository(Narrative::class)->findOrigins($fiction, 3);
+        $followings = $this->em->getRepository(Narrative::class)->findFollowings($fiction, 3);
+        $characters = $this->em->getRepository(Character::class)->findLastCharacters($fiction);
 
         // convert narrative into Narrative DTO
         return FictionDTOTransformer::fromEntity(new TransformerConfig(
             $fiction,
-            ['narratives' => $narratives, 'characters' => $characters],
+            ['narratives' => $narratives, 'origins' => $origins,  'followings' => $followings, 'characters' => $characters],
             $this->em
         ));
     }
@@ -63,7 +65,6 @@ class FictionItemDataProvider implements ItemDataProviderInterface, RestrictedDa
      */
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        // TODO: Implement supports() method.
         return FictionDTO::class === $resourceClass;
     }
 

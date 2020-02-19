@@ -9,9 +9,7 @@ namespace App\Component\Transformer;
 use App\Component\Date\DateTimeHelper;
 use App\Component\DTO\DTOInterface;
 use App\Component\DTO\FictionDTO;
-use App\Entity\EntityInterface;
 use App\Entity\Fragment;
-use App\Repository\FragmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FictionDTOTransformer extends AbstractTransformer implements TransformerInterface
@@ -33,10 +31,10 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
         $fictionDTO->setUpdatedAt(DateTimeHelper::stringify($entity->getUpdatedAt()));
 
         // manage embedded
-        $narrativesDTO = [];
         $nested = $config->getNested();
         $em = $config->getEm();
 
+        $narrativesDTO = [];
         foreach ($nested['narratives'] as $narrative) {
             $nestedConfig = new TransformerConfig(
                 $narrative, ['fragments' => $em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid())],
@@ -47,10 +45,37 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
             $narrativesDTO[]= NarrativeDTOTransformer::fromEntity($nestedConfig); // needs fragment
         }
 
+        $originsDTO = [];
+        foreach ($nested['origins'] as $narrative) {
+            $nestedConfig = new TransformerConfig(
+                $narrative, ['fragments' => $em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid())],
+                $em,
+                ['nested' => true] // we don't want all the fragments of the narrative
+            );
+
+             $originsDTO[]= NarrativeDTOTransformer::fromEntity($nestedConfig); // needs fragment
+        }
+
+        $followingsDTO = [];
+        foreach ($nested['followings'] as $narrative) {
+            $nestedConfig = new TransformerConfig(
+                $narrative, ['fragments' => $em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid())],
+                $em,
+                ['nested' => true] // we don't want all the fragments of the narrative
+            );
+
+            $followingsDTO[] = NarrativeDTOTransformer::fromEntity($nestedConfig); // needs fragment
+        }
+
+        $charactersDTO = [];
+        foreach ($nested['characters'] as $character) {
+            $charactersDTO[] = CharacterDTOTransformer::fromEntity(new TransformerConfig($character));
+        }
+
         $fictionDTO->setNarratives($narrativesDTO);
-        $fictionDTO->setOrigins([]);
-        $fictionDTO->setFollowings([]);
-        $fictionDTO->setCharacters([]);
+        $fictionDTO->setOrigins($originsDTO);
+        $fictionDTO->setFollowings($followingsDTO);
+        $fictionDTO->setCharacters($charactersDTO);
 
         return $fictionDTO;
     }

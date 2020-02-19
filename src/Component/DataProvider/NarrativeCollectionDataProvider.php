@@ -47,10 +47,10 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
      */
     public function getCollection(string $resourceClass, string $operationName = null): \Generator
     {
-        $narratives = $this->narrativeRepository->findLastNarratives(10);
+        $narratives = $this->narrativeRepository->findLastNarratives(3);
 
         foreach ($narratives as $narrative) {
-            yield $narrativeDTO= NarrativeDTOTransformer::fromEntity($narrative, [
+            yield $narrativeDTO = NarrativeDTOTransformer::fromEntity($narrative, [
                 // we only keep the last fragment to set the title and the content
                 "fragments" => $this->fragmentRepository->findNarrativeLastFragments($narrative->getUuid() ,10)
             ]);

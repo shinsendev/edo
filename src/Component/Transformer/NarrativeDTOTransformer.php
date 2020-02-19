@@ -62,6 +62,8 @@ class NarrativeDTOTransformer implements TransformerInterface
         $narrativeDTO = new NarrativeDTO();
         $narrative = $config->getSource();
         $narrativeDTO->setUuid($narrative->getUuid());
+        // todo: to replace with dynamic data
+        $narrativeDTO->setType('narrative');
         $narrativeDTO->setFictionUuid($narrative->getFiction()->getUuid());
 
         // add datetimes infos
@@ -92,7 +94,7 @@ class NarrativeDTOTransformer implements TransformerInterface
             }
         }
 
-        // if it's not a nested narrative, we add the fagments to DTO
+        // if it's not a nested narrative, we add the fragments to DTO
         foreach ($nested['fragments'] as $fragment) {
            $fragments[] = FragmentDTOTransformer::fromEntity(new TransformerConfig($fragment));
         }

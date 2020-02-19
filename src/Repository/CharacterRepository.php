@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Character;
+use App\Entity\Fiction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,32 +20,18 @@ class CharacterRepository extends ServiceEntityRepository
         parent::__construct($registry, Character::class);
     }
 
-    // /**
-    //  * @return Character[] Returns an array of Character objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param Fiction $fiction
+     * @param int $limit
+     * @return mixed
+     */
+    public function findLastCharacters(Fiction $fiction, int $limit = 10)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $query = $this->getEntityManager()->createQuery('
+            SELECT c FROM App\Entity\Character c WHERE c.fiction = :fiction ORDER BY c.updatedAt DESC
+        ')->setParameter('fiction', $fiction)->setMaxResults($limit);
 
-    /*
-    public function findOneBySomeField($value): ?Character
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $query->getResult();
     }
-    */
+
 }

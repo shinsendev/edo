@@ -6,7 +6,7 @@ namespace App\Component\DTO;
 
 use App\Component\Transformer\TransformableInterface;
 
-abstract class AbstractDTO implements TransformableInterface
+abstract class AbstractDTO implements TransformableInterface, DTOInterface
 {
 
 }

@@ -17,7 +17,7 @@ use App\Component\DTO\Composition\UpdatableTrait;
  *     shortName="narrative"
  * )
  */
-class NarrativeDTO extends AbstractDTO implements DTOInterface
+class NarrativeDTO extends AbstractDTO
 {
     use DatableTrait, UpdatableTrait, TreeableTrait;
 
@@ -30,6 +30,11 @@ class NarrativeDTO extends AbstractDTO implements DTOInterface
      * @var string
      */
     private $title;
+
+    /**
+     * @var string
+     */
+    private $type;
 
     /**
      * @var string
@@ -125,4 +130,21 @@ class NarrativeDTO extends AbstractDTO implements DTOInterface
     {
         $this->fictionUuid = $fictionUuid;
     }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
 }
