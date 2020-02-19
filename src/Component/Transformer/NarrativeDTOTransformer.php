@@ -77,18 +77,25 @@ class NarrativeDTOTransformer implements TransformerInterface
         $narrativeDTO->setLvl($narrative->getLvl());
         $narrativeDTO->setRgt($narrative->getRgt());
 
-        // if it's not for the narratives collection, we add the last X fragments for the narrative
+
         $fragments = [];
         $nested = $config->getNested();
-
-        foreach ($nested['fragments'] as $fragment) {
-           $fragments[] = FragmentDTOTransformer::fromEntity(new TransformerConfig($fragment));
-        }
 
         // if there are nested fragments we use them to set the title and content of the narrative
         $narrativeDTO->setTitle($nested['fragments'][0]->getTitle());
         $narrativeDTO->setContent($nested['fragments'][0]->getContent());
 
+        // if it's not for the narratives collection, we add the last X fragments for the narrative
+        if ($config->getOptions() && isset($config->getOptions()['nested'])) {
+            if ($config->getOptions()['nested']) {
+                return $narrativeDTO;
+            }
+        }
+
+        // if it's not a nested narrative, we add the fagments to DTO
+        foreach ($nested['fragments'] as $fragment) {
+           $fragments[] = FragmentDTOTransformer::fromEntity(new TransformerConfig($fragment));
+        }
         $narrativeDTO->setFragments($fragments);
 
         return $narrativeDTO;

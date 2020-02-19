@@ -38,9 +38,11 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
         $em = $config->getEm();
 
         foreach ($nested['narratives'] as $narrative) {
-            $nestedConfig = new TransformerConfig($narrative, [
-                'fragments' => $em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid())
-            ], $em);
+            $nestedConfig = new TransformerConfig(
+                $narrative, ['fragments' => $em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid())],
+                $em,
+                ['nested' => true] // we don't want all the fragments of the narrative
+            );
 
             $narrativesDTO[]= NarrativeDTOTransformer::fromEntity($nestedConfig); // needs fragment
         }

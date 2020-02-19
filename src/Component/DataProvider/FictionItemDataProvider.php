@@ -48,7 +48,11 @@ class FictionItemDataProvider implements ItemDataProviderInterface, RestrictedDa
         $characters = $this->em->getRepository(Character::class)->findByFiction($fiction);
 
         // convert narrative into Narrative DTO
-        return FictionDTOTransformer::fromEntity(new TransformerConfig($fiction, ['narratives' => $narratives, 'characters' => $characters], $this->em));
+        return FictionDTOTransformer::fromEntity(new TransformerConfig(
+            $fiction,
+            ['narratives' => $narratives, 'characters' => $characters],
+            $this->em
+        ));
     }
 
     /**

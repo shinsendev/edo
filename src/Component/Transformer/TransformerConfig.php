@@ -14,17 +14,26 @@ class TransformerConfig
     /** @var EntityManagerInterface */
     private $em;
 
+    /** @var array */
+    private $options;
+
     /**
      * @description: could be nested entity or nested DTO
-     * @var array
+     * @var TransformableInterface[]
      */
     private $nested;
 
-    public function __construct(TransformableInterface $source, array $nested = [], EntityManagerInterface $em = null)
+    public function __construct(
+        TransformableInterface $source,
+        array $nested = [],
+        EntityManagerInterface $em = null,
+        array $options = []
+    )
     {
         $this->source = $source;
         $this->nested = $nested;
         $this->em = $em;
+        $this->options = $options;
     }
 
     /**
@@ -73,5 +82,21 @@ class TransformerConfig
     public function setNested(array $nested): void
     {
         $this->nested = $nested;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param array $options
+     */
+    public function setOptions(array $options): void
+    {
+        $this->options = $options;
     }
 }
