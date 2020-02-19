@@ -17,7 +17,7 @@ use App\Component\DTO\Composition\UpdatableTrait;
  *     shortName="narrative"
  * )
  */
-class NarrativeDTO implements DTOInterface
+class NarrativeDTO extends AbstractDTO implements DTOInterface
 {
     use DatableTrait, UpdatableTrait, TreeableTrait;
 

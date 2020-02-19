@@ -20,8 +20,9 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class FragmentDTOTransformer extends AbstractTransformer implements TransformerInterface
 {
-    public static function fromEntity(EntityInterface $fragment, array $nested = [])
+    public static function fromEntity(TransformerConfig $config)
     {
+        $fragment = $config->getSource();
         if(!$fragment instanceof Fragment)
         {
             throw new EdoException('Not a fragment');

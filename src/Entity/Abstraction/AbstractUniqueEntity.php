@@ -3,6 +3,7 @@
 
 namespace App\Entity\Abstraction;
 
+use App\Component\Transformer\TransformableInterface;
 use App\Entity\EntityInterface;
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\HasLifecycleCallbacks()
  */
-abstract class AbstractUniqueEntity extends AbstractBaseEntity implements EntityInterface
+abstract class AbstractUniqueEntity extends AbstractBaseEntity implements EntityInterface, TransformableInterface
 {
     /**
      * @ORM\Column(type="guid", unique=true)

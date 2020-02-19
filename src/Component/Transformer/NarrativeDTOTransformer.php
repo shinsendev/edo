@@ -51,16 +51,16 @@ class NarrativeDTOTransformer implements TransformerInterface
     }
 
     /**
-     * @param EntityInterface $narrative
-     * @param array $nested
-     * @return NarrativeDTO
+     * @param TransformerConfig $config
      *
+     * @return NarrativeDTO
      * @throws EdoException
      */
-    public static function fromEntity(EntityInterface $narrative, array $nested = []): NarrativeDTO
+    public static function fromEntity(TransformerConfig $config): NarrativeDTO
     {
         // create DTO and add basics
         $narrativeDTO = new NarrativeDTO();
+        $narrative = $config->getSource();
         $narrativeDTO->setUuid($narrative->getUuid());
         $narrativeDTO->setFictionUuid($narrative->getFiction()->getUuid());
 
@@ -79,9 +79,10 @@ class NarrativeDTOTransformer implements TransformerInterface
 
         // if it's not for the narratives collection, we add the last X fragments for the narrative
         $fragments = [];
+        $nested = $config->getNested();
 
         foreach ($nested['fragments'] as $fragment) {
-           $fragments[] = FragmentDTOTransformer::fromEntity($fragment);
+           $fragments[] = FragmentDTOTransformer::fromEntity(new TransformerConfig($fragment));
         }
 
         // if there are nested fragments we use them to set the title and content of the narrative

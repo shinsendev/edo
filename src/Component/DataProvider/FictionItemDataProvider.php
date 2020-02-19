@@ -8,9 +8,11 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\FictionDTO;
 use App\Component\Transformer\FictionDTOTransformer;
-use App\Repository\CharacterRepository;
-use App\Repository\FictionRepository;
-use App\Repository\NarrativeRepository;
+use App\Component\Transformer\TransformerConfig;
+use App\Entity\Character;
+use App\Entity\Fiction;
+use App\Entity\Narrative;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -19,24 +21,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class FictionItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
-    /** @var FictionRepository  */
-    private $fictionRepository;
-
-    /** @var NarrativeRepository  */
-    private $narrativeRepository;
-
-    /** @var CharacterRepository  */
-    private $characterRepository;
+    /** @var EntityManagerInterface  */
+    private $em;
 
     public function __construct(
-        FictionRepository $fictionRepository,
-        NarrativeRepository $narrativeRepository,
-        CharacterRepository $characterRepository
+        EntityManagerInterface $em
     )
     {
-        $this->fictionRepository = $fictionRepository;
-        $this->narrativeRepository = $narrativeRepository;
-        $this->characterRepository = $characterRepository;
+        $this->em = $em;
     }
 
     /**
@@ -48,18 +40,15 @@ class FictionItemDataProvider implements ItemDataProviderInterface, RestrictedDa
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []) :?FictionDTO
     {
-        if (!$fiction = $this->fictionRepository->findOneByUuid($id)) {
+        if (!$fiction = $this->em->getRepository(Fiction::class)->findOneByUuid($id)) {
             throw new NotFoundHttpException("Fiction not found for uuid " . $id);
         }
 
-        $narratives = $this->narrativeRepository->findByFiction($fiction);
-        $characters = $this->characterRepository->findByFiction($fiction);
+        $narratives = $this->em->getRepository(Narrative::class)->findByFiction($fiction);
+        $characters = $this->em->getRepository(Character::class)->findByFiction($fiction);
 
         // convert narrative into Narrative DTO
-        return FictionDTOTransformer::fromEntity($fiction, [
-                'narratives' => $narratives,
-                'characters' => $characters
-            ]);
+        return FictionDTOTransformer::fromEntity(new TransformerConfig($fiction, ['narratives' => $narratives, 'characters' => $characters], $this->em));
     }
 
     /**

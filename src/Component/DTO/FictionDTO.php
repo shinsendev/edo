@@ -19,7 +19,7 @@ use App\Entity\Narrative;
  *     shortName="fiction"
  * )
  */
-class FictionDTO implements DTOInterface
+class FictionDTO extends  AbstractDTO implements DTOInterface
 {
     use DatableTrait, UpdatableTrait;
 

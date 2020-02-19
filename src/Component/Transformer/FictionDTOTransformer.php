@@ -10,6 +10,8 @@ use App\Component\Date\DateTimeHelper;
 use App\Component\DTO\DTOInterface;
 use App\Component\DTO\FictionDTO;
 use App\Entity\EntityInterface;
+use App\Entity\Fragment;
+use App\Repository\FragmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FictionDTOTransformer extends AbstractTransformer implements TransformerInterface
@@ -20,9 +22,10 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
         // TODO: Implement toEntity() method.
     }
 
-    static function fromEntity(EntityInterface $entity, array $nested = [])
+    static function fromEntity(TransformerConfig $config)
     {
         $fictionDTO = new FictionDTO();
+        $entity = $config->getSource();
         $fictionDTO->setUuid($entity->getUuid());
         $fictionDTO->setTitle($entity->getTitle());
         $fictionDTO->setContent(''); // todo: get description narrative
@@ -31,18 +34,21 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
 
         // manage embedded
         $narrativesDTO = [];
+        $nested = $config->getNested();
+        $em = $config->getEm();
 
         foreach ($nested['narratives'] as $narrative) {
-            $narrativesDTO[]= NarrativeDTOTransformer::fromEntity($narrative,
-                ['fragments' => $narrative->getFragments()]
-            ); // needs fragment
+            $nestedConfig = new TransformerConfig($narrative, [
+                'fragments' => $em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid())
+            ], $em);
+
+            $narrativesDTO[]= NarrativeDTOTransformer::fromEntity($nestedConfig); // needs fragment
         }
 
         $fictionDTO->setNarratives($narrativesDTO);
         $fictionDTO->setOrigins([]);
         $fictionDTO->setFollowings([]);
         $fictionDTO->setCharacters([]);
-
 
         return $fictionDTO;
     }
