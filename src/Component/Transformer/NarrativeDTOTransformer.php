@@ -8,6 +8,7 @@ use App\Component\DTO\DTOInterface;
 use App\Component\DTO\NarrativeDTO;
 use App\Component\Date\DateTimeHelper;
 use App\Component\Exception\EdoException;
+use App\Entity\EntityInterface;
 use App\Entity\Fiction;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +27,7 @@ class NarrativeDTOTransformer implements TransformerInterface
 
         try {
             $narrativeUuid = $narrativeDTO->getUuid();
-        } catch(EdoException $e) {
+        } catch(\Exception $e) {
             throw new EdoException('No uuid found for the narrative : ' . $e);
         }
         $narrative->setUuid($narrativeUuid);
@@ -50,17 +51,19 @@ class NarrativeDTOTransformer implements TransformerInterface
     }
 
     /**
-     * @param Narrative $narrative
-     * @param array $nested
-     * @return NarrativeDTO
+     * @param TransformerConfig $config
      *
-     * @throws \App\Component\Exception\EdoException
+     * @return NarrativeDTO
+     * @throws EdoException
      */
-    public static function fromEntity(Narrative $narrative, array $nested = []): NarrativeDTO
+    public static function fromEntity(TransformerConfig $config): NarrativeDTO
     {
         // create DTO and add basics
         $narrativeDTO = new NarrativeDTO();
+        $narrative = $config->getSource();
         $narrativeDTO->setUuid($narrative->getUuid());
+        // todo: to replace with dynamic data
+        $narrativeDTO->setType('narrative');
         $narrativeDTO->setFictionUuid($narrative->getFiction()->getUuid());
 
         // add datetimes infos
@@ -76,17 +79,25 @@ class NarrativeDTOTransformer implements TransformerInterface
         $narrativeDTO->setLvl($narrative->getLvl());
         $narrativeDTO->setRgt($narrative->getRgt());
 
-        // if it's not for the narratives collection, we add the last X fragments for the narrative
-        $fragments = [];
 
-        foreach ($nested['fragments'] as $fragment) {
-           $fragments[] = FragmentDTOTransformer::fromEntity($fragment);
-        }
+        $fragments = [];
+        $nested = $config->getNested();
 
         // if there are nested fragments we use them to set the title and content of the narrative
         $narrativeDTO->setTitle($nested['fragments'][0]->getTitle());
         $narrativeDTO->setContent($nested['fragments'][0]->getContent());
 
+        // if it's not for the narratives collection, we add the last X fragments for the narrative
+        if ($config->getOptions() && isset($config->getOptions()['nested'])) {
+            if ($config->getOptions()['nested']) {
+                return $narrativeDTO;
+            }
+        }
+
+        // if it's not a nested narrative, we add the fragments to DTO
+        foreach ($nested['fragments'] as $fragment) {
+           $fragments[] = FragmentDTOTransformer::fromEntity(new TransformerConfig($fragment));
+        }
         $narrativeDTO->setFragments($fragments);
 
         return $narrativeDTO;

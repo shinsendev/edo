@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Component\Exception\EdoException;
+use App\Entity\Fiction;
 use App\Entity\Fragment;
 use App\Entity\Narrative;
 use App\Repository\Helper\RawSQLQueryHelper;
@@ -26,15 +27,43 @@ class NarrativeRepository extends NestedTreeRepository
      * @param int $limit
      * @return mixed
      */
-    public function findLastNarratives(int $limit = 10)
+    public function findLastNarratives(Fiction $fiction, int $limit = 10)
     {
         $query = $this->getEntityManager()->createQuery('
-            SELECT n FROM App\Entity\Narrative n 
-        ')
-        ->setMaxResults($limit);
+            SELECT n FROM App\Entity\Narrative n WHERE n.fiction = :fiction ORDER BY n.updatedAt DESC
+        ')->setParameter('fiction', $fiction)->setMaxResults($limit);
 
         return $query->getResult();
     }
+
+    /**
+     * @param Fiction $fiction
+     * @param int $limit
+     * @return mixed
+     */
+    public function findOrigins(Fiction $fiction, int $limit = 10)
+    {
+        $query = $this->getEntityManager()->createQuery('
+            SELECT n FROM App\Entity\Narrative n WHERE n.lvl = 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
+        ')->setParameter('fiction', $fiction)->setMaxResults($limit);
+
+        return $query->getResult();
+    }
+
+    /**
+     * @param Fiction $fiction
+     * @param int $limit
+     * @return mixed
+     */
+    public function findFollowings(Fiction $fiction, int $limit = 10)
+    {
+        $query = $this->getEntityManager()->createQuery('
+            SELECT n FROM App\Entity\Narrative n WHERE n.lvl != 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
+        ')->setParameter('fiction', $fiction)->setMaxResults($limit);
+
+        return $query->getResult();
+    }
+
 
 //    /**
 //     * @param string $narrativeId

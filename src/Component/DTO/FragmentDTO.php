@@ -12,7 +12,7 @@ use Ramsey\Uuid\Uuid;
  * Class Fragment
  * @package App\Component\DTO
  */
-class FragmentDTO implements DTOInterface
+class FragmentDTO extends AbstractDTO
 {
     use DatableTrait;
 

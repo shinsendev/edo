@@ -32,6 +32,8 @@ class CharacterFixtures extends Fixture implements DependentFixtureInterface
         $character = new Character();
         $character->setFirstname('Name');
         $character->setLastname('Lastname');
+        $character->setBirthYear(1900);
+        $character->setDeathYear(2000);
         $character->setUuid(Uuid::uuid4());
 
         return $character;

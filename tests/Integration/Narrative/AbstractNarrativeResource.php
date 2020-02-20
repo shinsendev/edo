@@ -51,7 +51,8 @@ class AbstractNarrativeResource extends AbstractEdoApiTestCase
             'uuid' => '6153ca18-47a9-4b38-ae72-29e8340060cb',
             'title' => $this->title,
             'content' => $this->content,
-            'fiction_uuid' => '1b7df281-ae2a-40bf-ad6a-ac60409a9ce6'
+            'fiction_uuid' => '1b7df281-ae2a-40bf-ad6a-ac60409a9ce6',
+            'type' => 'narrative'
         ];
 
         // we use the container for test of Symfony that let us use "private" services

@@ -13,7 +13,6 @@ use App\Entity\EntityInterface;
 use App\Entity\Fragment;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Entity;
 
 /**
  * Class FragmentDTOTransformer
@@ -21,8 +20,9 @@ use Doctrine\ORM\Mapping\Entity;
  */
 class FragmentDTOTransformer extends AbstractTransformer implements TransformerInterface
 {
-    public static function fromEntity(EntityInterface $fragment)
+    public static function fromEntity(TransformerConfig $config)
     {
+        $fragment = $config->getSource();
         if(!$fragment instanceof Fragment)
         {
             throw new EdoException('Not a fragment');
@@ -36,15 +36,6 @@ class FragmentDTOTransformer extends AbstractTransformer implements TransformerI
 
         return $fragmentDTO;
     }
-
-    /**
-     * @param array $source
-     */
-    static function fromArray(array $source)
-    {
-        // TODO: Implement fromArray() method.
-    }
-
 
     //todo : correct not supposed to be Narrative DTO here
     public static function toEntity(DTOInterface $narrativeDTO, EntityManagerInterface $em)

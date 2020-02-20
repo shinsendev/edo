@@ -9,17 +9,19 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Component\DTO\Composition\DatableTrait;
 use App\Component\DTO\Composition\TreeableTrait;
 use App\Component\DTO\Composition\UpdatableTrait;
+use App\Entity\Character;
+use App\Entity\Narrative;
 
 /**
  * Class NarrativeDTO
  * @package App\Component\DTO
  * @ApiResource(
- *     shortName="narrative"
+ *     shortName="fiction"
  * )
  */
-class NarrativeDTO extends AbstractDTO
+class FictionDTO extends AbstractDTO
 {
-    use DatableTrait, UpdatableTrait, TreeableTrait;
+    use DatableTrait, UpdatableTrait;
 
     /**
      * @ApiProperty(identifier=true)
@@ -34,22 +36,27 @@ class NarrativeDTO extends AbstractDTO
     /**
      * @var string
      */
-    private $type;
-
-    /**
-     * @var string
-     */
     private $content;
 
     /**
-     * @var FragmentDTO[]
+     * @var Narrative[]
      */
-    private $fragments;
+    private $narratives;
 
     /**
-     * @var string
+     * @var Narrative[]
      */
-    private $fictionUuid;
+    private $origins;
+
+    /**
+     * @var Narrative[]
+     */
+    private $followings;
+
+    /**
+     * @var Character[]
+     */
+    private $characters;
 
     /**
      * @return mixed
@@ -100,51 +107,67 @@ class NarrativeDTO extends AbstractDTO
     }
 
     /**
-     * @return FragmentDTO[]
+     * @return Narrative[]
      */
-    public function getFragments(): ?array
+    public function getNarratives(): array
     {
-        return $this->fragments;
+        return $this->narratives;
     }
 
     /**
-     * @param FragmentDTO[] $fragments
+     * @param Narrative[] $narratives
      */
-    public function setFragments(array $fragments): void
+    public function setNarratives(array $narratives): void
     {
-        $this->fragments = $fragments;
+        $this->narratives = $narratives;
     }
 
     /**
-     * @return string
+     * @return Narrative[]
      */
-    public function getFictionUuid(): string
+    public function getOrigins(): array
     {
-        return $this->fictionUuid;
+        return $this->origins;
     }
 
     /**
-     * @param string $fictionUuid
+     * @param Narrative[] $origins
      */
-    public function setFictionUuid(string $fictionUuid): void
+    public function setOrigins(array $origins): void
     {
-        $this->fictionUuid = $fictionUuid;
+        $this->origins = $origins;
     }
 
     /**
-     * @return string
+     * @return Narrative[]
      */
-    public function getType(): string
+    public function getFollowings(): array
     {
-        return $this->type;
+        return $this->followings;
     }
 
     /**
-     * @param string $type
+     * @param Narrative[] $followings
      */
-    public function setType(string $type): void
+    public function setFollowings(array $followings): void
     {
-        $this->type = $type;
+        $this->followings = $followings;
+    }
+
+    /**
+     * @return Character[]
+     */
+    public function getCharacters(): array
+    {
+        return $this->characters;
+    }
+
+    /**
+     * @param Character[] $characters
+     */
+    public function setCharacters(array $characters): void
+    {
+        $this->characters = $characters;
     }
 
 }

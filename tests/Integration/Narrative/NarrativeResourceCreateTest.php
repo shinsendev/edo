@@ -21,16 +21,9 @@ class NarrativeResourceCreateTest extends AbstractNarrativeResource
         // and we count fragments
         $this->assertEquals(3, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
 
-        $data = [
-            'uuid' => '6153ca18-47a9-4b38-ae72-29e8340060cb',
-            'title' => $title,
-            'content' => $content,
-            'fiction_uuid' => '1b7df281-ae2a-40bf-ad6a-ac60409a9ce6'
-        ];
-
         $response = $this->client->request('POST', 'api/narratives', [
             'headers' => ['Content-Type' => 'application/json'],
-            'json' => $data
+            'json' => $this->data
         ]);
 
         $arrayResponse = $response->toArray();

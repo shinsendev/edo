@@ -48,6 +48,7 @@ class FragmentRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
+    // todo: keep for narration, when we'll need to connect characters, events, places, etc. with narratives, for the moment, everything is only connected to fiction
 //    /**
 //     * @param string $narrativeUuid
 //     * @return mixed[]
