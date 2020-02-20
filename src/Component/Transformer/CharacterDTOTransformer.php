@@ -28,6 +28,7 @@ class CharacterDTOTransformer implements TransformerInterface
         $characterDTO->setLastName($character->getLastName());
         $characterDTO->setBirthYear($character->getBirthYear());
         $characterDTO->setDeathYear($character->getDeathYear());
+        $characterDTO->setUuid($character->getUuid());
 
         return $characterDTO;
     }

@@ -7,8 +7,13 @@ use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\FragmentDTO;
 use App\Component\DTO\NarrativeDTO;
 use App\Component\Transformer\NarrativeDTOTransformer;
+use App\Component\Transformer\TransformerConfig;
+use App\Entity\Fiction;
+use App\Entity\Fragment;
+use App\Entity\Narrative;
 use App\Repository\FragmentRepository;
 use App\Repository\NarrativeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class FragmentCollectionDataProvider
@@ -16,16 +21,12 @@ use App\Repository\NarrativeRepository;
  */
 final class NarrativeCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
-    /** @var FragmentRepository  */
-    private $fragmentRepository;
+    /** @var EntityManagerInterface  */
+    private $em;
 
-    /** @var NarrativeRepository  */
-    private $narrativeRepository;
-
-    public function __construct(FragmentRepository $fragmentRepository, NarrativeRepository $narrativeRepository)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->fragmentRepository = $fragmentRepository;
-        $this->narrativeRepository = $narrativeRepository;
+        $this->em = $em;
     }
 
     /**
@@ -47,13 +48,18 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
      */
     public function getCollection(string $resourceClass, string $operationName = null): \Generator
     {
-        $narratives = $this->narrativeRepository->findLastNarratives(3);
+        //todo: replace by dynamic fiction
+        $fiction = $this->em->getRepository(Fiction::class)->findAll();
+        $narratives = $this->em->getRepository(Narrative::class)->findLastNarratives($fiction[0]);
 
         foreach ($narratives as $narrative) {
-            yield $narrativeDTO = NarrativeDTOTransformer::fromEntity($narrative, [
+            $config = new TransformerConfig(
+                $narrative,
                 // we only keep the last fragment to set the title and the content
-                "fragments" => $this->fragmentRepository->findNarrativeLastFragments($narrative->getUuid() ,10)
-            ]);
+                ["fragments" => $this->em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid() ,10)],
+                $this->em
+            );
+            yield NarrativeDTOTransformer::fromEntity($config);
         }
     }
 }

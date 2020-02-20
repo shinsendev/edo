@@ -41,6 +41,22 @@ class CharacterDTO extends AbstractDTO
     private $deathYear;
 
     /**
+     * @return string
+     */
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @param string $uuid
+     */
+    public function setUuid(string $uuid): void
+    {
+        $this->uuid = $uuid;
+    }
+
+    /**
      * @return mixed
      */
     public function getFirstName()
