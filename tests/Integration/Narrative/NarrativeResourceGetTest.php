@@ -39,7 +39,7 @@ class NarrativeResourceGetTest extends AbstractNarrativeResource
         $this->assertResponseIsSuccessful();
         $arrayResponse = $response->toArray();
         $this->assertCount(2, $arrayResponse['hydra:member']);
-        $this->assertEquals('Fragment title 2', $arrayResponse['hydra:member'][0]['title']);
+        $this->assertEquals('title Parent 3', $arrayResponse['hydra:member'][0]['title']);
         $this->assertNotNull($arrayResponse['hydra:member'][1]['uuid']);
     }
 

@@ -5,18 +5,28 @@ namespace App\Tests\Unit;
 
 use App\Component\Date\DateTimeHelper;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\Generator\NarrativeDTOGenerator;
 use App\Component\Narratable\Narrative\NarrativeCreator;
-use App\Tests\AbstractEdoApiTestCase;
+use Liip\TestFixturesBundle\Test\FixturesTrait;
 
 /**
  * Class NarrativeCreator
  * @package App\Tests\Unit
  */
-class NarrativeCreatorTest extends AbstractEdoApiTestCase
+class NarrativeCreatorTest extends AbstractUnitTest
 {
+    use FixturesTrait;
+
+    public function setUp():void
+    {
+        parent::setUp();
+        $this->loadFixtures([
+            'App\DataFixtures\FictionFixtures',
+            ]);
+    }
+
     public function testNarrativeCreatorSave()
     {
+        self::bootKernel();
         $container = self::$container;
         $creator = $container->get(NarrativeCreator::class);
         $response = $creator->save($this->generateNarrativeDTO());

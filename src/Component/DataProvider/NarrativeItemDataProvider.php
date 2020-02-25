@@ -12,8 +12,6 @@ use App\Component\Transformer\NarrativeDTOTransformer;
 use App\Component\Transformer\TransformerConfig;
 use App\Entity\Fragment;
 use App\Entity\Narrative;
-use App\Repository\FragmentRepository;
-use App\Repository\NarrativeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
