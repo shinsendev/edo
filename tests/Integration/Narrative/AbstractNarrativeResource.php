@@ -7,17 +7,15 @@ namespace App\Tests\Integration\Narrative;
 use App\Repository\FictionRepository;
 use App\Repository\FragmentRepository;
 use App\Repository\NarrativeRepository;
-use App\Tests\AbstractEdoApiTestCase;
+use App\Tests\Integration\AbstractIntegrationTest;
 use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
 
 /**
  * Class AbstractNarrativeResourceTest
  * @package App\Tests\Integration\Narrative
  */
-class AbstractNarrativeResource extends AbstractEdoApiTestCase
+class AbstractNarrativeResource extends AbstractIntegrationTest
 {
-    use FixturesTrait;
 
     /** @var EntityManagerInterface|object|null  */
     protected $em;

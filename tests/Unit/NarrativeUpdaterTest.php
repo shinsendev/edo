@@ -6,16 +6,28 @@ use App\Component\Date\DateTimeHelper;
 use App\Component\DTO\Faker\NarrativeDTOGenerator;
 use App\Component\Narratable\Narrative\NarrativeUpdater;
 use App\Repository\NarrativeRepository;
-use App\Tests\AbstractEdoApiTestCase;
+use Liip\TestFixturesBundle\Test\FixturesTrait;
 
 /**
  * Class NarrativeUpdaterTest
  * @package App\Tests\Unit
  */
-class NarrativeUpdaterTest extends AbstractEdoApiTestCase
+class NarrativeUpdaterTest extends AbstractUnitTest
 {
+    use FixturesTrait;
+
+    public function setUp():void
+    {
+        parent::setUp();
+        $this->loadFixtures([
+            'App\DataFixtures\FictionFixtures',
+            'App\DataFixtures\NarrativeFixtures',
+        ]);
+    }
+
     public function testNarrativeUpdaterUpdate()
     {
+        self::bootKernel();
         $container = self::$container;
         $generator = $container->get(NarrativeUpdater::class);
         // narrative uuid must be the same for the DTO and the entity
@@ -29,7 +41,9 @@ class NarrativeUpdaterTest extends AbstractEdoApiTestCase
         $this->assertEquals('Narrative title generated', $response->getTitle());
         $this->assertEquals($narrativeUuid, $response->getUuid());
         $this->assertEquals('Narrative content generated for test', $response->getContent());
-        $this->assertEquals(DateTimeHelper::humanNow(), $response->getCreatedAt());
+
+        $datetime = DateTimeHelper::now()->modify('-5 minutes');
+        $this->assertEquals(DateTimeHelper::stringify($datetime), $response->getCreatedAt());
         $this->assertEquals(DateTimeHelper::humanNow(), $response->getUpdatedAt());
     }
 }

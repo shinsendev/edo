@@ -22,16 +22,16 @@ class NarrativeFixtures extends Fixture
         $narrative = new Narrative();
         $narrative->setUuid('6284e5ac-09cf-4334-9503-dedf31bafdd0');
         $narrative->setFiction($fiction);
-        $narrative->setCreatedAt(DateTimeHelper::now()->modify('-2 minutes'));
-        $narrative->setUpdatedAt(DateTimeHelper::now()->modify('-2 minutes'));
+        $narrative->setCreatedAt(DateTimeHelper::now()->modify('-5 minutes'));
+        $narrative->setUpdatedAt(DateTimeHelper::now()->modify('-5 minutes'));
         $manager->persist($narrative);
 
         $child = new Narrative();
         $child->setUuid('9aab1d64-a66b-47f9-8fe9-8464bdbab6da');
         $child->setParent($narrative);
         $child->setFiction($fiction);
-        $narrative->setCreatedAt(DateTimeHelper::now()->modify('-1 minute'));
-        $narrative->setUpdatedAt(DateTimeHelper::now()->modify('-1 minute'));
+        $child->setCreatedAt(DateTimeHelper::now()->modify('-4 minutes'));
+        $child->setUpdatedAt(DateTimeHelper::now()->modify('-4 minutes'));
         $manager->persist($child);
 
         $manager->flush();
