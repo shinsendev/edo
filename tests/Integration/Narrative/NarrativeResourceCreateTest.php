@@ -46,8 +46,9 @@ class NarrativeResourceCreateTest extends AbstractNarrativeResource
         $this->assertResponseIsSuccessful();
         $arrayResponse = $response->toArray();
 
-        $this->assertEquals($title, $arrayResponse['hydra:member'][2]['title']);
-        $this->assertEquals($content, $arrayResponse['hydra:member'][2]['content']);
+        // we check the first narrative test that get collection send back
+        $this->assertEquals($title, $arrayResponse['hydra:member'][0]['title']);
+        $this->assertEquals($content, $arrayResponse['hydra:member'][0]['content']);
 
     }
 
