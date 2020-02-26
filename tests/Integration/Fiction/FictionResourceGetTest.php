@@ -20,6 +20,6 @@ class FictionResourceGetTest extends AbstractIntegrationTest
         $this->assertEquals(2, count($arrayResponse['narratives']), 'Wrong narratives number.');
         $this->assertEquals(1, count($arrayResponse['origins']), 'Wrong origins number.');
         $this->assertEquals(1, count($arrayResponse['followings']), 'Wrong followings number');
-        $this->assertEquals(0, count($arrayResponse['characters']), 'Wrong characters number');
+        $this->assertEquals(10, count($arrayResponse['characters']), 'Wrong characters number');
     }
 }
