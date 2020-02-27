@@ -52,7 +52,7 @@ class NarrativeFixtures extends Fixture
         // chap 1 part 2
         $chap1part2 = new Narrative();
         $chap1part2->setUuid('9aab1d64-a66b-47f9-8fe9-8464bdbab6da');
-        $chap1part2->setParent($chap1part2);
+        $chap1part2->setParent($chap1);
         $chap1part2->setFiction($fiction);
         $chap1part2->setCreatedAt(DateTimeHelper::now()->modify('-12 minutes'));
         $chap1part2->setUpdatedAt(DateTimeHelper::now()->modify('-12 minutes'));
@@ -61,7 +61,7 @@ class NarrativeFixtures extends Fixture
         // chap 1 part 3
         $chap1part3 = new Narrative();
         $chap1part3->setUuid('d7d4899d-9b1c-44cd-8406-8c839c16f79f');
-        $chap1part3->setParent($chap1part3);
+        $chap1part3->setParent($chap1);
         $chap1part3->setFiction($fiction);
         $chap1part3->setCreatedAt(DateTimeHelper::now()->modify('-11 minutes'));
         $chap1part3->setUpdatedAt(DateTimeHelper::now()->modify('-11 minutes'));
