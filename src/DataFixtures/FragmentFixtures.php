@@ -22,27 +22,48 @@ class FragmentFixtures extends Fixture implements DependentFixtureInterface
     {
         $narrative = $manager->getRepository(Narrative::class)->findOneByUuid('6284e5ac-09cf-4334-9503-dedf31bafdd0');
         $narrative2 = $manager->getRepository(Narrative::class)->findOneByUuid('9aab1d64-a66b-47f9-8fe9-8464bdbab6da');
+        $narrative3 = $manager->getRepository(Narrative::class)->findOneByUuid('');
 
+        // narrative 1
         $fragment = self::generateFragment($narrative);
         $fragment->setUuid('553f3319-5093-421b-a8d2-42de34f31023');
-        $fragment->setTitle('Fragment title');
-        $fragment->setContent('A simple fragment content.');
+        $fragment->setTitle('Chapitre 1 - Partie 1');
+        $fragment->setContent(file_get_contents(__DIR__.'/Files/narrative1_fragment1.txt', true));
         $fragment->setCreatedAt(DateTimeHelper::now()->modify('-3 minutes'));
         $manager->persist($fragment);
 
         $fragment2 = self::generateFragment($narrative);
-        $fragment2->setTitle('Fragment title 2');
-        $fragment2->setContent('A new fragment content.');
-        // we add 30 seconds to the fragment creation date to be sur it is the last one
+        $fragment2->setTitle('Chapitre 1 - Partie 1 - V2');
+        $fragment2->setContent(file_get_contents(__DIR__.'/Files/narrative1_fragment2.txt', true));
         $fragment2->setCreatedAt(DateTimeHelper::now()->modify('-2 minutes'));
         $manager->persist($fragment2);
 
-        $fragment3 = self::generateFragment($narrative);
-        $fragment3->setTitle('title Parent 3');
-        $fragment3->setContent('A third fragment content.');
-        // we add 30 seconds to the fragment creation date to be sur it is the last one
+        $fragment3 = self::generateFragment($narrative2);
+        $fragment3->setTitle('Chapter 1 - Part 2');
+        $fragment3->setContent(file_get_contents(__DIR__.'/Files/narrative2.txt', true));
         $fragment3->setCreatedAt(DateTimeHelper::now()->modify('-1 minute'));
         $fragment3->setNarrative($narrative2);
+        $manager->persist($fragment3);
+
+        $fragment3 = self::generateFragment($narrative3);
+        $fragment3->setTitle('Chapter 1 - Part 3');
+        $fragment3->setContent(file_get_contents(__DIR__.'/Files/narrative3_fragment1.txt', true));
+        $fragment3->setCreatedAt(DateTimeHelper::now()->modify('-1 minute'));
+        $fragment3->setNarrative($narrative3);
+        $manager->persist($fragment3);
+
+        $fragment3 = self::generateFragment($narrative3);
+        $fragment3->setTitle('Chapter 1 - Part 3 - V2');
+        $fragment3->setContent(file_get_contents(__DIR__.'/Files/narrative3_fragment2.txt', true));
+        $fragment3->setCreatedAt(DateTimeHelper::now()->modify('-1 minute'));
+        $fragment3->setNarrative($narrative3);
+        $manager->persist($fragment3);
+
+        $fragment3 = self::generateFragment($narrative3);
+        $fragment3->setTitle('Chapter 1 - Part 3 - V3');
+        $fragment3->setContent(file_get_contents(__DIR__.'/Files/narrative3_fragment3.txt', true));
+        $fragment3->setCreatedAt(DateTimeHelper::now()->modify('-1 minute'));
+        $fragment3->setNarrative($narrative3);
         $manager->persist($fragment3);
 
         $manager->flush();
