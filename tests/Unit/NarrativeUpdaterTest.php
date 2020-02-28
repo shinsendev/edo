@@ -42,7 +42,7 @@ class NarrativeUpdaterTest extends AbstractUnitTest
         $this->assertEquals($narrativeUuid, $response->getUuid());
         $this->assertEquals('Narrative content generated for test', $response->getContent());
 
-        $datetime = DateTimeHelper::now()->modify('-5 minutes');
+        $datetime = DateTimeHelper::now()->modify('-13 minutes');
         $this->assertEquals(DateTimeHelper::stringify($datetime), $response->getCreatedAt());
         $this->assertEquals(DateTimeHelper::humanNow(), $response->getUpdatedAt());
     }
