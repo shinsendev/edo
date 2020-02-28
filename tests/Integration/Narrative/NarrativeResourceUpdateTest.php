@@ -13,10 +13,10 @@ class NarrativeResourceUpdateTest extends AbstractNarrativeResource
     public function testUpdateNarrative()
     {
         // at first, we count the number of existing narratives
-        $this->assertEquals(2, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
+        $this->assertEquals(8, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
 
         // and we count fragments
-        $this->assertEquals(3, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
+        $this->assertEquals(11, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
 
         // send request to create a new fragment for an existing narrative
         $this->data['uuid'] = '6284e5ac-09cf-4334-9503-dedf31bafdd0';
@@ -30,8 +30,8 @@ class NarrativeResourceUpdateTest extends AbstractNarrativeResource
         $this->assertResponseIsSuccessful();
 
         // there are no more narratives but one more fragments
-        $this->assertEquals(2, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
-        $this->assertEquals(4, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
+        $this->assertEquals(8, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
+        $this->assertEquals(12, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
 
         // get the updated narrative
         $response = $this->client->request('GET', 'api/narratives/'.$this->data['uuid']);
@@ -54,7 +54,7 @@ class NarrativeResourceUpdateTest extends AbstractNarrativeResource
     public function testVersionningLimitFragmentsForANarrative()
     {
         // at first, we count the number of existing narratives
-        $this->assertEquals(2, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
+        $this->assertEquals(8, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
 
         // we select an existing narrative and count the number of fragments
         $narrativeUuid = '6284e5ac-09cf-4334-9503-dedf31bafdd0';
