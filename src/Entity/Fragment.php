@@ -14,12 +14,7 @@ class Fragment extends AbstractUniqueEntity
     use EntityDatableTrait;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $title;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", length=1024)
      */
     private $content;
 
@@ -28,22 +23,6 @@ class Fragment extends AbstractUniqueEntity
      * @ORM\JoinColumn(nullable=false)
      */
     private $narrative;
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title): void
-    {
-        $this->title = $title;
-    }
 
     public function getContent(): ?string
     {
