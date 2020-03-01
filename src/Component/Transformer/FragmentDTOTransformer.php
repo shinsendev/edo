@@ -29,7 +29,6 @@ class FragmentDTOTransformer extends AbstractTransformer implements TransformerI
         }
 
         $fragmentDTO = new FragmentDTO();
-        $fragmentDTO->setTitle($fragment->getTitle());
         $fragmentDTO->setContent($fragment->getContent());
         $fragmentDTO->setCreatedAt(DateTimeHelper::stringify($fragment->getCreatedAt()));
         $fragmentDTO->setUuid($fragment->getUuid());
@@ -52,7 +51,6 @@ class FragmentDTOTransformer extends AbstractTransformer implements TransformerI
         }
 
         $fragment = new Fragment();
-        $fragment->setTitle($narrativeDTO->getTitle());
         $fragment->setContent($narrativeDTO->getContent());
         $fragment->setCreatedAt(DateTimeHelper::now());
 

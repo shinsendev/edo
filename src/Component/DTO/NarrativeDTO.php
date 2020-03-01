@@ -29,11 +29,6 @@ class NarrativeDTO extends AbstractDTO
     /**
      * @var string
      */
-    private $title;
-
-    /**
-     * @var string
-     */
     private $type;
 
     /**
@@ -65,22 +60,6 @@ class NarrativeDTO extends AbstractDTO
     public function setUuid($uuid): void
     {
         $this->uuid = $uuid;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
     }
 
     /**

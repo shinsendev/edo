@@ -41,12 +41,10 @@ class NarrativeResourceUpdateTest extends AbstractNarrativeResource
         $this->assertEquals(3, count($arrayResponse['fragments']));
 
         // check the fragment data
-        $this->assertEquals($arrayResponse['fragments'][0]['title'], $this->title);
-        $this->assertNotEquals($arrayResponse['fragments'][0]['title'], $arrayResponse['fragments'][2]['title']);
+        $this->assertNotEquals($arrayResponse['fragments'][0]['content'], $arrayResponse['fragments'][2]['content']);
         $this->assertEquals($arrayResponse['fragments'][0]['content'], $this->content);
 
         // check if narrative infos has been correctly updated
-        $this->assertEquals($arrayResponse['title'], $this->title);
         $this->assertEquals($arrayResponse['content'], $this->content);
         $this->assertEquals($arrayResponse['uuid'], '6284e5ac-09cf-4334-9503-dedf31bafdd0');
     }
