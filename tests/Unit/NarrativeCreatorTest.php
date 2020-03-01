@@ -31,7 +31,6 @@ class NarrativeCreatorTest extends AbstractUnitTest
         $creator = $container->get(NarrativeCreator::class);
         $response = $creator->save($this->generateNarrativeDTO());
 
-        $this->assertEquals('Narrative title generated', $response->getTitle());
         $this->assertEquals('Narrative content generated for test', $response->getContent());
         //todo : we can exclude seconds from the test to be sure everyhing is ok
         $this->assertEquals(DateTimeHelper::humanNow(), $response->getCreatedAt());
@@ -47,7 +46,6 @@ class NarrativeCreatorTest extends AbstractUnitTest
     {
         $dto = new NarrativeDTO();
         $dto->setUuid('6153ca18-47a9-4b38-ae72-29e8340060cb');
-        $dto->setTitle('Narrative title generated');
         $dto->setContent('Narrative content generated for test');
         // we use the fiction created with the fixtures
         $dto->setFictionUuid('1b7df281-ae2a-40bf-ad6a-ac60409a9ce6');

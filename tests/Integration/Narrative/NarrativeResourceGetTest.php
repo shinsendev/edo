@@ -23,8 +23,8 @@ class NarrativeResourceGetTest extends AbstractNarrativeResource
         $arrayResponse = $response->toArray();
 
         $this->assertEquals(2, count($arrayResponse['fragments']));
-        $this->assertEquals($arrayResponse['fragments'][1]['title'], 'Chapitre 1 - Partie 1');
-        $this->assertEquals($arrayResponse['fragments'][0]['title'], 'Chapitre 1 - Partie 1 - V2');
+        $this->assertEquals($arrayResponse['fragments'][1]['uuid'], 'e7cc4025-030c-44a5-8c6f-b756575176b6');
+        $this->assertEquals($arrayResponse['fragments'][0]['uuid'], '03c340fa-b881-4c73-b634-63264382d8f5');
         $this->assertEquals($arrayResponse['uuid'], '6284e5ac-09cf-4334-9503-dedf31bafdd0');
         $this->assertEquals($arrayResponse['content'], $arrayResponse['fragments'][0]['content'], 'Not the correct content');
     }
@@ -39,8 +39,10 @@ class NarrativeResourceGetTest extends AbstractNarrativeResource
         $this->assertResponseIsSuccessful();
         $arrayResponse = $response->toArray();
         $this->assertCount(8, $arrayResponse['hydra:member']);
-        $this->assertEquals('Chapitre 2 - Part 2', $arrayResponse['hydra:member'][0]['title']);
+        $this->assertNotNull($arrayResponse['hydra:member'][0]['uuid']);
+        $this->assertNotNull($arrayResponse['hydra:member'][0]['content']);
         $this->assertNotNull($arrayResponse['hydra:member'][1]['uuid']);
+        $this->assertNotNull($arrayResponse['hydra:member'][1]['content']);
     }
 
     public function testGetNarrativeWithIncorrectUuid()

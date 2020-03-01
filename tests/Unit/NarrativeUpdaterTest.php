@@ -38,7 +38,6 @@ class NarrativeUpdaterTest extends AbstractUnitTest
 
         $response = $generator->update($narrativeDTO, $narrativeRepository->findOneByUuid($narrativeUuid));
 
-        $this->assertEquals('Narrative title generated', $response->getTitle());
         $this->assertEquals($narrativeUuid, $response->getUuid());
         $this->assertEquals('Narrative content generated for test', $response->getContent());
 

@@ -24,28 +24,7 @@ class FragmentDTO extends AbstractDTO
     /**
      * @var string
      */
-    private $title;
-
-    /**
-     * @var string
-     */
     private $content;
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title): void
-    {
-        $this->title = $title;
-    }
 
     /**
      * @return mixed
