@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Narrative;
 
+use Symfony\Component\HttpClient\Exception\ClientException;
+
 /**
  * Class NarrativeResourceCreateTest
  * @package App\Tests\Integration\Narrative
@@ -110,7 +112,12 @@ class NarrativeResourceCreateTest extends AbstractNarrativeResource
 
         $this->assertResponseStatusCodeSame(400);
 
-        //todo : add a way to check if the message is ok
+        try {
+            $this->client->getResponse()->getContent();
+        }
+        catch (ClientException $e) {
+            $this->assertContains('Your content cannot be longer than 1024 characters', $e->getMessage());
+        }
     }
 
 }
