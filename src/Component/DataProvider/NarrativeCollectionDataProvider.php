@@ -3,8 +3,6 @@
 namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
-use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
-use App\Component\DTO\NarrativeDTO;
 use App\Component\Transformer\NarrativeDTOTransformer;
 use App\Component\Transformer\TransformerConfig;
 use App\Entity\Fiction;
@@ -16,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * Class FragmentCollectionDataProvider
  * @package App\Component\DataProvider
  */
-final class NarrativeCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
+final class NarrativeCollectionDataProvider implements CollectionDataProviderInterface
 {
     /** @var EntityManagerInterface  */
     private $em;
@@ -24,17 +22,6 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-    }
-
-    /**
-     * @param string $resourceClass
-     * @param string|null $operationName
-     * @param array $context
-     * @return bool
-     */
-    public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
-    {
-        return NarrativeDTO::class === $resourceClass;
     }
 
     /**
