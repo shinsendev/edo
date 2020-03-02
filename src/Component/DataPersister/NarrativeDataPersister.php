@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Component\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
+use ApiPlatform\Core\Validator\ValidatorInterface;
 use App\Component\DTO\NarrativeDTO;
 use App\Component\Narratable\Narrative\NarrativeCreator;
 use App\Component\Narratable\Narrative\NarrativeUpdater;
@@ -26,21 +27,27 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
     /** @var NarrativeCreator  */
     private $creator;
 
+    /** @var ValidatorInterface  */
+    private $validator;
+
     /**
      * NarrativeDataPersister constructor.
      * @param NarrativeRepository $repository
      * @param NarrativeUpdater $updater
      * @param NarrativeCreator $creator
+     * @param ValidatorInterface $validator
      */
     public function __construct(
         NarrativeRepository $repository,
         NarrativeUpdater $updater,
-        NarrativeCreator $creator
+        NarrativeCreator $creator,
+        ValidatorInterface $validator
     )
     {
         $this->repository = $repository;
         $this->updater = $updater;
         $this->creator = $creator;
+        $this->validator = $validator;
     }
 
     /**
