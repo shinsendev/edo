@@ -9,6 +9,9 @@ namespace App\Component\DataProvider;
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\OriginDTO;
+use App\Component\Transformer\NarrativeDTOTransformer;
+use App\Component\Transformer\TransformerConfig;
+use App\Entity\Fragment;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -41,19 +44,30 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
      * @param array|int|string $id
      * @param string|null $operationName
      * @param array $context
-     * @return object|void|null
+     * @return \Generator|object|null
+     * @throws \App\Component\Exception\EdoException
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {
+        // check if it is a narrative
         if (!$narrative = $this->em->getRepository(Narrative::class)->findOneOriginByNarrativeUuid($id)) {
             throw new NotFoundHttpException("No origin narrative found for uuid " . $id);
         }
 
+        // get a limit number of narratives with the same parent if
+        $narratives = $this->em->getRepository(Narrative::class)->findBy(['root' => $narrative], null, 100);
 
+        foreach ($narratives as $narrative) {
+            $config = new TransformerConfig(
+                $narrative,
+                // we only keep the last fragment to set the title and the content
+                ["fragments" => $this->em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid() ,10)],
+                $this->em
+            );
+            yield NarrativeDTOTransformer::fromEntity($config);
+        }
 
-        dd($narrative);
-        // TODO : create an list of all narratives // how to limit?
-        // TODO: Implement getItem() method.
+        //todo: for the moment, I return a collection narrative, wouldn't it be better to return a specific originDTO? Narratives Without the fragments
     }
 
 }
