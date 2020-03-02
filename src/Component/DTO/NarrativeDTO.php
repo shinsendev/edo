@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Component\DTO\Composition\DatableTrait;
 use App\Component\DTO\Composition\TreeableTrait;
 use App\Component\DTO\Composition\UpdatableTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class NarrativeDTO
@@ -32,7 +33,10 @@ class NarrativeDTO extends AbstractDTO
     private $type;
 
     /**
-     * @var string
+     * @Assert\Length(
+     *      max = 1024,
+     *      maxMessage = "Your content cannot be longer than {{ limit }} characters"
+     * )
      */
     private $content;
 

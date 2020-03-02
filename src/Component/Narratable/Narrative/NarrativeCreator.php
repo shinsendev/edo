@@ -32,7 +32,7 @@ class NarrativeCreator
     {
         $narrative = NarrativeDTOTransformer::toEntity($narrativeDTO, $this->em);
         SaveEntityHelper::saveEntity($this->em, $narrative);
-        FragmentSaver::save($this->em, $narrativeDTO, $narrative->getUuid());
+        FragmentSaver::save($this->em, $narrativeDTO);
 
         return NarrativeResponseCreator::createResponse($narrativeDTO, $narrative);
     }

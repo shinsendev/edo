@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Component\DTO;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Component\DTO\Composition\DatableTrait;
@@ -17,12 +18,15 @@ class FragmentDTO extends AbstractDTO
     use DatableTrait;
 
     /**
-     * @ApiProperty(identifier=true)
+     * @var string
      */
     private $uuid;
 
     /**
-     * @var string
+     * @Assert\Length(
+     *      max = 1024,
+     *      maxMessage = "Your content cannot be longer than {{ limit }} characters"
+     * )
      */
     private $content;
 
