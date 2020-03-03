@@ -8,22 +8,27 @@ use App\Component\DTO\DTOInterface;
 use App\Component\DTO\NarrativeDTO;
 use App\Component\Date\DateTimeHelper;
 use App\Component\Exception\EdoException;
+use App\Entity\Abstraction\AbstractBaseEntity;
 use App\Entity\EntityInterface;
 use App\Entity\Fiction;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class NarrativeDTOTransformer implements TransformerInterface
 {
     /**
      * @param DTOInterface $narrativeDTO
      * @param EntityManagerInterface $em
+     * @param AbstractBaseEntity|null $entity
      * @return Narrative
-     * @throws \Exception
+     * @throws EdoException
      */
-    public static function toEntity(DTOInterface $narrativeDTO, EntityManagerInterface $em)
+    public static function toEntity(DTOInterface $narrativeDTO, EntityManagerInterface $em, AbstractBaseEntity $narrative = null)
     {
-        $narrative = new Narrative();
+        if(!$narrative) {
+            $narrative = new Narrative();
+        }
 
         try {
             $narrativeUuid = $narrativeDTO->getUuid();
@@ -32,11 +37,12 @@ class NarrativeDTOTransformer implements TransformerInterface
         }
         $narrative->setUuid($narrativeUuid);
 
-        // set datetimes
-        $narrative->setCreatedAt(DateTimeHelper::now());
-        $narrative->setUpdatedAt(DateTimeHelper::now());
-
-        //todo : implement tree mapping, only the parent?
+        if ($parentUuid = $narrativeDTO->getParentUuid()) {
+            if (!$parent = $em->getRepository(Narrative::class)->findOneByUuid($parentUuid)) {
+                throw new NotFoundHttpException('No parent narrative for the uuid '.$narrativeUuid);
+            }
+            $narrative->setParent($parent);
+        }
 
         // add fiction
         try {
@@ -74,7 +80,7 @@ class NarrativeDTOTransformer implements TransformerInterface
         // set tree info
         $narrativeDTO->setRoot($narrative->getRoot()->getUuid());
         if ($narrative->getParent()) {
-            $narrativeDTO->setParent($narrative->getParent()->getUuid());
+            $narrativeDTO->setParentUuid($narrative->getParent()->getUuid());
         }
         $narrativeDTO->setLft($narrative->getLft());
         $narrativeDTO->setLvl($narrative->getLvl());
