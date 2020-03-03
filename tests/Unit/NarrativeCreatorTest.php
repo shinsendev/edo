@@ -21,6 +21,7 @@ class NarrativeCreatorTest extends AbstractUnitTest
         parent::setUp();
         $this->loadFixtures([
             'App\DataFixtures\FictionFixtures',
+            'App\DataFixtures\NarrativeFixtures',
             ]);
     }
 
@@ -49,6 +50,7 @@ class NarrativeCreatorTest extends AbstractUnitTest
         $dto->setContent('Narrative content generated for test');
         // we use the fiction created with the fixtures
         $dto->setFictionUuid('1b7df281-ae2a-40bf-ad6a-ac60409a9ce6');
+        $dto->setParentUuid('de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff');
 
         return $dto;
     }

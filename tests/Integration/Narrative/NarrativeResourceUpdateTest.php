@@ -20,6 +20,7 @@ class NarrativeResourceUpdateTest extends AbstractNarrativeResource
 
         // send request to create a new fragment for an existing narrative
         $this->data['uuid'] = '6284e5ac-09cf-4334-9503-dedf31bafdd0';
+        $this->data['parent_uuid'] = '1b4705aa-4abd-4931-add0-ac11b6fff0c3';
 
         // create a new fragment for an existing narrative
         $this->client->request('POST', 'api/narratives', [
@@ -46,7 +47,8 @@ class NarrativeResourceUpdateTest extends AbstractNarrativeResource
 
         // check if narrative infos has been correctly updated
         $this->assertEquals($arrayResponse['content'], $this->content);
-        $this->assertEquals($arrayResponse['uuid'], '6284e5ac-09cf-4334-9503-dedf31bafdd0');
+        $this->assertEquals($this->data['uuid'], $arrayResponse['uuid']);
+        $this->assertEquals($this->data['parent_uuid'], $arrayResponse['parent_uuid']);
     }
 
     public function testVersionningLimitFragmentsForANarrative()

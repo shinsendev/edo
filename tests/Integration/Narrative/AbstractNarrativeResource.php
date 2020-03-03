@@ -48,7 +48,8 @@ class AbstractNarrativeResource extends AbstractIntegrationTest
             'uuid' => '6153ca18-47a9-4b38-ae72-29e8340060cb',
             'content' => $this->content,
             'fiction_uuid' => '1b7df281-ae2a-40bf-ad6a-ac60409a9ce6',
-            'type' => 'narrative'
+            'type' => 'narrative',
+            'parent_uuid' => 'de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff'
         ];
 
         // we use the container for test of Symfony that let us use "private" services
