@@ -62,7 +62,8 @@ class NarrativeDTOTransformer implements TransformerInterface
         $narrativeDTO = new NarrativeDTO();
         $narrative = $config->getSource();
         $narrativeDTO->setUuid($narrative->getUuid());
-        // todo: to replace with dynamic data
+
+        // todo: to replace with dynamic data // do we still need the type?
         $narrativeDTO->setType('narrative');
         $narrativeDTO->setFictionUuid($narrative->getFiction()->getUuid());
 
@@ -79,16 +80,18 @@ class NarrativeDTOTransformer implements TransformerInterface
         $narrativeDTO->setLvl($narrative->getLvl());
         $narrativeDTO->setRgt($narrative->getRgt());
 
-
         $fragments = [];
         $nested = $config->getNested();
 
         // if there are nested fragments we use them to set the title and content of the narrative
-        $narrativeDTO->setContent($nested['fragments'][0]->getContent());
+        if ($nested) {
+            // we set the content with the last fragment
+            $narrativeDTO->setContent($nested['fragments'][0]->getContent());
+        }
 
         // if it's not for the narratives collection, we add the last X fragments for the narrative
-        if ($config->getOptions() && isset($config->getOptions()['nested'])) {
-            if ($config->getOptions()['nested']) {
+        if ($config->getOptions() && isset($config->getOptions()['hideVersioning'])) {
+            if ($config->getOptions()['hideVersioning']) {
                 return $narrativeDTO;
             }
         }

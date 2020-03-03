@@ -64,6 +64,15 @@ class NarrativeRepository extends NestedTreeRepository
         return $query->getResult();
     }
 
+    public function findOneOriginByNarrativeUuid(string $uuid)
+    {
+        $query = $this->getEntityManager()->createQuery('
+            SELECT n FROM App\Entity\Narrative n WHERE n.lvl = 0 AND n.uuid = :uuid
+        ')->setParameter('uuid', $uuid);
+
+        return $query->getSingleResult();
+    }
+
 
 //    /**
 //     * @param string $narrativeId

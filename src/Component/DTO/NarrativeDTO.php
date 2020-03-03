@@ -15,7 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class NarrativeDTO
  * @package App\Component\DTO
  * @ApiResource(
- *     shortName="narrative"
+ *     shortName="narrative",
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "delete"}
  * )
  */
 class NarrativeDTO extends AbstractDTO
