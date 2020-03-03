@@ -9,6 +9,7 @@ use App\Component\DTO\NarrativeDTO;
 use App\Component\EntityManager\SaveEntityHelper;
 use App\Component\Date\DateTimeHelper;
 use App\Component\Transformer\FragmentDTOTransformer;
+use App\Component\Transformer\NarrativeDTOTransformer;
 use App\Entity\Fragment;
 use App\Entity\Narrative;
 use App\Repository\FragmentRepository;
@@ -64,8 +65,8 @@ class NarrativeUpdater
      */
     private function updateNarrative(NarrativeDTO $dto, Narrative $narrative)
     {
-        // update tree hierarchy with $narrativeDTO
-        //todo : to implement
+        // update parent with $narrativeDTO
+        $narrative = NarrativeDTOTransformer::toEntity($dto, $this->em, $narrative);
 
         // update updatedAt
         $narrative->setUpdatedAt(DateTimeHelper::now());

@@ -17,7 +17,7 @@ trait TreeableTrait
 
     protected $root;
 
-    protected $parent;
+    protected $parentUuid;
 
     protected $children;
 
@@ -88,17 +88,17 @@ trait TreeableTrait
     /**
      * @return mixed
      */
-    public function getParent()
+    public function getParentUuid()
     {
-        return $this->parent;
+        return $this->parentUuid;
     }
 
     /**
-     * @param mixed $parent
+     * @param mixed $parentUuid
      */
-    public function setParent($parent): void
+    public function setParentUuid($parentUuid): void
     {
-        $this->parent = $parent;
+        $this->parentUuid = $parentUuid;
     }
 
     /**

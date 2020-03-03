@@ -34,14 +34,14 @@ class FragmentFixtures extends Fixture implements DependentFixtureInterface
         // book 1 de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff
         $book = self::generateFragment($bookNarrative);
         $book->setUuid('fd8facee-ca94-4db0-8ff1-e82e817e2029');
-        $book->setContent('');
+        $book->setContent('Livre 1');
         $book->setCreatedAt(DateTimeHelper::now()->modify('-15 minutes'));
         $manager->persist($book);
 
         // chapter 1 1b4705aa-4abd-4931-add0-ac11b6fff0c3
         $chap1 = self::generateFragment($chap1Narrative);
         $chap1->setUuid('0cddb6e2-d3c5-4b00-b5c3-b6870298195e');
-        $chap1->setContent('');
+        $chap1->setContent('Chapitre 1');
         $chap1->setCreatedAt(DateTimeHelper::now()->modify('-15 minutes'));
         $manager->persist($chap1);
 
@@ -84,7 +84,7 @@ class FragmentFixtures extends Fixture implements DependentFixtureInterface
 
         // chap 2 a178e872-934c-4ff0-a7cf-34dccfdb9bb2
         $chap2 = self::generateFragment($chap2Narrative);
-        $chap2->setContent('');
+        $chap2->setContent('Chapitre 2');
         $chap2->setCreatedAt(DateTimeHelper::now()->modify('-7 minutes'));
         $manager->persist($chap2);
 

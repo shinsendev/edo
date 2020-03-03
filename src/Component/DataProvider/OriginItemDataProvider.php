@@ -60,10 +60,11 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
             $config = new TransformerConfig(
                 $narrative,
                 // we only keep the last fragment to set the title and the content
-                ["fragments" => $this->em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid() ,10)],
+                ["fragments" => $this->em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid() ,100)],
                 $this->em,
                 ['hideVersioning' => true]
             );
+
             yield NarrativeDTOTransformer::fromEntity($config);
         }
     }
