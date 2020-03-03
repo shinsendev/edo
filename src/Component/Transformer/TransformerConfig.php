@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Component\Transformer;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class TransformerConfig
 {

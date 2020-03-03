@@ -62,12 +62,11 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
                 $narrative,
                 // we only keep the last fragment to set the title and the content
                 ["fragments" => $this->em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid() ,10)],
-                $this->em
+                $this->em,
+                ['hideVersioning' => true]
             );
             yield NarrativeDTOTransformer::fromEntity($config);
         }
-
-        //todo: for the moment, I return a collection narrative, wouldn't it be better to return a specific originDTO? Narratives Without the fragments
     }
 
 }
