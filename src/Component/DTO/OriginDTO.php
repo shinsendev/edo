@@ -11,7 +11,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
  * @package App\Component\DTO
  * @ApiResource(
  *     shortName="origin",
- *     collectionOperations={},
+ *     collectionOperations={"get"},
  *     itemOperations={"get"}
  * )
  */

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Component\DataProvider;
-
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
@@ -49,6 +47,7 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {
+
         // check if it is a narrative
         if (!$narrative = $this->em->getRepository(Narrative::class)->findOneOriginByNarrativeUuid($id)) {
             throw new NotFoundHttpException("No origin narrative found for uuid " . $id);
