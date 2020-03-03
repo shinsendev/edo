@@ -11,6 +11,8 @@ use App\Component\Narratable\Narrative\NarrativeCreator;
 use App\Component\Narratable\Narrative\NarrativeUpdater;
 use App\Repository\FictionRepository;
 use App\Repository\NarrativeRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class FragmentDataPersister
@@ -20,6 +22,9 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
 {
     /** @var NarrativeRepository  */
     private $repository;
+
+    /** @var EntityManagerInterface */
+    private $em;
 
     /** @var NarrativeUpdater  */
     private $updater;
@@ -35,19 +40,22 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
      * @param NarrativeRepository $repository
      * @param NarrativeUpdater $updater
      * @param NarrativeCreator $creator
-     * @param ValidatorInterface $validator
+     * @param ValidatorInterface $validator,
+     * @param EntityManagerInterface $em
      */
     public function __construct(
         NarrativeRepository $repository,
         NarrativeUpdater $updater,
         NarrativeCreator $creator,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        EntityManagerInterface $em
     )
     {
         $this->repository = $repository;
         $this->updater = $updater;
         $this->creator = $creator;
         $this->validator = $validator;
+        $this->em = $em;
     }
 
     /**
@@ -80,8 +88,17 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
         return $narrativeDTO;
     }
 
-    public function remove($data, array $context = [])
+    /**
+     * @param $narrativeDTO
+     * @param array $context
+     */
+    public function remove($narrativeDTO, array $context = [])
     {
-        // call your persistence layer to delete $data
+        // get the correct narrative with uuid
+        if (!$narrative = $this->repository->findOneByUuid($narrativeDTO->getUuid())) {
+            throw new NotFoundHttpException("No narrative found with uuid" . $narrativeDTO->getUuid());
+        }
+        $this->em->remove($narrative);
+        $this->em->flush();
     }
 }

@@ -14,9 +14,7 @@ class OriginResourceGetTest extends AbstractNarrativeResource
     public function testGetOrigin()
     {
         $uuid = 'de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff';
-
         $response = $this->client->request('GET', 'api/origins/'.$uuid);
-
         $this->assertResponseIsSuccessful();
         $arrayResponse = $response->toArray();
         $this->assertEquals(8, count($arrayResponse['hydra:member']));
