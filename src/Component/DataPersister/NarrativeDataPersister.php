@@ -9,9 +9,10 @@ use ApiPlatform\Core\Validator\ValidatorInterface;
 use App\Component\DTO\NarrativeDTO;
 use App\Component\Narratable\Narrative\NarrativeCreator;
 use App\Component\Narratable\Narrative\NarrativeUpdater;
-use App\Repository\FictionRepository;
 use App\Repository\NarrativeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -94,9 +95,9 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
      */
     public function remove($narrativeDTO, array $context = [])
     {
-        // get the correct narrative with uuid
-        if (!$narrative = $this->repository->findOneByUuid($narrativeDTO->getUuid())) {
-            throw new NotFoundHttpException("No narrative found with uuid" . $narrativeDTO->getUuid());
+        $uuid = $narrativeDTO->getUuid();
+        if (!$narrative = $this->repository->findOneByUuid($uuid)) {
+            throw new NotFoundHttpException("No narrative found with uuid" . $uuid);
         }
         $this->em->remove($narrative);
         $this->em->flush();
