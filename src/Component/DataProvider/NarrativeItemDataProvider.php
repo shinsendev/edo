@@ -8,9 +8,8 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\FragmentDTO;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\Transformer\NarrativeDTOTransformer;
-use App\Component\Transformer\TransformerConfig;
-use App\Entity\Fragment;
+use App\Component\DTO\Strategy\DTOContext;
+use App\Component\DTO\Strategy\Narrative\NarrativeDTOGetItem;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -18,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final class NarrativeItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
     /** @var EntityManagerInterface  */
-    private $em;
+    protected $em;
 
     /**
      * NarrativeItemDataProvider constructor.
@@ -55,14 +54,10 @@ final class NarrativeItemDataProvider implements ItemDataProviderInterface, Rest
             throw new NotFoundHttpException("Narrative not found for uuid " . $id);
         }
 
-        // convert narrative into Narrative DTO
-        $config = new TransformerConfig(
-            $narrative,
-            // we only keep the last fragment to set the title and the content
-            ["fragments" => $this->em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid() ,10)],
-            $this->em
-        );
-        return NarrativeDTOTransformer::fromEntity($config);
+        $context= new DTOContext(new NarrativeDTOGetItem(), null, $this->em, $narrative);
+
+        /** @var NarrativeDTO $narrativeDTO */
+        return $context->proceed();
     }
 
 }

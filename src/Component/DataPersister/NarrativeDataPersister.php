@@ -6,9 +6,10 @@ namespace App\Component\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use ApiPlatform\Core\Validator\ValidatorInterface;
+use App\Component\DTO\Strategy\DTOContext;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\Narratable\Narrative\NarrativeCreator;
-use App\Component\Narratable\Narrative\NarrativeUpdater;
+use App\Component\DTO\Strategy\Narrative\NarrativeDTOSave;
+use App\Component\DTO\Strategy\Narrative\NarrativeDTOUpdate;
 use App\Repository\NarrativeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,34 +26,22 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
     /** @var EntityManagerInterface */
     private $em;
 
-    /** @var NarrativeUpdater  */
-    private $updater;
-
-    /** @var NarrativeCreator  */
-    private $creator;
-
     /** @var ValidatorInterface  */
     private $validator;
 
     /**
      * NarrativeDataPersister constructor.
      * @param NarrativeRepository $repository
-     * @param NarrativeUpdater $updater
-     * @param NarrativeCreator $creator
      * @param ValidatorInterface $validator,
      * @param EntityManagerInterface $em
      */
     public function __construct(
         NarrativeRepository $repository,
-        NarrativeUpdater $updater,
-        NarrativeCreator $creator,
         ValidatorInterface $validator,
         EntityManagerInterface $em
     )
     {
         $this->repository = $repository;
-        $this->updater = $updater;
-        $this->creator = $creator;
         $this->validator = $validator;
         $this->em = $em;
     }
@@ -77,14 +66,14 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
     {
         if (!$narrative = $this->repository->findOneByUuid($narrativeDTO->getUuid())) {
             // it's a new  narrative, this is an insert
-            $this->creator->save($narrativeDTO);
+            $context= new DTOContext(new NarrativeDTOSave(), $narrativeDTO, $this->em);
         }
         else {
             // narrative already exists, so it is an update
-            $this->updater->update($narrativeDTO, $narrative);
+            $context = new DTOContext(new NarrativeDTOUpdate(), $narrativeDTO, $this->em, $narrative);
         }
 
-        return $narrativeDTO;
+        return $context->proceed();
     }
 
     /**
