@@ -54,10 +54,8 @@ final class NarrativeItemDataProvider implements ItemDataProviderInterface, Rest
             throw new NotFoundHttpException("Narrative not found for uuid " . $id);
         }
 
-        $context= new DTOContext(new NarrativeDTOGetItem(), null, $this->em, $narrative);
-
-        /** @var NarrativeDTO $narrativeDTO */
-        return $context->proceed();
+        /** @var NarrativeDTO */
+        return (new DTOContext(new NarrativeDTOGetItem(), null, $this->em, $narrative))->proceed();
     }
 
 }

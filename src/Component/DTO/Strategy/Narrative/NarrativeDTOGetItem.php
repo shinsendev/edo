@@ -14,21 +14,24 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class NarrativeDTOGetItem implements DTOStrategyInterface
 {
-    public function proceed(DTOStrategyConfig $config)
+    public function proceed(DTOStrategyConfig $strategyConfig)
     {
-        /** @var Narrative $narrative */
-        $narrative = $config->getEntity();
-
+        // initialize
         /** @var EntityManagerInterface $em */
-        $em = $config->getEm();
+        $em = $strategyConfig->getEm();
 
-        // convert narrative into Narrative DTO
-        $config = new TransformerConfig(
+        /** @var Narrative $narrative */
+        $narrative = $strategyConfig->getEntity();
+
+        // prepare conf
+        $transformerConfig = new TransformerConfig(
             $narrative,
             // we only keep the last fragment to set the title and the content
             ["fragments" => $em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid() ,10)],
             $em
         );
-        return NarrativeDTOTransformer::fromEntity($config);
+
+        //convert narrative into Narrative DTO
+        return NarrativeDTOTransformer::fromEntity($transformerConfig);
     }
 }

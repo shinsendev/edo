@@ -37,9 +37,8 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
         $narratives = $this->em->getRepository(Narrative::class)->findLastNarratives($fiction[0]);
 
         foreach ($narratives as $narrative) {
-            $context= new DTOContext(new NarrativeDTOGetItem(), null, $this->em, $narrative);
-            /** @var NarrativeDTO $narrativeDTO */
-            yield $context->proceed();
+            /** @var NarrativeDTO */
+            yield (new DTOContext(new NarrativeDTOGetItem(), null, $this->em, $narrative))->proceed();
         }
     }
 }
