@@ -11,6 +11,8 @@ use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
+ * todo: do we need this provider? + do we need fragments for this narrative? When are we supposed to use get Narratives collections?
+ *
  * Class FragmentCollectionDataProvider
  * @package App\Component\DataProvider
  */

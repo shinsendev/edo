@@ -6,7 +6,10 @@ namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
+use App\Component\DTO\NarrativeDTO;
 use App\Component\DTO\OriginDTO;
+use App\Component\DTO\Strategy\DTOContext;
+use App\Component\DTO\Strategy\Narrative\NarrativeDTOGetItemFromCollection;
 use App\Component\Transformer\NarrativeDTOTransformer;
 use App\Component\Transformer\TransformerConfig;
 use App\Entity\Fragment;
@@ -56,16 +59,10 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
         // get a limit number of narratives with the same parent if
         $narratives = $this->em->getRepository(Narrative::class)->findBy(['root' => $narrative], null, 100);
 
+        /** @var Narrative $narrative */
         foreach ($narratives as $narrative) {
-            $config = new TransformerConfig(
-                $narrative,
-                // we only keep the last fragment to set the title and the content
-                ["fragments" => $this->em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid() ,100)],
-                $this->em,
-                ['hideVersioning' => true]
-            );
-
-            yield NarrativeDTOTransformer::fromEntity($config);
+            /** @var NarrativeDTO */
+            yield (new DTOContext(new NarrativeDTOGetItemFromCollection(), null, $this->em, $narrative))->proceed();
         }
     }
 

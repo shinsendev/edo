@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 
-namespace App\Component\DTO\Strategy\Fictio;
-
+namespace App\Component\DTO\Strategy\Fiction;
 
 use App\Component\DTO\Strategy\DTOStrategyConfig;
 use App\Component\DTO\Strategy\DTOStrategyInterface;
@@ -19,7 +18,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * Class FictioDTOGetItem
  * @package App\Component\DTO\Strategy\Fictio
  */
-class FictioDTOGetItem implements DTOStrategyInterface
+class FictionDTOGetItem implements DTOStrategyInterface
 {
     public function proceed(DTOStrategyConfig $config)
     {

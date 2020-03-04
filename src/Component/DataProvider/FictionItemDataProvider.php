@@ -7,15 +7,9 @@ namespace App\Component\DataProvider;
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\FictionDTO;
-use App\Component\DTO\NarrativeDTO;
 use App\Component\DTO\Strategy\DTOContext;
-use App\Component\DTO\Strategy\Fictio\FictioDTOGetItem;
-use App\Component\DTO\Strategy\Narrative\NarrativeDTOGetItem;
-use App\Component\Transformer\FictionDTOTransformer;
-use App\Component\Transformer\TransformerConfig;
-use App\Entity\Character;
+use App\Component\DTO\Strategy\Fiction\FictionDTOGetItem;
 use App\Entity\Fiction;
-use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -49,7 +43,7 @@ class FictionItemDataProvider implements ItemDataProviderInterface, RestrictedDa
         }
 
         /** @var FictionDTO  */
-        return (new DTOContext(new FictioDTOGetItem(), null, $this->em, $fiction))->proceed();
+        return (new DTOContext(new FictionDTOGetItem(), null, $this->em, $fiction))->proceed();
     }
 
     /**
