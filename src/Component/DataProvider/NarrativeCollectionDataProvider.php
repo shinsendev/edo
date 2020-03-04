@@ -3,14 +3,16 @@
 namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
-use App\Component\Transformer\NarrativeDTOTransformer;
-use App\Component\Transformer\TransformerConfig;
+use App\Component\DTO\NarrativeDTO;
+use App\Component\DTO\Strategy\DTOContext;
+use App\Component\DTO\Strategy\Narrative\NarrativeDTOGetItem;
 use App\Entity\Fiction;
-use App\Entity\Fragment;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
+ * todo: do we need this provider? + do we need fragments for this narrative? When are we supposed to use get Narratives collections?
+ *
  * Class FragmentCollectionDataProvider
  * @package App\Component\DataProvider
  */
@@ -37,13 +39,8 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
         $narratives = $this->em->getRepository(Narrative::class)->findLastNarratives($fiction[0]);
 
         foreach ($narratives as $narrative) {
-            $config = new TransformerConfig(
-                $narrative,
-                // we only keep the last fragment to set the title and the content
-                ["fragments" => $this->em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid() ,10)],
-                $this->em
-            );
-            yield NarrativeDTOTransformer::fromEntity($config);
+            /** @var NarrativeDTO */
+            yield (new DTOContext(new NarrativeDTOGetItem(), null, $this->em, $narrative))->proceed();
         }
     }
 }

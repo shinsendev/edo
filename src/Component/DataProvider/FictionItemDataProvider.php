@@ -7,11 +7,9 @@ namespace App\Component\DataProvider;
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\FictionDTO;
-use App\Component\Transformer\FictionDTOTransformer;
-use App\Component\Transformer\TransformerConfig;
-use App\Entity\Character;
+use App\Component\DTO\Strategy\DTOContext;
+use App\Component\DTO\Strategy\Fiction\FictionDTOGetItem;
 use App\Entity\Fiction;
-use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -44,17 +42,8 @@ class FictionItemDataProvider implements ItemDataProviderInterface, RestrictedDa
             throw new NotFoundHttpException("Fiction not found for uuid " . $id);
         }
 
-        $narratives = $this->em->getRepository(Narrative::class)->findByFiction($fiction);
-        $origins = $this->em->getRepository(Narrative::class)->findOrigins($fiction, 3);
-        $followings = $this->em->getRepository(Narrative::class)->findFollowings($fiction, 3);
-        $characters = $this->em->getRepository(Character::class)->findLastCharacters($fiction);
-
-        // convert narrative into Narrative DTO
-        return FictionDTOTransformer::fromEntity(new TransformerConfig(
-            $fiction,
-            ['narratives' => $narratives, 'origins' => $origins,  'followings' => $followings, 'characters' => $characters],
-            $this->em
-        ));
+        /** @var FictionDTO  */
+        return (new DTOContext(new FictionDTOGetItem(), null, $this->em, $fiction))->proceed();
     }
 
     /**

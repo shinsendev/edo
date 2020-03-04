@@ -5,14 +5,17 @@ namespace App\Tests\Unit;
 
 use App\Component\Date\DateTimeHelper;
 use App\Component\DTO\NarrativeDTO;
-use App\Component\Narratable\Narrative\NarrativeCreator;
+use App\Component\DTO\Strategy\DTOContext;
+use App\Component\DTO\Strategy\DTOStrategyConfig;
+use App\Component\DTO\Strategy\Narrative\NarrativeDTOSave;
+use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 
 /**
  * Class NarrativeCreator
  * @package App\Tests\Unit
  */
-class NarrativeCreatorTest extends AbstractUnitTest
+class NarrativeDTOSaveTest extends AbstractUnitTest
 {
     use FixturesTrait;
 
@@ -29,8 +32,10 @@ class NarrativeCreatorTest extends AbstractUnitTest
     {
         self::bootKernel();
         $container = self::$container;
-        $creator = $container->get(NarrativeCreator::class);
-        $response = $creator->save($this->generateNarrativeDTO());
+
+        $em = $container->get(EntityManagerInterface::class);
+        $context = new DTOContext(new NarrativeDTOSave(), $this->generateNarrativeDTO(), $em);
+        $response = $context->proceed();
 
         $this->assertEquals('Narrative content generated for test', $response->getContent());
         //todo : we can exclude seconds from the test to be sure everyhing is ok

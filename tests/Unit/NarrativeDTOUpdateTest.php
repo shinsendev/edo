@@ -4,8 +4,11 @@ namespace App\Tests\Unit;
 
 use App\Component\Date\DateTimeHelper;
 use App\Component\DTO\Faker\NarrativeDTOGenerator;
-use App\Component\Narratable\Narrative\NarrativeUpdater;
+use App\Component\DTO\Strategy\DTOContext;
+use App\Component\DTO\Strategy\DTOStrategyConfig;
+use App\Component\DTO\Strategy\Narrative\NarrativeDTOUpdate;
 use App\Repository\NarrativeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 
 /**
@@ -29,7 +32,7 @@ class NarrativeUpdaterTest extends AbstractUnitTest
     {
         self::bootKernel();
         $container = self::$container;
-        $generator = $container->get(NarrativeUpdater::class);
+        $em = $container->get(EntityManagerInterface::class);
 
         // narrative uuid must be the same for the DTO and the entity
         $narrativeUuid = '6284e5ac-09cf-4334-9503-dedf31bafdd0';
@@ -39,7 +42,14 @@ class NarrativeUpdaterTest extends AbstractUnitTest
         $narrativeDTO->setUuid($narrativeUuid);
         $narrativeDTO->setParentUuid($parentUuid);
 
-        $response = $generator->update($narrativeDTO, $narrativeRepository->findOneByUuid($narrativeUuid));
+        $context = new DTOContext(
+            new NarrativeDTOUpdate(),
+            $narrativeDTO,
+            $em,
+            $narrativeRepository->findOneByUuid($narrativeUuid)
+        );
+        $response = $context->proceed();
+
         $this->assertEquals($narrativeUuid, $response->getUuid());
         $this->assertEquals($parentUuid, $response->getParentUuid());
         $this->assertEquals('Narrative content generated for test', $response->getContent());
