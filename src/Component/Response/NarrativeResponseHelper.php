@@ -1,14 +1,14 @@
 <?php
 
 
-namespace App\Component\Narratable\Narrative;
+namespace App\Component\Response;
 
 
 use App\Component\Date\DateConverter;
 use App\Component\DTO\Model\NarrativeDTO;
 use App\Entity\Narrative;
 
-class NarrativeResponseCreator
+class NarrativeResponseHelper
 {
     /**
      * @param NarrativeDTO $dto
