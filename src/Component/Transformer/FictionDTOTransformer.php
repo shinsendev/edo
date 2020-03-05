@@ -7,8 +7,8 @@ namespace App\Component\Transformer;
 
 
 use App\Component\Date\DateTimeHelper;
-use App\Component\DTO\DTOInterface;
-use App\Component\DTO\FictionDTO;
+use App\Component\DTO\Model\DTOInterface;
+use App\Component\DTO\Model\FictionDTO;
 use App\Entity\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
 

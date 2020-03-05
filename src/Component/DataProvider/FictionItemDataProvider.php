@@ -6,7 +6,7 @@ namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
-use App\Component\DTO\FictionDTO;
+use App\Component\DTO\Model\FictionDTO;
 use App\Component\DTO\Strategy\DTOContext;
 use App\Component\DTO\Strategy\Fiction\FictionDTOGetItem;
 use App\Entity\Fiction;

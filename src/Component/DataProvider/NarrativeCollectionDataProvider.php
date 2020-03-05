@@ -3,9 +3,9 @@
 namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
-use App\Component\DTO\NarrativeDTO;
+use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Strategy\DTOContext;
-use App\Component\DTO\Strategy\Narrative\NarrativeDTOGetItem;
+use App\Component\DTO\Strategy\Narrative\GetItem\NarrativeDTOGetItem;
 use App\Entity\Fiction;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;

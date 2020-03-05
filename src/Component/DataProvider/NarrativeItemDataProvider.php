@@ -6,10 +6,10 @@ namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
-use App\Component\DTO\FragmentDTO;
-use App\Component\DTO\NarrativeDTO;
+use App\Component\DTO\Model\FragmentDTO;
+use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Strategy\DTOContext;
-use App\Component\DTO\Strategy\Narrative\NarrativeDTOGetItem;
+use App\Component\DTO\Strategy\Narrative\GetItem\NarrativeDTOGetItem;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

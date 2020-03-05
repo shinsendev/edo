@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 
-namespace App\Component\DTO\Strategy\Narrative;
+namespace App\Component\DTO\Strategy\Narrative\Save;
 
-use App\Component\DTO\NarrativeDTO;
+use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Strategy\DTOStrategyConfig;
 use App\Component\DTO\Strategy\DTOStrategyInterface;
 use App\Component\EntityManager\SaveEntityHelper;

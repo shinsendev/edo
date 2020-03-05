@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\DTO\Faker;
 
-use App\Component\DTO\NarrativeDTO;
+use App\Component\DTO\Model\NarrativeDTO;
 
 class NarrativeDTOGenerator
 {

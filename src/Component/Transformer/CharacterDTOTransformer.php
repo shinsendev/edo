@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Component\Transformer;
 
 use App\Component\Date\DateTimeHelper;
-use App\Component\DTO\CharacterDTO;
-use App\Component\DTO\DTOInterface;
+use App\Component\DTO\Model\CharacterDTO;
+use App\Component\DTO\Model\AbstractDTO;
+use App\Component\DTO\Model\DTOInterface;
 use App\Entity\Character;
 use Doctrine\ORM\EntityManagerInterface;
 
