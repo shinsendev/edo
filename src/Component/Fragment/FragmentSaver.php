@@ -4,9 +4,8 @@
 namespace App\Component\Fragment;
 
 
-use App\Component\DTO\NarrativeDTO;
+use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\EntityManager\SaveEntityHelper;
-use App\Component\Relation\Qualifier;
 use App\Component\Transformer\FragmentDTOTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 

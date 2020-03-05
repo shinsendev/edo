@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Component\DTO;
+namespace App\Component\DTO\Model;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Component\DTO\Composition\DatableTrait;
-use App\Component\DTO\Composition\TreeableTrait;
 use App\Component\DTO\Composition\UpdatableTrait;
 use App\Entity\Character;
 use App\Entity\Narrative;

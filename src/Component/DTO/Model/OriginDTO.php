@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Component\DTO;
+namespace App\Component\DTO\Model;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
@@ -15,7 +15,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
  *     itemOperations={"get"}
  * )
  */
-class OriginDTO
+class OriginDTO extends AbstractDTO
 {
     /**
      * @ApiProperty(identifier=true)

@@ -4,8 +4,9 @@
 namespace App\Component\Transformer;
 
 
-use App\Component\DTO\DTOInterface;
-use App\Component\DTO\NarrativeDTO;
+use App\Component\DTO\Model\AbstractDTO;
+use App\Component\DTO\Model\DTOInterface;
+use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\Date\DateTimeHelper;
 use App\Component\Exception\EdoException;
 use App\Entity\Abstraction\AbstractBaseEntity;
@@ -20,8 +21,8 @@ class NarrativeDTOTransformer implements TransformerInterface
     /**
      * @param DTOInterface $narrativeDTO
      * @param EntityManagerInterface $em
-     * @param AbstractBaseEntity|null $entity
-     * @return Narrative
+     * @param AbstractBaseEntity|null $narrative
+     * @return AbstractBaseEntity|Narrative
      * @throws EdoException
      */
     public static function toEntity(DTOInterface $narrativeDTO, EntityManagerInterface $em, AbstractBaseEntity $narrative = null)

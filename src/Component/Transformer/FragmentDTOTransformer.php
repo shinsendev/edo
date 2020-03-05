@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Component\Transformer;
 
-use App\Component\DTO\DTOInterface;
-use App\Component\DTO\FragmentDTO;
-use App\Component\DTO\NarrativeDTO;
+use App\Component\DTO\Model\AbstractDTO;
+use App\Component\DTO\Model\DTOInterface;
+use App\Component\DTO\Model\FragmentDTO;
+use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\Date\DateTimeHelper;
 use App\Component\Exception\EdoException;
 use App\Entity\EntityInterface;

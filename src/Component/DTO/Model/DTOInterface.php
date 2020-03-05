@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Component\DTO;
+namespace App\Component\DTO\Model;
 
 
 interface DTOInterface

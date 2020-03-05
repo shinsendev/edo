@@ -12,6 +12,20 @@ composer install
 
 # Launch
 
+You will need a php server, we recommand to use symfony webserver. You will need to install Symfony
+
 ```
-symfony server:start
+ curl -sS https://get.symfony.com/cli/installer | bash
+```
+
+Then you can launch the application with make
+
+```
+make start
+```
+
+# Fixtures
+
+```
+make fixture
 ```

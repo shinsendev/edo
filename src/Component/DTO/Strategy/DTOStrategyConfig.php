@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-
 namespace App\Component\DTO\Strategy;
 
-
-use App\Component\DTO\DTOInterface;
+use App\Component\DTO\Model\DTOInterface;
 use App\Entity\EntityInterface;
 use Doctrine\ORM\EntityManagerInterface;
 

@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Component\DTO;
-use Symfony\Component\Validator\Constraints as Assert;
+namespace App\Component\DTO\Model;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Component\DTO\Composition\DatableTrait;
 use Ramsey\Uuid\Uuid;
 

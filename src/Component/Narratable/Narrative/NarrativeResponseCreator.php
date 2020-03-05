@@ -5,7 +5,7 @@ namespace App\Component\Narratable\Narrative;
 
 
 use App\Component\Date\DateConverter;
-use App\Component\DTO\NarrativeDTO;
+use App\Component\DTO\Model\NarrativeDTO;
 use App\Entity\Narrative;
 
 class NarrativeResponseCreator

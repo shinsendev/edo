@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Component\DTO;
+namespace App\Component\DTO\Model;
 
+use App\Component\DTO\Model\AbstractDTO;
 use App\Component\DTO\Composition\DatableTrait;
 use App\Component\DTO\Composition\UpdatableTrait;
 
