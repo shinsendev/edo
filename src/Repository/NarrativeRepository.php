@@ -51,6 +51,20 @@ class NarrativeRepository extends NestedTreeRepository
     }
 
     /**
+     * @param Narrative $origin
+     * @param int $limit
+     * @return mixed
+     */
+    public function findOriginNarratives(Narrative $origin, $limit = 100)
+    {
+        $query = $this->getEntityManager()->createQuery(
+            'SELECT n FROM App\Entity\Narrative n WHERE n.root = :origin ORDER BY n.lft ASC'
+        )->setParameter('origin', $origin)->setMaxResults($limit);
+
+        return $query->getResult();
+    }
+
+    /**
      * @param Fiction $fiction
      * @param int $limit
      * @return mixed

@@ -10,7 +10,7 @@ use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Strategy\DTOStrategyConfig;
 use App\Component\DTO\Strategy\DTOStrategyInterface;
 use App\Component\EntityManager\SaveEntityHelper;
-use App\Component\Narratable\Narrative\NarrativeResponseCreator;
+use App\Component\Response\NarrativeResponseHelper;
 use App\Component\Transformer\FragmentDTOTransformer;
 use App\Component\Transformer\NarrativeDTOTransformer;
 use App\Entity\Fragment;
@@ -53,7 +53,7 @@ class NarrativeDTOUpdate implements DTOStrategyInterface
         // we save the fragments
         SaveEntityHelper::saveEntity($this->em, FragmentDTOTransformer::toEntity( $this->dto, $config->getEm()));
 
-        return NarrativeResponseCreator::createResponse($this->dto, $this->entity);
+        return NarrativeResponseHelper::createResponse($this->dto, $this->entity);
     }
 
     /**

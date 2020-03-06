@@ -10,7 +10,7 @@ use App\Component\DTO\Strategy\DTOStrategyConfig;
 use App\Component\DTO\Strategy\DTOStrategyInterface;
 use App\Component\EntityManager\SaveEntityHelper;
 use App\Component\Fragment\FragmentSaver;
-use App\Component\Narratable\Narrative\NarrativeResponseCreator;
+use App\Component\Response\NarrativeResponseHelper;
 use App\Component\Transformer\NarrativeDTOTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -28,6 +28,7 @@ class NarrativeDTOSave implements DTOStrategyInterface
         SaveEntityHelper::saveEntity($config->getEm(), $narrative);
         FragmentSaver::save($config->getEm(), $dto);
 
-        return NarrativeResponseCreator::createResponse($config->getDto(), $narrative);
+        return NarrativeResponseHelper::createResponse($config->getDto(), $narrative);
     }
+
 }

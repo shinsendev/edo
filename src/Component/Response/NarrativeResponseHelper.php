@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Component\Response;
-
 
 use App\Component\Date\DateConverter;
 use App\Component\DTO\Model\NarrativeDTO;
