@@ -47,14 +47,13 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {
-
         // check if it is a narrative
         if (!$narrative = $this->em->getRepository(Narrative::class)->findOneOriginByNarrativeUuid($id)) {
             throw new NotFoundHttpException("No origin narrative found for uuid " . $id);
         }
 
         // get a limit number of narratives with the same parent if
-        $narratives = $this->em->getRepository(Narrative::class)->findBy(['root' => $narrative], null, 100);
+        $narratives = $this->em->getRepository(Narrative::class)->findOriginNarratives($narrative, 100);
 
         /** @var Narrative $narrative */
         foreach ($narratives as $narrative) {
