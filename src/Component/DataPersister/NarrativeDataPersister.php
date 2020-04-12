@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class FragmentDataPersister
+ * Class NarrativeDataPersister
  * @package App\Component\DataPersister
  */
 final class NarrativeDataPersister implements ContextAwareDataPersisterInterface

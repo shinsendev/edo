@@ -35,17 +35,7 @@ class ReorderDTO extends AbstractDTO
     /**
      * @ApiProperty(identifier=true)
      */
-    private $uuid;
-
-    /**
-     * @var string
-     */
-    private $sourceUuid;
-
-    /**
-     * @var string
-     */
-    private $sourceType;
+    private $narrativeUuid;
 
     /**
      * @var ?string
@@ -58,51 +48,19 @@ class ReorderDTO extends AbstractDTO
     private $position;
 
     /**
-     * @return mixed
-     */
-    public function getUuid()
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * @param mixed $uuid
-     */
-    public function setUuid($uuid): void
-    {
-        $this->uuid = $uuid;
-    }
-
-    /**
      * @return string
      */
-    public function getSourceUuid(): string
+    public function getNarrativeUuid(): string
     {
-        return $this->sourceUuid;
+        return $this->narrativeUuid;
     }
 
     /**
-     * @param string $sourceUuid
+     * @param string $narrativeUuid
      */
-    public function setSourceUuid(string $sourceUuid): void
+    public function setNarrativeUuid(string $narrativeUuid): void
     {
-        $this->sourceUuid = $sourceUuid;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSourceType(): string
-    {
-        return $this->sourceType;
-    }
-
-    /**
-     * @param string $sourceType
-     */
-    public function setSourceType(string $sourceType): void
-    {
-        $this->sourceType = $sourceType;
+        $this->narrativeUuid = $narrativeUuid;
     }
 
     /**
