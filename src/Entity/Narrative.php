@@ -50,7 +50,7 @@ class Narrative extends AbstractUniqueEntity
     private $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="Narrative", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Narrative", mappedBy="parent", orphanRemoval=true)
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $children;

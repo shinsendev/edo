@@ -20,7 +20,7 @@ class Fragment extends AbstractUniqueEntity
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Narrative", inversedBy="fragments")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $narrative;
 
