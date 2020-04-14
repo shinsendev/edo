@@ -7,7 +7,9 @@ use App\Entity\Fiction;
 use App\Entity\Fragment;
 use App\Entity\Narrative;
 use App\Repository\Helper\RawSQLQueryHelper;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
@@ -16,11 +18,11 @@ use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
  * @method Narrative[]    findAll()
  * @method Narrative[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class NarrativeRepository extends NestedTreeRepository
+class NarrativeRepository extends ServiceEntityRepository
 {
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($manager, $manager->getClassMetadata(Narrative::class));
+        parent::__construct($registry, Narrative::class);
     }
 
     /**

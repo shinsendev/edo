@@ -14,7 +14,7 @@ use App\Component\Response\NarrativeResponseHelper;
 use App\Component\Transformer\NarrativeDTOTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 
-class NarrativeDTOSave implements DTOStrategyInterface
+class   NarrativeDTOSave implements DTOStrategyInterface
 {
     public function proceed(DTOStrategyConfig $config)
     {

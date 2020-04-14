@@ -65,50 +65,54 @@ class NarrativeDTOTransformer implements TransformerInterface
      */
     public static function fromEntity(TransformerConfig $config): NarrativeDTO
     {
-        // create DTO and add basics
-        $narrativeDTO = new NarrativeDTO();
-        $narrative = $config->getSource();
-        $narrativeDTO->setUuid($narrative->getUuid());
+        try {
+            // create DTO and add basics
+            $narrativeDTO = new NarrativeDTO();
+            $narrative = $config->getSource();
+            $narrativeDTO->setUuid($narrative->getUuid());
 
-        // todo: to replace with dynamic data // do we still need the type?
-        $narrativeDTO->setType('narrative');
-        $narrativeDTO->setFictionUuid($narrative->getFiction()->getUuid());
+            // todo: to replace with dynamic data // do we still need the type?
+            $narrativeDTO->setType('narrative');
+            $narrativeDTO->setFictionUuid($narrative->getFiction()->getUuid());
 
-        // add datetimes infos
-        $narrativeDTO->setCreatedAt(($narrative->getCreatedAt())->format('Y-m-d H:i:s'));
-        $narrativeDTO->setUpdatedAt(($narrative->getUpdatedAt())->format('Y-m-d H:i:s'));
+            // add datetimes infos
+            $narrativeDTO->setCreatedAt(($narrative->getCreatedAt())->format('Y-m-d H:i:s'));
+            $narrativeDTO->setUpdatedAt(($narrative->getUpdatedAt())->format('Y-m-d H:i:s'));
 
-        // set tree info
-        $narrativeDTO->setRoot($narrative->getRoot()->getUuid());
-        if ($narrative->getParent()) {
-            $narrativeDTO->setParentUuid($narrative->getParent()->getUuid());
-        }
-        $narrativeDTO->setLft($narrative->getLft());
-        $narrativeDTO->setLvl($narrative->getLvl());
-        $narrativeDTO->setRgt($narrative->getRgt());
-
-        $fragments = [];
-        $nested = $config->getNested();
-
-        // if there are nested fragments we use them to set the title and content of the narrative
-        if ($nested) {
-            // we set the content with the last fragment
-            $narrativeDTO->setContent($nested['fragments'][0]->getContent());
-        }
-
-        // if it's not for the narratives collection, we add the last X fragments for the narrative
-        if ($config->getOptions() && isset($config->getOptions()['hideVersioning'])) {
-            if ($config->getOptions()['hideVersioning']) {
-                return $narrativeDTO;
+            // set tree info
+            $narrativeDTO->setRoot($narrative->getRoot()->getUuid());
+            if ($narrative->getParent()) {
+                $narrativeDTO->setParentUuid($narrative->getParent()->getUuid());
             }
-        }
+            $narrativeDTO->setLft($narrative->getLft());
+            $narrativeDTO->setLvl($narrative->getLvl());
+            $narrativeDTO->setRgt($narrative->getRgt());
 
-        // if it's not a nested narrative, we add the fragments to DTO
-        foreach ($nested['fragments'] as $fragment) {
-           $fragments[] = FragmentDTOTransformer::fromEntity(new TransformerConfig($fragment));
-        }
-        $narrativeDTO->setFragments($fragments);
+            $fragments = [];
+            $nested = $config->getNested();
 
-        return $narrativeDTO;
+            // if there are nested fragments we use them to set the title and content of the narrative
+            if ($nested) {
+                // we set the content with the last fragment
+                $narrativeDTO->setContent($nested['fragments'][0]->getContent());
+            }
+
+            // if it's not for the narratives collection, we add the last X fragments for the narrative
+            if ($config->getOptions() && isset($config->getOptions()['hideVersioning'])) {
+                if ($config->getOptions()['hideVersioning']) {
+                    return $narrativeDTO;
+                }
+            }
+
+            // if it's not a nested narrative, we add the fragments to DTO
+            foreach ($nested['fragments'] as $fragment) {
+               $fragments[] = FragmentDTOTransformer::fromEntity(new TransformerConfig($fragment));
+            }
+            $narrativeDTO->setFragments($fragments);
+
+            return $narrativeDTO;
+        } catch (\Error $e) {
+            throw new EdoException('Error in the NarrativeDTOTransformer');
+        }
     }
 }

@@ -14,21 +14,30 @@ class ReorderDTOPost implements DTOStrategyInterface
 {
     public function proceed(DTOStrategyConfig $config)
     {
-        // TODO: Implement proceed() method.
+        $em = $config->getEm();
 
-        // we remove from the tree
-        $config->getEm()->getRepository(Narrative::class)->removeFromTree($config->getEntity());
-        $config->getEm()->clear();
+        // we extract the narrative to update
+        $narrativeToUpdate = $config->getEntity();
 
-        dd($config->getEntity());
+        // we remove from the tree only the selected narrative (not its children), the narrative will be deleted but all of the tree info will be updated correctly
+        $em->getRepository(Narrative::class)->removeFromTree($config->getEntity());
+        $em->clear();
+        $em->flush();
 
-//        $em->clear();
+        // if needed we change the parent of the narrative
+        if ($parentUuid = $config->getDto()->getParentUuid()) {
+            $narrativeToUpdate->setParent($parentUuid);
+        }
 
-        // we change the parent
+        // save entity
+        $em->persist($narrativeToUpdate);
+        $em->flush();
+        dd($narrativeToUpdate);
 
-        // we must change the position of the element
 
-        // we have to update the creation date of the fragment with the creation date of the first fragment
+        //0000000077f289e9000000001c87a96d
+        // update position
+        dd($narrativeToUpdate->getUuid());
     }
 
 }
