@@ -40,76 +40,39 @@ class NarrativeFixtures extends Fixture implements DependentFixtureInterface
 
         // chap 1 part 1
         $chap1part1Time = DateTimeHelper::now()->modify('-13 minutes');
-        $chap1 = $this->manageNarrative(
+        $chap1part1 = $this->manageNarrative(
             $manager, '6284e5ac-09cf-4334-9503-dedf31bafdd0', $fiction, $chap1part1Time, $chap1part1Time, $chap1['position']
         );
 
         // chap 1 part 2
         $chap1part2Time = DateTimeHelper::now()->modify('-12 minutes');
-        $chap1 = $this->manageNarrative(
+        $chap1part2 = $this->manageNarrative(
             $manager, '9aab1d64-a66b-47f9-8fe9-8464bdbab6da', $fiction, $chap1part2Time, $chap1part2Time, $chap1['position']
         );
 
         // chap 1 part 3
-        $chap1part3 = new Narrative();
-        $chap1part3->setUuid('d7d4899d-9b1c-44cd-8406-8c839c16f79f');
-        $chap1part3->setFiction($fiction);
-
-        $chap1part3Position = new Position();
-        $chap1part3Position->setParent($chap1['position']);
-        $chap1part3->setPosition($chap1part3Position);
-
-        $chap1part3->setCreatedAt(DateTimeHelper::now()->modify('-11 minutes'));
-        $chap1part3->setUpdatedAt(DateTimeHelper::now()->modify('-11 minutes'));
-
-        $manager->persist($chap1part3Position);
-        $manager->persist($chap1part3);
-
+        $chap1part3Time = DateTimeHelper::now()->modify('-11 minutes');
+        $chap1part3 = $this->manageNarrative(
+            $manager, 'd7d4899d-9b1c-44cd-8406-8c839c16f79f', $fiction, $chap1part3Time, $chap1part3Time, $chap1['position']
+        );
 
         // chap 2
-        $chap2 = new Narrative();
-        $chap2->setUuid('a178e872-934c-4ff0-a7cf-34dccfdb9bb2');
-        $chap2->setFiction($fiction);
-
-        $chap2Position = new Position();
-        $chap2Position->setParent($book['position']);
-        $chap2->setPosition($chap2Position);
-
-        $chap2->setCreatedAt(DateTimeHelper::now()->modify('-10 minutes'));
-        $chap2->setUpdatedAt(DateTimeHelper::now()->modify('-10 minutes'));
-
-        $manager->persist($chap2Position);
-        $manager->persist($chap2);
+        $chap2Time = DateTimeHelper::now()->modify('-10 minutes');
+        $chap2 = $this->manageNarrative(
+            $manager, 'a178e872-934c-4ff0-a7cf-34dccfdb9bb2', $fiction, $chap2Time, $chap2Time, $book['position']
+        );
 
         // chap 2 part 1
-        $chap2part1 = new Narrative();
-        $chap2part1->setUuid('6aa31944-c4ec-4b03-a8e1-f44f54c56de6');
-        $chap2part1->setFiction($fiction);
-
-        $chap2part1Position = new Position();
-        $chap2part1Position->setParent($chap2Position);
-        $chap2part1->setPosition($chap2part1Position);
-
-        $chap2part1->setCreatedAt(DateTimeHelper::now()->modify('-9 minutes'));
-        $chap2part1->setUpdatedAt(DateTimeHelper::now()->modify('-9 minutes'));
-
-        $manager->persist($chap2part1Position);
-        $manager->persist($chap2part1);
+        $chap2part1Time = DateTimeHelper::now()->modify('-9 minutes');
+        $chap2part1 = $this->manageNarrative(
+            $manager, '6aa31944-c4ec-4b03-a8e1-f44f54c56de6', $fiction, $chap2part1Time, $chap2part1Time, $chap2['position']
+        );
 
         // chap 2 part 2
-        $chap2part2 = new Narrative();
-        $chap2part2->setUuid('5e110313-1f01-4f1e-8515-84c93fbb08ad');
-        $chap2part2->setFiction($fiction);
-
-        $chap2part2Position = new Position();
-        $chap2part2Position->setParent($chap2Position);
-        $chap2part2->setPosition($chap2part2Position);
-
-        $chap2part2->setCreatedAt(DateTimeHelper::now()->modify('-8 minutes'));
-        $chap2part2->setUpdatedAt(DateTimeHelper::now()->modify('-8 minutes'));
-
-        $manager->persist($chap2part2Position);
-        $manager->persist($chap2part2);
+        $chap2part2Time = DateTimeHelper::now()->modify('-8 minutes');
+        $chap2part2 = $this->manageNarrative(
+            $manager, '5e110313-1f01-4f1e-8515-84c93fbb08ad', $fiction, $chap2part2Time, $chap2part2Time, $chap2['position']
+        );
 
         $manager->flush();
 
