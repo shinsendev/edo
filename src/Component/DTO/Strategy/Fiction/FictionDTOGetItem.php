@@ -34,6 +34,7 @@ class FictionDTOGetItem implements DTOStrategyInterface
         $origins = $em->getRepository(Narrative::class)->findOrigins($fiction, 3);
         $followings = $em->getRepository(Narrative::class)->findFollowings($fiction, 3);
         $characters = $em->getRepository(Character::class)->findLastCharacters($fiction);
+
         $nestedArray = ['narratives' => $narratives, 'origins' => $origins,  'followings' => $followings, 'characters' => $characters];
         $transformerConfig = new TransformerConfig($fiction, $nestedArray, $em);
 

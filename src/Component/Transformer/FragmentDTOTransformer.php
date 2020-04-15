@@ -56,7 +56,8 @@ class FragmentDTOTransformer extends AbstractTransformer implements TransformerI
         $fragment->setCreatedAt(DateTimeHelper::now());
 
         $fragment->setNarrative($narrative);
-        return $fragment;
+
+        return ['fragment' => $fragment];
     }
 
 }

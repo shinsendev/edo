@@ -46,7 +46,7 @@ class NarrativeRepository extends ServiceEntityRepository
     public function findOrigins(Fiction $fiction, int $limit = 10)
     {
         $query = $this->getEntityManager()->createQuery('
-            SELECT n FROM App\Entity\Narrative n WHERE n.lvl = 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
+            SELECT n FROM App\Entity\Narrative n JOIN n.position p WHERE p.lvl = 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
         ')->setParameter('fiction', $fiction)->setMaxResults($limit);
 
         return $query->getResult();
@@ -74,7 +74,7 @@ class NarrativeRepository extends ServiceEntityRepository
     public function findFollowings(Fiction $fiction, int $limit = 10)
     {
         $query = $this->getEntityManager()->createQuery('
-            SELECT n FROM App\Entity\Narrative n WHERE n.lvl != 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
+            SELECT n FROM App\Entity\Narrative n JOIN n.position p WHERE p.lvl != 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
         ')->setParameter('fiction', $fiction)->setMaxResults($limit);
 
         return $query->getResult();
@@ -83,7 +83,7 @@ class NarrativeRepository extends ServiceEntityRepository
     public function findOneOriginByNarrativeUuid(string $uuid)
     {
         $query = $this->getEntityManager()->createQuery('
-            SELECT n FROM App\Entity\Narrative n WHERE n.lvl = 0 AND n.uuid = :uuid
+            SELECT n FROM App\Entity\Narrative n JOIN n.position p WHERE p.lvl = 0 AND n.uuid = :uuid
         ')->setParameter('uuid', $uuid);
 
         return $query->getSingleResult();

@@ -13,6 +13,7 @@ use App\Entity\Abstraction\AbstractBaseEntity;
 use App\Entity\EntityInterface;
 use App\Entity\Fiction;
 use App\Entity\Narrative;
+use App\Entity\Position;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -22,13 +23,17 @@ class NarrativeDTOTransformer implements TransformerInterface
      * @param DTOInterface $narrativeDTO
      * @param EntityManagerInterface $em
      * @param AbstractBaseEntity|null $narrative
-     * @return AbstractBaseEntity|Narrative
+     * @return array|mixed
      * @throws EdoException
      */
     public static function toEntity(DTOInterface $narrativeDTO, EntityManagerInterface $em, AbstractBaseEntity $narrative = null)
     {
+        // to check if it is a narrative creation or an update
+        $isCreation = false;
+
         if(!$narrative) {
             $narrative = new Narrative();
+            $isCreation = true;
         }
 
         try {
@@ -38,11 +43,28 @@ class NarrativeDTOTransformer implements TransformerInterface
         }
         $narrative->setUuid($narrativeUuid);
 
+        // parentUUid is narrative uuid
         if ($parentUuid = $narrativeDTO->getParentUuid()) {
-            if (!$parent = $em->getRepository(Narrative::class)->findOneByUuid($parentUuid)) {
+
+            // get narrative's position, if it is a new narrative we create the position
+            if ($isCreation) {
+                $position = new Position();
+                $position->setNarrative($narrative);
+            }
+            else {
+                if (!$position = $em->getRepository(Position::class)->findOneByNarrative($narrative)) {
+                    throw new NotFoundHttpException('No position for the narrative '.$narrativeUuid);
+                }
+            }
+
+            // get parent's position : we need to find the corresponding position for the narrative uuid
+            $parentNarrative = $em->getRepository(Narrative::class)->findOneByUuid($parentUuid);
+
+            if (!$parentPosition = $em->getRepository(Position::class)->findOneByNarrative($parentNarrative)) {
                 throw new NotFoundHttpException('No parent narrative for the uuid '.$narrativeUuid);
             }
-            $narrative->setParent($parent);
+
+            $position->setParent($parentPosition);
         }
 
         // add fiction
@@ -54,7 +76,12 @@ class NarrativeDTOTransformer implements TransformerInterface
 
         $narrative->setFiction($em->getRepository(Fiction::class)->findOneByUuid($fictionUuid));
 
-        return $narrative;
+        $result = ['narrative' => $narrative];
+        if (isset($position)) {
+            $result['position'] = $position;
+        }
+
+        return $result;
     }
 
     /**
