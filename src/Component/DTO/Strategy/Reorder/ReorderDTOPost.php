@@ -28,6 +28,7 @@ class ReorderDTOPost implements DTOStrategyInterface
         // we remove from the tree only the selected narrative (not its children), the narrative will be deleted but all of the tree info will be updated correctly
 //        $em->getRepository(Position::class)->removeFromTree($position);
 //        $em->clear();
+        // todo: check if everything is ok = left and right change correctly when using simple doctrine remove and not removeFromTree (be carefull, there is a warning in comments in doctrine extension for using removeFromTree)
         $em->remove($position);
         $em->flush();
 
@@ -45,6 +46,7 @@ class ReorderDTOPost implements DTOStrategyInterface
         $em->flush();
 
         // we set the position of the narrative in the node
+        //todo: set the narrative position, how ???
 
     }
 
