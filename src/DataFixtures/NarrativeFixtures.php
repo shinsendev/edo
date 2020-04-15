@@ -108,7 +108,7 @@ class NarrativeFixtures extends Fixture implements DependentFixtureInterface
             $position->setParent($parent);
         }
 
-        $narrative->setPosition($position);
+        $position->setNarrative($narrative);
 
         return ['narrative' => $narrative, 'position' => $position];
     }

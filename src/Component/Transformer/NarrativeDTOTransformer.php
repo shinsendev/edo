@@ -79,14 +79,17 @@ class NarrativeDTOTransformer implements TransformerInterface
             $narrativeDTO->setCreatedAt(($narrative->getCreatedAt())->format('Y-m-d H:i:s'));
             $narrativeDTO->setUpdatedAt(($narrative->getUpdatedAt())->format('Y-m-d H:i:s'));
 
-            // set tree info
-            $narrativeDTO->setRoot($narrative->getRoot()->getUuid());
-            if ($narrative->getParent()) {
-                $narrativeDTO->setParentUuid($narrative->getParent()->getUuid());
+            // set tree infos
+            if ($config->getOptions() && isset ($config->getOptions()['position'])) {
+                $position = $config->getOptions()['position'];
+                $narrativeDTO->setRoot($position->getRoot()->getUuid());
+                if ($position->getParent()) {
+                    $narrativeDTO->setParentUuid($position->getParent()->getUuid());
+                }
+                $narrativeDTO->setLft($position->getLft());
+                $narrativeDTO->setLvl($position->getLvl());
+                $narrativeDTO->setRgt($position->getRgt());
             }
-            $narrativeDTO->setLft($narrative->getLft());
-            $narrativeDTO->setLvl($narrative->getLvl());
-            $narrativeDTO->setRgt($narrative->getRgt());
 
             $fragments = [];
             $nested = $config->getNested();

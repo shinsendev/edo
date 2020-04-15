@@ -8,6 +8,7 @@ use App\Component\DTO\Strategy\DTOStrategyConfig;
 use App\Component\DTO\Strategy\DTOStrategyInterface;
 use App\Component\Transformer\NarrativeDTOTransformer;
 use App\Entity\Narrative;
+use App\Entity\Position;
 
 /**
  * Class NarrativeDTOGetItem
@@ -20,11 +21,17 @@ class NarrativeDTOGetItem implements DTOStrategyInterface
         /** @var Narrative $narrative */
         $narrative = $strategyConfig->getEntity();
 
+        /** @var Position $position */
+        $position = $strategyConfig->getEm()->getRepository(Position::class)->findOneByNarrative($narrative);
+
         //convert narrative into Narrative DTO
         return NarrativeDTOTransformer::fromEntity(
             NarrativeDTOGetItemHelper::createTransformerConfig(
                 $strategyConfig->getEm(),
-                $narrative
+                $narrative,
+                [
+                    'position' => $position
+                ]
             ));
     }
 }
