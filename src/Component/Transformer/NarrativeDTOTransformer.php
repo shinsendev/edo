@@ -109,10 +109,15 @@ class NarrativeDTOTransformer implements TransformerInterface
             // set tree infos
             if ($config->getOptions() && isset ($config->getOptions()['position'])) {
                 $position = $config->getOptions()['position'];
-                $narrativeDTO->setRoot($position->getRoot()->getUuid());
-                if ($position->getParent()) {
-                    $narrativeDTO->setParentUuid($position->getParent()->getUuid());
+
+                if(isset($config->getOptions()['tree'])) {
+                    $tree = $config->getOptions()['tree'];
+                    $narrativeDTO->setRoot($tree['rootNarrativeUuid']);
+                    if ($position->getParent()) {
+                        $narrativeDTO->setParentUuid($tree['parentNarrativeUuid']);
+                    }
                 }
+
                 $narrativeDTO->setLft($position->getLft());
                 $narrativeDTO->setLvl($position->getLvl());
                 $narrativeDTO->setRgt($position->getRgt());

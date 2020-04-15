@@ -19,4 +19,12 @@ class PositionRepository extends NestedTreeRepository
         parent::__construct($manager, $manager->getClassMetadata(Position::class));
     }
 
+    public function findNarrative(int $positionId)
+    {
+        $query = $this->getEntityManager()->createQuery('
+            SELECT n FROM App\Entity\Narrative n JOIN n.position p WHERE p.id = :position
+        ')->setParameter('position', $positionId)->setMaxResults(1);
+
+        return $query->getSingleResult();
+    }
 }
