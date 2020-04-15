@@ -8,36 +8,44 @@ namespace App\Component\DTO\Strategy\Reorder;
 
 use App\Component\DTO\Strategy\DTOStrategyConfig;
 use App\Component\DTO\Strategy\DTOStrategyInterface;
-use App\Entity\Narrative;
+use App\Component\DTO\Tree\PositionConvertor;
+use App\Entity\Position;
 
 class ReorderDTOPost implements DTOStrategyInterface
 {
+    /**
+     * @param DTOStrategyConfig $config
+     */
     public function proceed(DTOStrategyConfig $config)
     {
         $em = $config->getEm();
 
-        // we extract the narrative to update
-        $narrativeToUpdate = $config->getEntity();
+        // we extract the position to update
+        $narrative = $config->getEntity();
+        $position = $em->getRepository(Position::class)->findOneByNarrative($narrative);
+        $createdAt = $position->getCreatedAt();
 
         // we remove from the tree only the selected narrative (not its children), the narrative will be deleted but all of the tree info will be updated correctly
-        $em->getRepository(Narrative::class)->removeFromTree($config->getEntity());
-        $em->clear();
+//        $em->getRepository(Position::class)->removeFromTree($position);
+//        $em->clear();
+        $em->remove($position);
         $em->flush();
 
-        // if needed we change the parent of the narrative
-        if ($parentUuid = $config->getDto()->getParentUuid()) {
-            $narrativeToUpdate->setParent($parentUuid);
-        }
+        // change the parent of the narrative, if it's null, it means there is no parent
+        $parentPosition = PositionConvertor::getParentPositionFromNarrativeUuid($config->getDto()->getParentUuid(), $em);
+        $position->setParent($parentPosition);
+        // we restore the first creation date of the position before we deleted it
+        $position->setCreatedAt($createdAt);
+
+        $narrative->setPosition($position);
+        $em->persist($position);
+        $em->persist($narrative);
 
         // save entity
-        $em->persist($narrativeToUpdate);
         $em->flush();
-        dd($narrativeToUpdate);
 
+        // we set the position of the narrative in the node
 
-        //0000000077f289e9000000001c87a96d
-        // update position
-        dd($narrativeToUpdate->getUuid());
     }
 
 }

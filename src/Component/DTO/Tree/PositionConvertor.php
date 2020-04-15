@@ -39,4 +39,18 @@ class PositionConvertor
     {
         return ($em->getRepository(Position::class)->findOneByNarrative($narrative))->getRoot();
     }
+
+    /**
+     * description : extract parent position from narrative
+     *
+     * @param string $narrativeUuid
+     * @param EntityManagerInterface $em
+     * @return mixed
+     */
+    public static function getParentPositionFromNarrativeUuid(string $narrativeUuid, EntityManagerInterface $em)
+    {
+        $parentNarrative = $em->getRepository(Narrative::class)->findOneByUuid($narrativeUuid);
+        return $em->getRepository(Position::class)->findOneByNarrative($parentNarrative);
+    }
+
 }

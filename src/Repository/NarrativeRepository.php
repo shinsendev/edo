@@ -3,15 +3,10 @@
 namespace App\Repository;
 
 use App\Component\DTO\Tree\PositionConvertor;
-use App\Component\Exception\EdoException;
 use App\Entity\Fiction;
-use App\Entity\Fragment;
 use App\Entity\Narrative;
-use App\Repository\Helper\RawSQLQueryHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
  * @method Narrative|null find($id, $lockMode = null, $lockVersion = null)
