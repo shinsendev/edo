@@ -28,7 +28,7 @@ class Narrative extends AbstractUniqueEntity
     private $fragments;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Position", mappedBy="narrative")
+     * @ORM\OneToOne(targetEntity="App\Entity\Position", mappedBy="narrative", orphanRemoval=true)
      */
     private $position;
 

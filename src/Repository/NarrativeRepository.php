@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Component\DTO\Tree\PositionConvertor;
 use App\Component\Exception\EdoException;
 use App\Entity\Fiction;
 use App\Entity\Fragment;
@@ -59,9 +60,11 @@ class NarrativeRepository extends ServiceEntityRepository
      */
     public function findOriginNarratives(Narrative $origin, $limit = 100)
     {
+        $rootPosition = PositionConvertor::getRootPosition($origin, $this->getEntityManager());
+
         $query = $this->getEntityManager()->createQuery(
-            'SELECT n FROM App\Entity\Narrative n WHERE n.root = :origin ORDER BY n.lft ASC'
-        )->setParameter('origin', $origin)->setMaxResults($limit);
+            'SELECT n FROM App\Entity\Narrative n JOIN n.position p WHERE p.root = :origin ORDER BY p.lft ASC'
+        )->setParameter('origin', $rootPosition->getId())->setMaxResults($limit);
 
         return $query->getResult();
     }

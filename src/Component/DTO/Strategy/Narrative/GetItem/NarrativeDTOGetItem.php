@@ -31,6 +31,7 @@ class NarrativeDTOGetItem implements DTOStrategyInterface
             $parentNarrativeUUid = PositionConvertor::getNarrativeUuid($position->getParent(), $strategyConfig->getEm());
         }
 
+        // we use narrative uuid in DTO, not the position Uuid
         $tree = [
             'parentNarrativeUuid' => $parentNarrativeUUid,
             'rootNarrativeUuid' => PositionConvertor::getNarrativeUuid($position->getRoot(), $strategyConfig->getEm()),
