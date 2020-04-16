@@ -4,9 +4,11 @@
 namespace App\Tests\Integration\Narrative;
 
 
+use App\Entity\Position;
 use App\Repository\FictionRepository;
 use App\Repository\FragmentRepository;
 use App\Repository\NarrativeRepository;
+use App\Repository\PositionRepository;
 use App\Tests\Integration\AbstractIntegrationTest;
 use Doctrine\ORM\EntityManagerInterface;
 
