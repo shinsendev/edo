@@ -14,7 +14,7 @@ use App\Component\Response\NarrativeResponseHelper;
 use App\Component\Transformer\NarrativeDTOTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 
-class NarrativeDTOSave implements DTOStrategyInterface
+class   NarrativeDTOSave implements DTOStrategyInterface
 {
     public function proceed(DTOStrategyConfig $config)
     {
@@ -24,11 +24,11 @@ class NarrativeDTOSave implements DTOStrategyInterface
         /** @var EntityManagerInterface $em */
         $em = $config->getEm();
 
-        $narrative = NarrativeDTOTransformer::toEntity($dto, $em);
-        SaveEntityHelper::saveEntity($config->getEm(), $narrative);
+        $narrativeResponse = NarrativeDTOTransformer::toEntity($dto, $em);
+        SaveEntityHelper::saveEntity($config->getEm(), $narrativeResponse);
         FragmentSaver::save($config->getEm(), $dto);
 
-        return NarrativeResponseHelper::createResponse($config->getDto(), $narrative);
+        return NarrativeResponseHelper::createResponse($config->getDto(), $narrativeResponse);
     }
 
 }

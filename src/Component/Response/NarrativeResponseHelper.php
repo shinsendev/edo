@@ -10,11 +10,14 @@ class NarrativeResponseHelper
 {
     /**
      * @param NarrativeDTO $dto
-     * @param Narrative $narrative
+     * @param array $narrativeResponse
      * @return NarrativeDTO
      */
-    public static function createResponse(NarrativeDTO $dto, Narrative $narrative)
+    public static function createResponse(NarrativeDTO $dto, array $narrativeResponse)
     {
+        /** @var Narrative $narrative */
+        $narrative = $narrativeResponse['narrative'];
+
         //from entity to DTO
         $dto->setCreatedAt(DateConverter::stringifyDatetime($narrative->getCreatedAt()));
         $dto->setUpdatedAt(DateConverter::stringifyDatetime($narrative->getUpdatedAt()));

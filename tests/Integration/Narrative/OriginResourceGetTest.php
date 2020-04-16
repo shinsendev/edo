@@ -20,5 +20,12 @@ class OriginResourceGetTest extends AbstractNarrativeResource
         $this->assertEquals(8, count($arrayResponse['hydra:member']));
         $this->assertEquals('de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff', $arrayResponse['hydra:member'][0]['uuid']);
         $this->assertEquals('5e110313-1f01-4f1e-8515-84c93fbb08ad', $arrayResponse['hydra:member'][7]['uuid']);
+
+        foreach ($arrayResponse['hydra:member'] as $origin) {
+            $this->assertNotNull($origin['lft'], 'Narrative must have lft');
+            $this->assertNotNull($origin['lvl'], 'Narrative must have lvl');
+            $this->assertNotNull($origin['rgt'], 'Narrative must have rgt');
+            $this->assertNotNull($origin['root'], 'Narrative must have root');
+        }
     }
 }

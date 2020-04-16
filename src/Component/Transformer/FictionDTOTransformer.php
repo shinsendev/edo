@@ -10,6 +10,7 @@ use App\Component\Date\DateTimeHelper;
 use App\Component\DTO\Model\DTOInterface;
 use App\Component\DTO\Model\FictionDTO;
 use App\Entity\Fragment;
+use App\Entity\Position;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FictionDTOTransformer extends AbstractTransformer implements TransformerInterface
@@ -36,10 +37,17 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
 
         $narrativesDTO = [];
         foreach ($nested['narratives'] as $narrative) {
+
+            /** @var Position $position */
+            $position = $em->getRepository(Position::class)->findOneByNarrative($narrative);
+
             $nestedConfig = new TransformerConfig(
                 $narrative, ['fragments' => $em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid())],
                 $em,
-                ['nested' => true] // we don't want all the fragments of the narrative
+                [
+                    'nested' => true, // we don't want all the fragments of the narrative
+                    'position' => $position
+                ]
             );
 
             $narrativesDTO[]= NarrativeDTOTransformer::fromEntity($nestedConfig); // needs fragment

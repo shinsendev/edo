@@ -41,8 +41,8 @@ class NarrativeDTOUpdate implements DTOStrategyInterface
         // initialize all variables in the class
         $this->initialize($config);
 
-        $this->updateNarrative( $this->dto, $this->entity);
-        SaveEntityHelper::saveEntity($this->em, $config->getEntity());
+        $updateResult = $this->updateNarrative( $this->dto, $this->entity);
+        SaveEntityHelper::saveEntity($this->em, $updateResult);
         // as long as there are more fragments than authorized, we delete them one by one
         while ($this->countFragments($this->entity) >=  NarrativeConfiguration::getMaxVersionningFragments())
         {
@@ -53,24 +53,27 @@ class NarrativeDTOUpdate implements DTOStrategyInterface
         // we save the fragments
         SaveEntityHelper::saveEntity($this->em, FragmentDTOTransformer::toEntity( $this->dto, $config->getEm()));
 
-        return NarrativeResponseHelper::createResponse($this->dto, $this->entity);
+        return NarrativeResponseHelper::createResponse($this->dto, $updateResult);
     }
 
     /**
      * @param NarrativeDTO $dto
      * @param Narrative $narrative
-     * @throws \Exception
+     * @return array|mixed
+     * @throws \App\Component\Exception\EdoException
      */
     private function updateNarrative(NarrativeDTO $dto, Narrative $narrative)
     {
         // update parent with $narrativeDTO
-        $narrative = NarrativeDTOTransformer::toEntity($dto, $this->em, $narrative);
+        $narrativeResult = NarrativeDTOTransformer::toEntity($dto, $this->em, $narrative);
 
         // update updatedAt
-        $narrative->setUpdatedAt(DateTimeHelper::now());
+        ($narrativeResult['narrative'])->setUpdatedAt(DateTimeHelper::now());
 
         // save narrative
-        SaveEntityHelper::saveEntity($this->em, $narrative);
+        SaveEntityHelper::saveEntity($this->em, $narrativeResult);
+
+        return $narrativeResult;
     }
 
     /**

@@ -2,13 +2,11 @@
 
 namespace App\Repository;
 
-use App\Component\Exception\EdoException;
+use App\Component\DTO\Tree\PositionConvertor;
 use App\Entity\Fiction;
-use App\Entity\Fragment;
 use App\Entity\Narrative;
-use App\Repository\Helper\RawSQLQueryHelper;
-use Doctrine\ORM\EntityManagerInterface;
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Narrative|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,11 +14,11 @@ use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
  * @method Narrative[]    findAll()
  * @method Narrative[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class NarrativeRepository extends NestedTreeRepository
+class NarrativeRepository extends ServiceEntityRepository
 {
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($manager, $manager->getClassMetadata(Narrative::class));
+        parent::__construct($registry, Narrative::class);
     }
 
     /**
@@ -44,7 +42,7 @@ class NarrativeRepository extends NestedTreeRepository
     public function findOrigins(Fiction $fiction, int $limit = 10)
     {
         $query = $this->getEntityManager()->createQuery('
-            SELECT n FROM App\Entity\Narrative n WHERE n.lvl = 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
+            SELECT n FROM App\Entity\Narrative n JOIN n.position p WHERE p.lvl = 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
         ')->setParameter('fiction', $fiction)->setMaxResults($limit);
 
         return $query->getResult();
@@ -57,9 +55,11 @@ class NarrativeRepository extends NestedTreeRepository
      */
     public function findOriginNarratives(Narrative $origin, $limit = 100)
     {
+        $rootPosition = PositionConvertor::getRootPosition($origin, $this->getEntityManager());
+
         $query = $this->getEntityManager()->createQuery(
-            'SELECT n FROM App\Entity\Narrative n WHERE n.root = :origin ORDER BY n.lft ASC'
-        )->setParameter('origin', $origin)->setMaxResults($limit);
+            'SELECT n FROM App\Entity\Narrative n JOIN n.position p WHERE p.root = :origin ORDER BY p.lft ASC'
+        )->setParameter('origin', $rootPosition->getId())->setMaxResults($limit);
 
         return $query->getResult();
     }
@@ -72,7 +72,7 @@ class NarrativeRepository extends NestedTreeRepository
     public function findFollowings(Fiction $fiction, int $limit = 10)
     {
         $query = $this->getEntityManager()->createQuery('
-            SELECT n FROM App\Entity\Narrative n WHERE n.lvl != 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
+            SELECT n FROM App\Entity\Narrative n JOIN n.position p WHERE p.lvl != 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
         ')->setParameter('fiction', $fiction)->setMaxResults($limit);
 
         return $query->getResult();
@@ -81,7 +81,7 @@ class NarrativeRepository extends NestedTreeRepository
     public function findOneOriginByNarrativeUuid(string $uuid)
     {
         $query = $this->getEntityManager()->createQuery('
-            SELECT n FROM App\Entity\Narrative n WHERE n.lvl = 0 AND n.uuid = :uuid
+            SELECT n FROM App\Entity\Narrative n JOIN n.position p WHERE p.lvl = 0 AND n.uuid = :uuid
         ')->setParameter('uuid', $uuid);
 
         return $query->getSingleResult();
