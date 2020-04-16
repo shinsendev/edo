@@ -3,14 +3,12 @@
 
 namespace App\Component\Transformer;
 
-
-use App\Component\DTO\Model\AbstractDTO;
 use App\Component\DTO\Model\DTOInterface;
 use App\Component\DTO\Model\NarrativeDTO;
-use App\Component\Date\DateTimeHelper;
+use App\Component\DTO\Tree\PositionConvertor;
+use App\Component\Error\EdoError;
 use App\Component\Exception\EdoException;
 use App\Entity\Abstraction\AbstractBaseEntity;
-use App\Entity\EntityInterface;
 use App\Entity\Fiction;
 use App\Entity\Narrative;
 use App\Entity\Position;
@@ -26,62 +24,152 @@ class NarrativeDTOTransformer implements TransformerInterface
      * @return array|mixed
      * @throws EdoException
      */
-    public static function toEntity(DTOInterface $narrativeDTO, EntityManagerInterface $em, AbstractBaseEntity $narrative = null)
+    public static function toEntity(
+        DTOInterface $narrativeDTO,
+        EntityManagerInterface $em,
+        AbstractBaseEntity $narrative = null
+    )
     {
-        // to check if it is a narrative creation or an update
+        // check if it is a narrative creation or an update
+        $isCreation = self::isCreate($narrative);
+
+        // if it's a creation, we set a new narrative
+        if($isCreation) {
+            $narrative = new Narrative();
+        }
+
+        // set Narrative Uuid
+        $narrative = self::setNarrativeUuid($narrativeDTO, $narrative, $isCreation);
+
+        // create position
+        $position = self::createPosition($narrativeDTO, $isCreation, $narrative, $em);
+
+        // set parent position
+        $position = self::setParentPosition($narrativeDTO, $position, $em);
+
+        // add fiction
+        $narrative = self::setNarrativeFiction($narrativeDTO, $narrative, $em);
+
+        // create result
+        return self::createResponse($narrative, $position);
+    }
+
+    /**
+     * @param AbstractBaseEntity|null $narrative
+     * @return bool
+     */
+    public static function isCreate(?AbstractBaseEntity $narrative)
+    {
         $isCreation = false;
 
         if(!$narrative) {
-            $narrative = new Narrative();
             $isCreation = true;
         }
 
-        try {
-            $narrativeUuid = $narrativeDTO->getUuid();
-        } catch(\Exception $e) {
-            throw new EdoException('No uuid found for the narrative : ' . $e);
+        return $isCreation;
+    }
+
+    /**
+     * @param DTOInterface $narrativeDTO
+     * @param Narrative $narrative
+     * @param bool $isCreation
+     * @return Narrative
+     */
+    public static function setNarrativeUuid(DTOInterface $narrativeDTO, Narrative $narrative, bool $isCreation): Narrative
+    {
+        if ($isCreation) {
+            $narrative->setUuid($narrativeDTO->getUuid());
         }
-        $narrative->setUuid($narrativeUuid);
 
-        // parentUUid is narrative uuid
+        return $narrative;
+    }
+
+    /**
+     * @param DTOInterface $narrativeDTO
+     * @param bool $isCreation
+     * @param Narrative $narrative
+     * @param EntityManagerInterface $em
+     * @return Position|null
+     * @throws \Exception
+     */
+    public static function createPosition (
+        DTOInterface $narrativeDTO,
+        bool $isCreation,
+        Narrative $narrative,
+        EntityManagerInterface $em
+    )
+    {
+        $narrativeUuid = $narrativeDTO->getUuid();
+
+        // get narrative's position
+        if ($isCreation) { // if it is a new narrative we create the position
+            $position = new Position();
+            $position->setNarrative($narrative);
+        }
+        else { // if it is an update, we get the position of the narrative
+            if (!$position = $em->getRepository(Position::class)->findOneByNarrative($narrative)) {
+                throw new NotFoundHttpException('No position for the narrative '.$narrativeUuid);
+            }
+        }
+
+        return $position;
+    }
+
+    /**
+     * @param DTOInterface $narrativeDTO
+     * @param Position $position
+     * @param EntityManagerInterface $em
+     * @return Position
+     */
+    public static function setParentPosition(DTOInterface $narrativeDTO, Position $position, EntityManagerInterface $em)
+    {
+        // parentUUid is the narrative parent uuid
         if ($parentUuid = $narrativeDTO->getParentUuid()) {
-
-            // get narrative's position, if it is a new narrative we create the position
-            if ($isCreation) {
-                $position = new Position();
-                $position->setNarrative($narrative);
-            }
-            else {
-                if (!$position = $em->getRepository(Position::class)->findOneByNarrative($narrative)) {
-                    throw new NotFoundHttpException('No position for the narrative '.$narrativeUuid);
-                }
-            }
 
             // get parent's position : we need to find the corresponding position for the narrative uuid
             $parentNarrative = $em->getRepository(Narrative::class)->findOneByUuid($parentUuid);
 
             if (!$parentPosition = $em->getRepository(Position::class)->findOneByNarrative($parentNarrative)) {
-                throw new NotFoundHttpException('No parent narrative for the uuid '.$narrativeUuid);
+                throw new NotFoundHttpException('No parent narrative for the uuid '.$narrativeDTO->getUuid());
             }
 
             $position->setParent($parentPosition);
         }
 
-        // add fiction
+        return $position;
+    }
+
+    /**
+     * @param DTOInterface $narrativeDTO
+     * @param Narrative $narrative
+     * @param EntityManagerInterface $em
+     * @return Narrative
+     * @throws EdoException
+     */
+    public static function setNarrativeFiction(DTOInterface $narrativeDTO, Narrative $narrative, EntityManagerInterface $em)
+    {
         try {
             $fictionUuid = $narrativeDTO->getFictionUuid();
         } catch(\Error $e) {
             throw new EdoException('No uuid found for the fiction : ' . $e);
         }
-
         $narrative->setFiction($em->getRepository(Fiction::class)->findOneByUuid($fictionUuid));
 
-        $result = ['narrative' => $narrative];
-        if (isset($position)) {
-            $result['position'] = $position;
-        }
+        return $narrative;
+    }
 
-        return $result;
+    /**
+     * @param Narrative $narrative
+     * @param Position|null $position
+     * @return array
+     */
+    public static function createResponse(Narrative $narrative, ?Position $position)
+    {
+        $response = ['narrative' => $narrative];
+        if ($position) {
+            $response['position'] = $position;
+        }
+        return $response;
     }
 
     /**
@@ -102,7 +190,7 @@ class NarrativeDTOTransformer implements TransformerInterface
             $narrativeDTO->setType('narrative');
             $narrativeDTO->setFictionUuid($narrative->getFiction()->getUuid());
 
-            // add datetimes infos
+            // add datetime infos
             $narrativeDTO->setCreatedAt(($narrative->getCreatedAt())->format('Y-m-d H:i:s'));
             $narrativeDTO->setUpdatedAt(($narrative->getUpdatedAt())->format('Y-m-d H:i:s'));
 
@@ -121,6 +209,9 @@ class NarrativeDTOTransformer implements TransformerInterface
                 $narrativeDTO->setLft($position->getLft());
                 $narrativeDTO->setLvl($position->getLvl());
                 $narrativeDTO->setRgt($position->getRgt());
+
+                $narrativeDTO = self::setChildrenPosition($narrativeDTO, $position, $config->getEm());
+
             }
 
             $fragments = [];
@@ -147,7 +238,27 @@ class NarrativeDTOTransformer implements TransformerInterface
 
             return $narrativeDTO;
         } catch (\Error $e) {
-            throw new EdoException('Error in the NarrativeDTOTransformer');
+            throw new EdoError('Error in fromEntity() from the NarrativeDTOTransformer');
         }
+    }
+
+    /**
+     * @param DTOInterface $narrativeDTO
+     * @param Position $position
+     * @param EntityManagerInterface $em
+     * @return DTOInterface
+     */
+    public static function setChildrenPosition(DTOInterface $narrativeDTO, Position $position, EntityManagerInterface $em)
+    {
+        $children = [];
+
+        foreach ($position->getChildren() as $child) {
+            // we add the corresponding narrative uuid for each position
+            $children[] = PositionConvertor::getNarrativeUuid($child, $em);
+        }
+
+        $narrativeDTO->setChildren($children);
+
+        return $narrativeDTO;
     }
 }
