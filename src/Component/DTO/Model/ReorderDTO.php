@@ -7,6 +7,7 @@ namespace App\Component\DTO\Model;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\NotFoundController;
 
 /**
  * Class ReorderDTO
@@ -15,7 +16,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *     shortName="reorder",
  *     collectionOperations={
  *         "get"={
- *             "controller"= NotFoundAction::class,
+ *             "controller"= NotFoundController::class,
  *             "read"=false,
  *             "output"=false,
  *         },
@@ -23,7 +24,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *  },
  *     itemOperations={
  *         "get"={
- *             "controller"= NotFoundAction::class,
+ *             "controller"= NotFoundController::class,
  *             "read"=false,
  *             "output"=false,
  *         }
