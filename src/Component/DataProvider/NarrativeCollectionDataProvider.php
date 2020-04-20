@@ -35,12 +35,13 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
     public function getCollection(string $resourceClass, string $operationName = null): \Generator
     {
         //todo: replace by dynamic fiction
+        /** @var Fiction[] $fiction */
         $fiction = $this->em->getRepository(Fiction::class)->findAll();
         $narratives = $this->em->getRepository(Narrative::class)->findLastNarratives($fiction[0]);
 
         foreach ($narratives as $narrative) {
             /** @var NarrativeDTO */
-            yield (new DTOContext(new NarrativeDTOGetItem(), null, $this->em, $narrative))->proceed();
+            yield (new DTOContext(new NarrativeDTOGetItem(), null, $this->em, ['narrative' => $narrative]))->proceed();
         }
     }
 }

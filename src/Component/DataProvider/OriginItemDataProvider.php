@@ -55,10 +55,12 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
         // get a limit number of narratives with the same parent if
         $narratives = $this->em->getRepository(Narrative::class)->findOriginNarratives($narrative, 100);
 
+
         /** @var Narrative $narrative */
         foreach ($narratives as $narrative) {
+
             /** @var NarrativeDTO */
-            yield (new DTOContext(new NarrativeDTOGetItemFromCollection(), null, $this->em, $narrative))->proceed();
+            yield (new DTOContext(new NarrativeDTOGetItemFromCollection(), null, $this->em, ['narrative' => $narrative]))->proceed();
         }
     }
 

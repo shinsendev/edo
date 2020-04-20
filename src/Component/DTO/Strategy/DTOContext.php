@@ -25,17 +25,17 @@ class DTOContext
      * @param DTOStrategyInterface $strategy
      * @param DTOInterface|null $dto
      * @param EntityManagerInterface|null $em
-     * @param EntityInterface|null $entity
+     * @param array $data
      */
     public function __construct(
         DTOStrategyInterface $strategy,
         DTOInterface $dto = null,
         EntityManagerInterface $em = null,
-        EntityInterface $entity = null
+        array $data = []
     )
     {
         $this->strategy = $strategy;
-        $this->config = new DTOStrategyConfig($dto, $em, $entity);
+        $this->config = new DTOStrategyConfig($dto, $em, $data);
     }
 
     /**

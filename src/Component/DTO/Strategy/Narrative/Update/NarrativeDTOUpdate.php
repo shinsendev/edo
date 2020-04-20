@@ -105,7 +105,7 @@ class NarrativeDTOUpdate implements DTOStrategyInterface
     {
         $this->em = $config->getEm();
         $this->dto = $config->getDto();
-        $this->entity = $config->getEntity();
+        $this->entity = $config->getData()['narrative'];
     }
 
 }

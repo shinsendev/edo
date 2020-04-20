@@ -29,6 +29,8 @@ class NarrativeDTO extends AbstractDTO
      */
     private $uuid;
 
+    protected $children;
+
     /**
      * @var string
      */

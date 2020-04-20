@@ -55,7 +55,7 @@ final class NarrativeItemDataProvider implements ItemDataProviderInterface, Rest
         }
 
         /** @var NarrativeDTO */
-        return (new DTOContext(new NarrativeDTOGetItem(), null, $this->em, $narrative))->proceed();
+        return (new DTOContext(new NarrativeDTOGetItem(), null, $this->em, ['narrative' => $narrative]))->proceed();
     }
 
 }

@@ -43,7 +43,7 @@ class FictionItemDataProvider implements ItemDataProviderInterface, RestrictedDa
         }
 
         /** @var FictionDTO  */
-        return (new DTOContext(new FictionDTOGetItem(), null, $this->em, $fiction))->proceed();
+        return (new DTOContext(new FictionDTOGetItem(), null, $this->em, ['fiction' => $fiction]))->proceed();
     }
 
     /**
