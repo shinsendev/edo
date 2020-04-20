@@ -12,6 +12,17 @@ class OriginDTOGetItem implements DTOStrategyInterface
 {
     public function proceed(DTOStrategyConfig $config)
     {
+        $narrativesDTO = $config->getData()['narrativesDTO'];
+
+        foreach ($narrativesDTO as $narrativeDTO) {
+            // the parent of the family
+            if ($narrativeDTO->getLvl() === 0) {
+                foreach ($narrativeDTO->getChildren() as $child) {
+
+                }
+            }
+        }
         // TODO: Implement proceed() method.
+        return $narratives;
     }
 }

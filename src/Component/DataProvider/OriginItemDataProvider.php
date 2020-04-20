@@ -10,6 +10,7 @@ use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Model\OriginDTO;
 use App\Component\DTO\Strategy\DTOContext;
 use App\Component\DTO\Strategy\Narrative\GetItem\NarrativeDTOGetItemFromCollection;
+use App\Component\DTO\Strategy\Origin\GetItem\OriginDTOGetItem;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -55,13 +56,23 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
         // get a limit number of narratives with the same parent if
         $narratives = $this->em->getRepository(Narrative::class)->findOriginNarratives($narrative, 100);
 
+        // first we create a list of narratives DTO, specialy for using the narratives uuid for hierarchy and not the position
+        /** @var NarrativeDTO[] $narrativesDTO */
+        $narrativesDTO = [];
 
         /** @var Narrative $narrative */
         foreach ($narratives as $narrative) {
 
             /** @var NarrativeDTO */
-            yield (new DTOContext(new NarrativeDTOGetItemFromCollection(), null, $this->em, ['narrative' => $narrative]))->proceed();
+            $narrativesDTO[] = (new DTOContext(new NarrativeDTOGetItemFromCollection(), null, $this->em, ['narrative' => $narrative]))->proceed();
         }
+
+        // then we create the payload with hierarchy
+        $rsl = (new DTOContext(new OriginDTOGetItem(), null, $this->em, ['narrativesDTO' => $narrativesDTO]))->proceed();
+
+        dd($rsl);
+
+
     }
 
 }
