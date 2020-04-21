@@ -16,14 +16,24 @@ class DTOStrategyConfig
     /** @var DTOInterface  */
     private $dto;
 
-    /** @var EntityInterface  */
-    private $entity;
+    /** @var array  */
+    private $data;
 
-    public function __construct(DTOInterface $dto = null, EntityManagerInterface $em = null, EntityInterface $entity = null)
+    /**
+     * DTOStrategyConfig constructor.
+     * @param DTOInterface|null $dto
+     * @param EntityManagerInterface|null $em
+     * @param array $data
+     */
+    public function __construct(
+        DTOInterface $dto = null,
+        EntityManagerInterface $em = null,
+        array $data = null
+    )
     {
         $this->em = $em;
         $this->dto= $dto;
-        $this->entity = $entity;
+        $this->data = $data;
     }
 
     /**
@@ -59,18 +69,18 @@ class DTOStrategyConfig
     }
 
     /**
-     * @return EntityInterface
+     * @return array
      */
-    public function getEntity(): EntityInterface
+    public function getData(): array
     {
-        return $this->entity;
+        return $this->data;
     }
 
     /**
-     * @param EntityInterface $entity
+     * @param array $data
      */
-    public function setEntity(EntityInterface $entity): void
+    public function setData(array $data): void
     {
-        $this->entity = $entity;
+        $this->data = $data;
     }
 }

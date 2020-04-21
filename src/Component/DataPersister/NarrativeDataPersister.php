@@ -70,7 +70,7 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
         }
         else {
             // narrative already exists, so it is an update
-            $context = new DTOContext(new NarrativeDTOUpdate(), $narrativeDTO, $this->em, $narrative);
+            $context = new DTOContext(new NarrativeDTOUpdate(), $narrativeDTO, $this->em, ['narrative' => $narrative]);
         }
 
         return $context->proceed();

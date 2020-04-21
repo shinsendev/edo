@@ -27,7 +27,7 @@ class FictionDTOGetItem implements DTOStrategyInterface
         $em = $config->getEm();
 
         /** @var Fiction $fiction */
-        $fiction = $config->getEntity();
+        $fiction = $config->getData()['fiction'];
 
         // prepare transformer conf
         $narratives = $em->getRepository(Narrative::class)->findByFiction($fiction);

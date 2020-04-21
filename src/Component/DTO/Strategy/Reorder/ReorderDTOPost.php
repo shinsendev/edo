@@ -23,7 +23,7 @@ class ReorderDTOPost implements DTOStrategyInterface
         $em = $config->getEm();
 
         // we extract the position to update
-        $narrative = $config->getEntity();
+        $narrative = $config->getData()['narrative'];
         $position = $em->getRepository(Position::class)->findOneByNarrative($narrative);
         $createdAt = $position->getCreatedAt();
 

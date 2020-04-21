@@ -66,7 +66,7 @@ final class ReorderDataPersister implements ContextAwareDataPersisterInterface
             throw new EdoException('No narrative found to reorder');
         }
 
-        $context = new DTOContext(new ReorderDTOPost(), $reorderDTO, $this->em, $narrative);
+        $context = new DTOContext(new ReorderDTOPost(), $reorderDTO, $this->em, ['narrative' => $narrative]);
 
         return $context->proceed();
     }

@@ -21,7 +21,7 @@ class NarrativeDTOGetItemFromCollection implements DTOStrategyInterface
     public function proceed(DTOStrategyConfig $strategyConfig)
     {
         /** @var Narrative $narrative */
-        $narrative = $strategyConfig->getEntity();
+        $narrative = $strategyConfig->getData()['narrative'];
 
         /** @var Position $position */
         $position = $strategyConfig->getEm()->getRepository(Position::class)->findOneByNarrative($narrative);

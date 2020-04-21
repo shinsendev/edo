@@ -45,7 +45,7 @@ class NarrativeUpdaterTest extends AbstractUnitTest
             new NarrativeDTOUpdate(),
             $narrativeDTO,
             $em,
-            $narrativeRepository->findOneByUuid($narrativeUuid)
+            ['narrative' => $narrativeRepository->findOneByUuid($narrativeUuid)]
         );
         $response = $context->proceed();
 
