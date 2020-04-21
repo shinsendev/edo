@@ -62,17 +62,12 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
 
         /** @var Narrative $narrative */
         foreach ($narratives as $narrative) {
-
             /** @var NarrativeDTO */
             $narrativesDTO[] = (new DTOContext(new NarrativeDTOGetItemFromCollection(), null, $this->em, ['narrative' => $narrative]))->proceed();
         }
 
         // then we create the payload with hierarchy
-        $rsl = (new DTOContext(new OriginDTOGetItem(), null, $this->em, ['narrativesDTO' => $narrativesDTO]))->proceed();
-
-        dd($rsl);
-
-
+        return (new DTOContext(new OriginDTOGetItem(), null, $this->em, ['narrativesDTO' => $narrativesDTO]))->proceed();
     }
 
 }

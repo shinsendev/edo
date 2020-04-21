@@ -6,6 +6,9 @@ test:
 start:
 	symfony server:start
 
+stop:
+	symfony server:stop
+
 diff:
 	php bin/console doctrine:migrations:diff
 
