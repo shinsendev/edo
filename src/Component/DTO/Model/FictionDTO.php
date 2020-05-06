@@ -9,7 +9,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Component\DTO\Composition\DatableTrait;
 use App\Component\DTO\Composition\UpdatableTrait;
 use App\Entity\Character;
-use App\Entity\Narrative;
+use App\Entity\Fragment;
 
 /**
  * Class NarrativeDTO
@@ -38,17 +38,19 @@ class FictionDTO extends AbstractDTO
     private $content;
 
     /**
-     * @var Narrative[]
+     * @var Fragment[]
      */
-    private $narratives;
+    private $fragments;
 
+    //todo : to remove?
     /**
-     * @var Narrative[]
+     * @var Fragment[]
      */
     private $origins;
 
+    //todo : to remove?
     /**
-     * @var Narrative[]
+     * @var Fragment[]
      */
     private $followings;
 
@@ -106,23 +108,23 @@ class FictionDTO extends AbstractDTO
     }
 
     /**
-     * @return Narrative[]
+     * @return Fragment[]
      */
-    public function getNarratives(): array
+    public function getFragments(): array
     {
-        return $this->narratives;
+        return $this->fragments;
     }
 
     /**
-     * @param Narrative[] $narratives
+     * @param Fragment[] $fragments
      */
-    public function setNarratives(array $narratives): void
+    public function setFragments(array $fragments): void
     {
-        $this->narratives = $narratives;
+        $this->fragments = $fragments;
     }
 
     /**
-     * @return Narrative[]
+     * @return Fragment[]
      */
     public function getOrigins(): array
     {
@@ -130,7 +132,7 @@ class FictionDTO extends AbstractDTO
     }
 
     /**
-     * @param Narrative[] $origins
+     * @param Fragment[] $origins
      */
     public function setOrigins(array $origins): void
     {
@@ -138,7 +140,7 @@ class FictionDTO extends AbstractDTO
     }
 
     /**
-     * @return Narrative[]
+     * @return Fragment[]
      */
     public function getFollowings(): array
     {
@@ -146,7 +148,7 @@ class FictionDTO extends AbstractDTO
     }
 
     /**
-     * @param Narrative[] $followings
+     * @param Fragment[] $followings
      */
     public function setFollowings(array $followings): void
     {

@@ -23,7 +23,7 @@ class NarrativeUpdaterTest extends AbstractUnitTest
         parent::setUp();
         $this->loadFixtures([
             'App\DataFixtures\FictionFixtures',
-            'App\DataFixtures\NarrativeFixtures',
+            'App\DataFixtures\FragmentFixtures',
         ]);
     }
 

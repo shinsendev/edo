@@ -58,10 +58,10 @@ class Position extends AbstractUniqueEntity
     private $children;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Narrative")
-     * @ORM\JoinColumn(name="narrative_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="App\Entity\Fragment")
+     * @ORM\JoinColumn(name="fragment_id", referencedColumnName="id")
      */
-    private $narrative;
+    private $fragment;
 
     /**
      * @return mixed
@@ -162,17 +162,16 @@ class Position extends AbstractUniqueEntity
     /**
      * @return mixed
      */
-    public function getNarrative()
+    public function getFragment()
     {
-        return $this->narrative;
+        return $this->fragment;
     }
 
     /**
-     * @param mixed $narrative
+     * @param mixed $fragment
      */
-    public function setNarrative($narrative): void
+    public function setFragment($fragment): void
     {
-        $this->narrative = $narrative;
+        $this->fragment = $fragment;
     }
-
 }

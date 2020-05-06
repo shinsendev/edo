@@ -45,9 +45,9 @@ class NarrativeDTO extends AbstractDTO
     private $content;
 
     /**
-     * @var FragmentDTO[]
+     * @var VersionDTO[]
      */
-    private $fragments;
+    private $versions;
 
     /**
      * @var string
@@ -87,19 +87,19 @@ class NarrativeDTO extends AbstractDTO
     }
 
     /**
-     * @return FragmentDTO[]
+     * @return VersionDTO[]
      */
-    public function getFragments(): ?array
+    public function getVersions(): ?array
     {
-        return $this->fragments;
+        return $this->versions;
     }
 
     /**
-     * @param FragmentDTO[] $fragments
+     * @param VersionDTO[] $versions
      */
-    public function setFragments(array $fragments): void
+    public function setFragments(array $versions): void
     {
-        $this->fragments = $fragments;
+        $this->versions = $versions;
     }
 
     /**

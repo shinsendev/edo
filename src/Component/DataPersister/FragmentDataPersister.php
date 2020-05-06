@@ -10,7 +10,7 @@ use App\Component\DTO\Strategy\DTOContext;
 use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Strategy\Narrative\Save\NarrativeDTOSave;
 use App\Component\DTO\Strategy\Narrative\Update\NarrativeDTOUpdate;
-use App\Repository\NarrativeRepository;
+use App\Repository\FragmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -18,9 +18,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Class NarrativeDataPersister
  * @package App\Component\DataPersister
  */
-final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
+final class FragmentDataPersister implements ContextAwareDataPersisterInterface
 {
-    /** @var NarrativeRepository  */
+    /** @var FragmentRepository  */
     private $repository;
 
     /** @var EntityManagerInterface */
@@ -31,12 +31,12 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
 
     /**
      * NarrativeDataPersister constructor.
-     * @param NarrativeRepository $repository
+     * @param FragmentRepository $repository
      * @param ValidatorInterface $validator,
      * @param EntityManagerInterface $em
      */
     public function __construct(
-        NarrativeRepository $repository,
+        FragmentRepository $repository,
         ValidatorInterface $validator,
         EntityManagerInterface $em
     )

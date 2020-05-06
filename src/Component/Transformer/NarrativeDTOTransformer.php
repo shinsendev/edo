@@ -10,7 +10,7 @@ use App\Component\Error\EdoError;
 use App\Component\Exception\EdoException;
 use App\Entity\Abstraction\AbstractBaseEntity;
 use App\Entity\Fiction;
-use App\Entity\Narrative;
+use App\Entity\Fragment;
 use App\Entity\Position;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -20,49 +20,49 @@ class NarrativeDTOTransformer implements TransformerInterface
     /**
      * @param DTOInterface $narrativeDTO
      * @param EntityManagerInterface $em
-     * @param AbstractBaseEntity|null $narrative
+     * @param AbstractBaseEntity|null $fragment
      * @return array|mixed
      * @throws EdoException
      */
     public static function toEntity(
         DTOInterface $narrativeDTO,
         EntityManagerInterface $em,
-        AbstractBaseEntity $narrative = null
+        AbstractBaseEntity $fragment = null
     )
     {
         // check if it is a narrative creation or an update
-        $isCreation = self::isCreate($narrative);
+        $isCreation = self::isCreate($fragment);
 
         // if it's a creation, we set a new narrative
         if($isCreation) {
-            $narrative = new Narrative();
+            $fragment = new Fragment();
         }
 
         // set Narrative Uuid
-        $narrative = self::setNarrativeUuid($narrativeDTO, $narrative, $isCreation);
+        $fragment = self::setNarrativeUuid($narrativeDTO, $fragment, $isCreation);
 
         // create position
-        $position = self::createPosition($narrativeDTO, $isCreation, $narrative, $em);
+        $position = self::createPosition($narrativeDTO, $isCreation, $fragment, $em);
 
         // set parent position
         $position = self::setParentPosition($narrativeDTO, $position, $em);
 
         // add fiction
-        $narrative = self::setNarrativeFiction($narrativeDTO, $narrative, $em);
+        $fragment = self::setNarrativeFiction($narrativeDTO, $fragment, $em);
 
         // create result
-        return self::createResponse($narrative, $position);
+        return self::createResponse($fragment, $position);
     }
 
     /**
-     * @param AbstractBaseEntity|null $narrative
+     * @param AbstractBaseEntity|null $fragment
      * @return bool
      */
-    public static function isCreate(?AbstractBaseEntity $narrative)
+    public static function isCreate(?AbstractBaseEntity $fragment)
     {
         $isCreation = false;
 
-        if(!$narrative) {
+        if(!$fragment) {
             $isCreation = true;
         }
 
@@ -71,23 +71,23 @@ class NarrativeDTOTransformer implements TransformerInterface
 
     /**
      * @param DTOInterface $narrativeDTO
-     * @param Narrative $narrative
+     * @param Fragment $fragment
      * @param bool $isCreation
-     * @return Narrative
+     * @return Fragment
      */
-    public static function setNarrativeUuid(DTOInterface $narrativeDTO, Narrative $narrative, bool $isCreation): Narrative
+    public static function setNarrativeUuid(DTOInterface $narrativeDTO, Fragment $fragment, bool $isCreation): Fragment
     {
         if ($isCreation) {
-            $narrative->setUuid($narrativeDTO->getUuid());
+            $fragment->setUuid($narrativeDTO->getUuid());
         }
 
-        return $narrative;
+        return $fragment;
     }
 
     /**
      * @param DTOInterface $narrativeDTO
      * @param bool $isCreation
-     * @param Narrative $narrative
+     * @param Fragment $fragment
      * @param EntityManagerInterface $em
      * @return Position|null
      * @throws \Exception
@@ -95,7 +95,7 @@ class NarrativeDTOTransformer implements TransformerInterface
     public static function createPosition (
         DTOInterface $narrativeDTO,
         bool $isCreation,
-        Narrative $narrative,
+        Fragment $fragment,
         EntityManagerInterface $em
     )
     {
@@ -104,10 +104,10 @@ class NarrativeDTOTransformer implements TransformerInterface
         // get narrative's position
         if ($isCreation) { // if it is a new narrative we create the position
             $position = new Position();
-            $position->setNarrative($narrative);
+            $position->setNarrative($fragment);
         }
         else { // if it is an update, we get the position of the narrative
-            if (!$position = $em->getRepository(Position::class)->findOneByNarrative($narrative)) {
+            if (!$position = $em->getRepository(Position::class)->findOneByNarrative($fragment)) {
                 throw new NotFoundHttpException('No position for the narrative '.$narrativeUuid);
             }
         }
@@ -127,7 +127,7 @@ class NarrativeDTOTransformer implements TransformerInterface
         if ($parentUuid = $narrativeDTO->getParentUuid()) {
 
             // get parent's position : we need to find the corresponding position for the narrative uuid
-            $parentNarrative = $em->getRepository(Narrative::class)->findOneByUuid($parentUuid);
+            $parentNarrative = $em->getRepository(Fragment::class)->findOneByUuid($parentUuid);
 
             if (!$parentPosition = $em->getRepository(Position::class)->findOneByNarrative($parentNarrative)) {
                 throw new NotFoundHttpException('No parent narrative for the uuid '.$narrativeDTO->getUuid());
@@ -141,31 +141,31 @@ class NarrativeDTOTransformer implements TransformerInterface
 
     /**
      * @param DTOInterface $narrativeDTO
-     * @param Narrative $narrative
+     * @param Fragment $fragment
      * @param EntityManagerInterface $em
-     * @return Narrative
+     * @return Fragment
      * @throws EdoException
      */
-    public static function setNarrativeFiction(DTOInterface $narrativeDTO, Narrative $narrative, EntityManagerInterface $em)
+    public static function setNarrativeFiction(DTOInterface $narrativeDTO, Fragment $fragment, EntityManagerInterface $em)
     {
         try {
             $fictionUuid = $narrativeDTO->getFictionUuid();
         } catch(\Error $e) {
             throw new EdoException('No uuid found for the fiction : ' . $e);
         }
-        $narrative->setFiction($em->getRepository(Fiction::class)->findOneByUuid($fictionUuid));
+        $fragment->setFiction($em->getRepository(Fiction::class)->findOneByUuid($fictionUuid));
 
-        return $narrative;
+        return $fragment;
     }
 
     /**
-     * @param Narrative $narrative
+     * @param Fragment $fragment
      * @param Position|null $position
      * @return array
      */
-    public static function createResponse(Narrative $narrative, ?Position $position)
+    public static function createResponse(Fragment $fragment, ?Position $position)
     {
-        $response = ['narrative' => $narrative];
+        $response = ['fragment' => $fragment];
         if ($position) {
             $response['position'] = $position;
         }

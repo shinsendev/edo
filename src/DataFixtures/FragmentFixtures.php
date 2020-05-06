@@ -5,124 +5,144 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\Component\Date\DateTimeHelper;
+use App\Entity\Fiction;
 use App\Entity\Fragment;
-use App\Entity\Narrative;
+use App\Entity\Position;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Ramsey\Uuid\Uuid;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class FragmentFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const FRAGMENT_REFERENCE_1 = 'fragment1';
+    public const FRAGMENT_REFERENCE_2 = 'fragment2';
+
     /**
      * @param ObjectManager $manager
      * @throws \Exception
      */
     public function load(ObjectManager $manager)
     {
-        $bookNarrative = $manager->getRepository(Narrative::class)->findOneByUuid('de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff');
+        $fiction = $manager->getRepository(Fiction::class)->findOneByUuid('1b7df281-ae2a-40bf-ad6a-ac60409a9ce6');
 
-        $chap1Narrative = $manager->getRepository(Narrative::class)->findOneByUuid('1b4705aa-4abd-4931-add0-ac11b6fff0c3');
-        $chap1Part1Narrative = $manager->getRepository(Narrative::class)->findOneByUuid('6284e5ac-09cf-4334-9503-dedf31bafdd0');
-        $chap1Part2Narrative = $manager->getRepository(Narrative::class)->findOneByUuid('9aab1d64-a66b-47f9-8fe9-8464bdbab6da');
-        $chap1Part3Narrative =  $manager->getRepository(Narrative::class)->findOneByUuid('d7d4899d-9b1c-44cd-8406-8c839c16f79f');
+        // book 1
+        $bookTime = DateTimeHelper::now()->modify('-15 minutes');
+        $book = $this->manageFragment(
+            $manager, 'de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff', $fiction, $bookTime, $bookTime
+        );
 
-        $chap2Narrative = $manager->getRepository(Narrative::class)->findOneByUuid('a178e872-934c-4ff0-a7cf-34dccfdb9bb2');
-        $chap2Part1Narrative = $manager->getRepository(Narrative::class)->findOneByUuid('6aa31944-c4ec-4b03-a8e1-f44f54c56de6');
-        $chap2Part2Narrative = $manager->getRepository(Narrative::class)->findOneByUuid('5e110313-1f01-4f1e-8515-84c93fbb08ad');
+        // chap 1
+        $chap1Time = DateTimeHelper::now()->modify('-14 minutes');
+        $chap1 = $this->manageFragment(
+            $manager, '1b4705aa-4abd-4931-add0-ac11b6fff0c3', $fiction, $chap1Time, $chap1Time, $book['position']
+        );
 
-        // book 1 de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff
-        $book = self::generateFragment($bookNarrative);
-        $book->setUuid('fd8facee-ca94-4db0-8ff1-e82e817e2029');
-        $book->setContent('Livre 1');
-        $book->setCreatedAt(DateTimeHelper::now()->modify('-15 minutes'));
-        $manager->persist($book);
+        // chap 1 part 1
+        $chap1part1Time = DateTimeHelper::now()->modify('-13 minutes');
+        $chap1part1 = $this->manageFragment(
+            $manager, '6284e5ac-09cf-4334-9503-dedf31bafdd0', $fiction, $chap1part1Time, $chap1part1Time, $chap1['position']
+        );
 
-        // chapter 1 1b4705aa-4abd-4931-add0-ac11b6fff0c3
-        $chap1 = self::generateFragment($chap1Narrative);
-        $chap1->setUuid('0cddb6e2-d3c5-4b00-b5c3-b6870298195e');
-        $chap1->setContent('Chapitre 1');
-        $chap1->setCreatedAt(DateTimeHelper::now()->modify('-15 minutes'));
-        $manager->persist($chap1);
+        // chap 1 part 2
+        $chap1part2Time = DateTimeHelper::now()->modify('-12 minutes');
+        $chap1part2 = $this->manageFragment(
+            $manager, '9aab1d64-a66b-47f9-8fe9-8464bdbab6da', $fiction, $chap1part2Time, $chap1part2Time, $chap1['position']
+        );
 
-        // chapter 1 part 1 6284e5ac-09cf-4334-9503-dedf31bafdd0
-        $chap1part1 = self::generateFragment($chap1Part1Narrative);
-        $chap1part1->setUuid('e7cc4025-030c-44a5-8c6f-b756575176b6');
-        $chap1part1->setContent(file_get_contents(__DIR__.'/Files/book1_chap1_part1_v1.txt', true));
-        $chap1part1->setCreatedAt(DateTimeHelper::now()->modify('-14 minutes'));
-        $manager->persist($chap1part1);
+        // chap 1 part 3
+        $chap1part3Time = DateTimeHelper::now()->modify('-11 minutes');
+        $chap1part3 = $this->manageFragment(
+            $manager, 'd7d4899d-9b1c-44cd-8406-8c839c16f79f', $fiction, $chap1part3Time, $chap1part3Time, $chap1['position']
+        );
 
-        $chap1part1V2 = self::generateFragment($chap1Part1Narrative);
-        $chap1part1V2->setUuid('03c340fa-b881-4c73-b634-63264382d8f5');
-        $chap1part1V2->setContent(file_get_contents(__DIR__.'/Files/book1_chap1_part1_v2.txt', true));
-        $chap1part1V2->setCreatedAt(DateTimeHelper::now()->modify('-13 minutes'));
-        $manager->persist($chap1part1V2);
+        // chap 2
+        $chap2Time = DateTimeHelper::now()->modify('-10 minutes');
+        $chap2 = $this->manageFragment(
+            $manager, 'a178e872-934c-4ff0-a7cf-34dccfdb9bb2', $fiction, $chap2Time, $chap2Time, $book['position']
+        );
 
-        // chapter 1 part 2 9aab1d64-a66b-47f9-8fe9-8464bdbab6da
-        $chap1part2 = self::generateFragment($chap1Part2Narrative);
-        $chap1part2->setContent(file_get_contents(__DIR__.'/Files/book1_chap1_part2_v1.txt', true));
-        $chap1part2->setCreatedAt(DateTimeHelper::now()->modify('-12 minutes'));
-        $manager->persist($chap1part2);
+        // chap 2 part 1
+        $chap2part1Time = DateTimeHelper::now()->modify('-9 minutes');
+        $chap2part1 = $this->manageFragment(
+            $manager, '6aa31944-c4ec-4b03-a8e1-f44f54c56de6', $fiction, $chap2part1Time, $chap2part1Time, $chap2['position']
+        );
 
-        // chapter 1 part 3 d7d4899d-9b1c-44cd-8406-8c839c16f79f
-        $chap1part3 = self::generateFragment($chap1Part3Narrative);
-        $chap1part3->setContent(file_get_contents(__DIR__.'/Files/book1_chap1_part3_v1.txt', true));
-        $chap1part3->setCreatedAt(DateTimeHelper::now()->modify('-11 minutes'));
-        $manager->persist($chap1part3);
-
-        // chapter 1 part 3 V2
-        $chap1part3V2 = self::generateFragment($chap1Part3Narrative);
-        $chap1part3V2->setContent(file_get_contents(__DIR__.'/Files/book1_chap1_part3_v2.txt', true));
-        $chap1part3V2->setCreatedAt(DateTimeHelper::now()->modify('-9 minutes'));
-        $manager->persist($chap1part3V2);
-
-        // chapter 1 part 3 V3
-        $chap1part3V3 = self::generateFragment($chap1Part3Narrative);
-        $chap1part3V3->setContent(file_get_contents(__DIR__.'/Files/book1_chap1_part3_v3.txt', true));
-        $chap1part3V3->setCreatedAt(DateTimeHelper::now()->modify('-8 minutes'));
-        $manager->persist($chap1part3V3);
-
-        // chap 2 a178e872-934c-4ff0-a7cf-34dccfdb9bb2
-        $chap2 = self::generateFragment($chap2Narrative);
-        $chap2->setContent('Chapitre 2');
-        $chap2->setCreatedAt(DateTimeHelper::now()->modify('-7 minutes'));
-        $manager->persist($chap2);
-
-        // chap 2 part 1 6aa31944-c4ec-4b03-a8e1-f44f54c56de6
-        $chap2part1 = self::generateFragment($chap2Part1Narrative);
-        $chap2part1->setContent(file_get_contents(__DIR__.'/Files/book1_chap2_part1_v1.txt', true));
-        $chap2part1->setCreatedAt(DateTimeHelper::now()->modify('-6 minutes'));
-        $manager->persist($chap2part1);
-
-        // chap 2 part 1 V2
-        $chap2part1V2 = self::generateFragment($chap2Part1Narrative);
-        $chap2part1V2->setContent(file_get_contents(__DIR__.'/Files/book1_chap2_part1_v2.txt', true));
-        $chap2part1V2->setCreatedAt(DateTimeHelper::now()->modify('-5 minutes'));
-        $manager->persist($chap2part1);
-
-        // chap 3 part 2 5e110313-1f01-4f1e-8515-84c93fbb08ad
-        $chap2part2 = self::generateFragment($chap2Part2Narrative);
-        $chap2part2->setContent(file_get_contents(__DIR__.'/Files/book1_chap2_part2_v1.txt', true));
-        $chap2part2->setCreatedAt(DateTimeHelper::now()->modify('-9 minutes'));
-        $manager->persist($chap2part2);
+        // chap 2 part 2
+        $chap2part2Time = DateTimeHelper::now()->modify('-8 minutes');
+        $chap2part2 = $this->manageFragment(
+            $manager, '5e110313-1f01-4f1e-8515-84c93fbb08ad', $fiction, $chap2part2Time, $chap2part2Time, $chap2['position']
+        );
 
         $manager->flush();
+
+        $this->addReference(self::FRAGMENT_REFERENCE_1, $book['fragment']);
+        $this->addReference(self::FRAGMENT_REFERENCE_2, $chap1['fragment']);
     }
 
     /**
-     * @param Narrative $narrative
-     * @return Fragment
+     * @param String $uuid
+     * @param Fiction $fiction
+     * @param \DateTime $createdAd
+     * @param \Datetime $updatedAt
+     * @param Position|null $parent
+     * @return array
      * @throws \Exception
      */
-    public static function generateFragment(Narrative $narrative): Fragment
+    public function generateFragmentWithPosition(
+        String $uuid,
+        Fiction $fiction,
+        \DateTime $createdAd,
+        \Datetime $updatedAt,
+        Position $parent = null
+    )
     {
         $fragment = new Fragment();
+        $fragment->setUuid($uuid);
+        $fragment->setFiction($fiction);
+        $fragment->setCreatedAt($createdAd);
+        $fragment->setUpdatedAt($updatedAt);
 
-        // let the possibility to manually add uuid
-        $fragment->setUuid(Uuid::uuid4());
-        $fragment->setContent('Content for '.$narrative->getUuid());
-        $fragment->setCreatedAt(DateTimeHelper::now());
-        $fragment->setNarrative($narrative);
+        $position = new Position();
+        if($parent) {
+            $position->setParent($parent);
+        }
+
+        $position->setFragment($fragment);
+
+        return ['fragment' => $fragment, 'position' => $position];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param array $fragment
+     */
+    public function persistFragmentWithPosition(ObjectManager $manager, array $fragment)
+    {
+        $manager->persist($fragment['position']);
+        $manager->persist($fragment['fragment']);
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param String $uuid
+     * @param Fiction $fiction
+     * @param \DateTime $createdAd
+     * @param \Datetime $updatedAt
+     * @param Position|null $parent
+     * @return array
+     * @throws \Exception
+     */
+    public function manageFragment(
+        ObjectManager $manager,
+        String $uuid,
+        Fiction $fiction,
+        \DateTime $createdAd,
+        \Datetime $updatedAt,
+        Position $parent = null
+    )
+    {
+        $fragment = $this->generateFragmentWithPosition($uuid, $fiction, $createdAd, $updatedAt, $parent);
+        $this->persistFragmentWithPosition($manager, $fragment);
 
         return $fragment;
     }
@@ -133,8 +153,7 @@ class FragmentFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return array(
-            NarrativeFixtures::class,
+            FictionFixtures::class,
         );
     }
-
 }

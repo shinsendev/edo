@@ -22,9 +22,9 @@ class Fiction extends AbstractUniqueEntity
     private $title;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Narrative", mappedBy="fiction", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Fragment", mappedBy="fiction", orphanRemoval=true)
      */
-    private $narratives;
+    private $fragments;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Character", mappedBy="fiction", orphanRemoval=true)
@@ -33,35 +33,36 @@ class Fiction extends AbstractUniqueEntity
 
     public function __construct()
     {
-        $this->narratives = new ArrayCollection();
+        parent::__construct();
+        $this->fragments = new ArrayCollection();
         $this->characters = new ArrayCollection();
     }
 
     /**
-     * @return Collection|Narrative[]
+     * @return Collection|Fragment[]
      */
-    public function getNarratives(): Collection
+    public function getFragments(): Collection
     {
-        return $this->narratives;
+        return $this->fragments;
     }
 
-    public function addNarrative(Narrative $narrative): self
+    public function addFragment(Fragment $fragment): self
     {
-        if (!$this->narratives->contains($narrative)) {
-            $this->narratives[] = $narrative;
-            $narrative->setFiction($this);
+        if (!$this->fragments->contains($fragment)) {
+            $this->fragments[] = $fragment;
+            $fragment->setFiction($this);
         }
 
         return $this;
     }
 
-    public function removeNarrative(Narrative $narrative): self
+    public function removeFragment(Fragment $fragment): self
     {
-        if ($this->narratives->contains($narrative)) {
-            $this->narratives->removeElement($narrative);
+        if ($this->fragments->contains($fragment)) {
+            $this->fragments->removeElement($fragment);
             // set the owning side to null (unless already changed)
-            if ($narrative->getFiction() === $this) {
-                $narrative->setFiction(null);
+            if ($fragment->getFiction() === $this) {
+                $fragment->setFiction(null);
             }
         }
 
