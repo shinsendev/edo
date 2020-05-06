@@ -3,10 +3,13 @@
 namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
+use App\Component\DTO\Model\FragmentDTO;
 use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Strategy\DTOContext;
+use App\Component\DTO\Strategy\Narrative\GetItem\FragmentDTOGetItem;
 use App\Component\DTO\Strategy\Narrative\GetItem\NarrativeDTOGetItem;
 use App\Entity\Fiction;
+use App\Entity\Fragment;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -16,7 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * Class FragmentCollectionDataProvider
  * @package App\Component\DataProvider
  */
-final class NarrativeCollectionDataProvider implements CollectionDataProviderInterface
+final class FragmentCollectionDataProvider implements CollectionDataProviderInterface
 {
     /** @var EntityManagerInterface  */
     private $em;
@@ -37,11 +40,11 @@ final class NarrativeCollectionDataProvider implements CollectionDataProviderInt
         //todo: replace by dynamic fiction
         /** @var Fiction[] $fiction */
         $fiction = $this->em->getRepository(Fiction::class)->findAll();
-        $narratives = $this->em->getRepository(Narrative::class)->findLastNarratives($fiction[0]);
+        $fragments = $this->em->getRepository(Fragment::class)->findLastNarratives($fiction[0]);
 
-        foreach ($narratives as $narrative) {
-            /** @var NarrativeDTO */
-            yield (new DTOContext(new NarrativeDTOGetItem(), null, $this->em, ['narrative' => $narrative]))->proceed();
+        foreach ($fragments as $fragment) {
+            /** @var FragmentDTO */
+            yield (new DTOContext(new FragmentDTOGetItem(), null, $this->em, ['fragment' => $fragment]))->proceed();
         }
     }
 }

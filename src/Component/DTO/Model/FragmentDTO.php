@@ -15,12 +15,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class NarrativeDTO
  * @package App\Component\DTO
  * @ApiResource(
- *     shortName="narrative",
+ *     shortName="fragment",
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "delete"}
  * )
  */
-class NarrativeDTO extends AbstractDTO
+class FragmentDTO extends AbstractDTO
 {
     use DatableTrait, UpdatableTrait, TreeableTrait;
 

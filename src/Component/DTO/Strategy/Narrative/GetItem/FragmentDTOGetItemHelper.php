@@ -6,27 +6,27 @@ namespace App\Component\DTO\Strategy\Narrative\GetItem;
 
 use App\Component\Transformer\TransformerConfig;
 use App\Entity\Fragment;
-use App\Entity\Narrative;
+use App\Entity\Version;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class DTOStrategyGETHelper
  * @package App\Component\DTO\Strategy\Helper
  */
-class NarrativeDTOGetItemHelper
+class FragmentDTOGetItemHelper
 {
     /**
      * @param EntityManagerInterface $em
-     * @param Narrative $narrative
+     * @param Fragment $fragment
      * @param array $options
      * @return TransformerConfig
      */
-    public static function createTransformerConfig(EntityManagerInterface $em, Narrative $narrative, array $options = [])
+    public static function createTransformerConfig(EntityManagerInterface $em, Fragment $fragment, array $options = [])
     {
         return new TransformerConfig(
-            $narrative,
+            $fragment,
             // we only keep the last fragment to set the title and the content
-            ["fragments" => $em->getRepository(Fragment::class)->findNarrativeLastFragments($narrative->getUuid() ,10)],
+            ["versions" => $em->getRepository(Version::class)->findFragmentLastVersions($fragment->getUuid() ,10)],
             $em,
             $options
         );

@@ -4,7 +4,7 @@
 namespace App\Component\Transformer;
 
 use App\Component\DTO\Model\DTOInterface;
-use App\Component\DTO\Model\NarrativeDTO;
+use App\Component\DTO\Model\FragmentDTO;
 use App\Component\DTO\Tree\PositionConvertor;
 use App\Component\Error\EdoError;
 use App\Component\Exception\EdoException;
@@ -15,7 +15,7 @@ use App\Entity\Position;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class NarrativeDTOTransformer implements TransformerInterface
+class FragmentDTOTransformer implements TransformerInterface
 {
     /**
      * @param DTOInterface $narrativeDTO
@@ -39,7 +39,7 @@ class NarrativeDTOTransformer implements TransformerInterface
         }
 
         // set Narrative Uuid
-        $fragment = self::setNarrativeUuid($narrativeDTO, $fragment, $isCreation);
+        $fragment = self::setFragmentUuid($narrativeDTO, $fragment, $isCreation);
 
         // create position
         $position = self::createPosition($narrativeDTO, $isCreation, $fragment, $em);
@@ -48,7 +48,7 @@ class NarrativeDTOTransformer implements TransformerInterface
         $position = self::setParentPosition($narrativeDTO, $position, $em);
 
         // add fiction
-        $fragment = self::setNarrativeFiction($narrativeDTO, $fragment, $em);
+        $fragment = self::setFragmentFiction($narrativeDTO, $fragment, $em);
 
         // create result
         return self::createResponse($fragment, $position);
@@ -75,7 +75,7 @@ class NarrativeDTOTransformer implements TransformerInterface
      * @param bool $isCreation
      * @return Fragment
      */
-    public static function setNarrativeUuid(DTOInterface $narrativeDTO, Fragment $fragment, bool $isCreation): Fragment
+    public static function setFragmentUuid(DTOInterface $narrativeDTO, Fragment $fragment, bool $isCreation): Fragment
     {
         if ($isCreation) {
             $fragment->setUuid($narrativeDTO->getUuid());
@@ -146,7 +146,7 @@ class NarrativeDTOTransformer implements TransformerInterface
      * @return Fragment
      * @throws EdoException
      */
-    public static function setNarrativeFiction(DTOInterface $narrativeDTO, Fragment $fragment, EntityManagerInterface $em)
+    public static function setFragmentFiction(DTOInterface $narrativeDTO, Fragment $fragment, EntityManagerInterface $em)
     {
         try {
             $fictionUuid = $narrativeDTO->getFictionUuid();
@@ -175,14 +175,14 @@ class NarrativeDTOTransformer implements TransformerInterface
     /**
      * @param TransformerConfig $config
      *
-     * @return NarrativeDTO
+     * @return FragmentDTO
      * @throws EdoException
      */
-    public static function fromEntity(TransformerConfig $config): NarrativeDTO
+    public static function fromEntity(TransformerConfig $config): FragmentDTO
     {
         try {
             // create DTO and add basics
-            $fragmentDTO = new NarrativeDTO();
+            $fragmentDTO = new FragmentDTO();
             $fragment = $config->getSource();
             $fragmentDTO->setUuid($fragment->getUuid());
 

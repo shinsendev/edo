@@ -7,14 +7,13 @@ namespace App\Component\DataProvider;
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Component\DTO\Model\FragmentDTO;
-use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Strategy\DTOContext;
-use App\Component\DTO\Strategy\Narrative\GetItem\NarrativeDTOGetItem;
-use App\Entity\Narrative;
+use App\Component\DTO\Strategy\Narrative\GetItem\FragmentDTOGetItem;
+use App\Entity\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-final class NarrativeItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
+final class FragmentItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
     /** @var EntityManagerInterface  */
     protected $em;
@@ -36,7 +35,7 @@ final class NarrativeItemDataProvider implements ItemDataProviderInterface, Rest
      */
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return NarrativeDTO::class === $resourceClass;
+        return FragmentDTO::class === $resourceClass;
     }
 
     /**
@@ -48,14 +47,14 @@ final class NarrativeItemDataProvider implements ItemDataProviderInterface, Rest
      * @return FragmentDTO|null
      * @throws \Exception
      */
-    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?NarrativeDTO
+    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?FragmentDTO
     {
-        if (!$narrative = $this->em->getRepository(Narrative::class)->findOneByUuid($id)) {
+        if (!$fragment = $this->em->getRepository(Fragment::class)->findOneByUuid($id)) {
             throw new NotFoundHttpException("Narrative not found for uuid " . $id);
         }
 
-        /** @var NarrativeDTO */
-        return (new DTOContext(new NarrativeDTOGetItem(), null, $this->em, ['narrative' => $narrative]))->proceed();
+        /** @var FragmentDTO */
+        return (new DTOContext(new FragmentDTOGetItem(), null, $this->em, ['fragment' => $fragment]))->proceed();
     }
 
 }
