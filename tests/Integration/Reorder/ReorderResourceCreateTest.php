@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Integration\Narrative;
+namespace App\Tests\Integration\Fragment;
 
 use App\Entity\Position;
 
 /**
- * Class NarrativeResourceCreateTest
+ * Class FragmentResourceCreateTest
  * @package App\Tests\Integration\Narrative
  */
-class ReorderResourceCreateTest extends AbstractNarrativeResource
+class ReorderResourceCreateTest extends AbstractFragmentResource
 {
     public function testCreateReorder()
     {

@@ -104,7 +104,7 @@ class FragmentDTOTransformer implements TransformerInterface
         // get narrative's position
         if ($isCreation) { // if it is a new narrative we create the position
             $position = new Position();
-            $position->setNarrative($fragment);
+            $position->setFragment($fragment);
         }
         else { // if it is an update, we get the position of the narrative
             if (!$position = $em->getRepository(Position::class)->findOneByNarrative($fragment)) {
@@ -129,7 +129,7 @@ class FragmentDTOTransformer implements TransformerInterface
             // get parent's position : we need to find the corresponding position for the narrative uuid
             $parentNarrative = $em->getRepository(Fragment::class)->findOneByUuid($parentUuid);
 
-            if (!$parentPosition = $em->getRepository(Position::class)->findOneByNarrative($parentNarrative)) {
+            if (!$parentPosition = $em->getRepository(Position::class)->findOneByFragment($parentNarrative)) {
                 throw new NotFoundHttpException('No parent narrative for the uuid '.$narrativeDTO->getUuid());
             }
 

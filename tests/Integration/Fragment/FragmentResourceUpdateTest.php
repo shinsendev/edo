@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Tests\Integration\Narrative;
+namespace App\Tests\Integration\Fragment;
 
 use App\DataFixtures\FragmentFixtures;
 
-class NarrativeResourceUpdateTest extends AbstractNarrativeResource
+class FragmentResourceUpdateTest extends AbstractFragmentResource
 {
     /**
      * @Description: we create a new fragment for an existing narrative, it's like updating this narrative

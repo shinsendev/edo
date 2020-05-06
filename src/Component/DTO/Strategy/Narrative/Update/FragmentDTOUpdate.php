@@ -17,7 +17,7 @@ use App\Entity\Fragment;
 use App\Entity\Narrative;
 use Doctrine\ORM\EntityManager;
 
-class NarrativeDTOUpdate implements DTOStrategyInterface
+class FragmentDTOUpdate implements DTOStrategyInterface
 {
     /** @var EntityManager */
     private $em;

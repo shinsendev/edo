@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Integration\Narrative;
+namespace App\Tests\Integration\Fragment;
 
 use Symfony\Component\HttpClient\Exception\ClientException;
 
 /**
- * Class NarrativeResourceCreateTest
+ * Class FragmentResourceCreateTest
  * @package App\Tests\Integration\Narrative
  */
-class NarrativeResourceCreateTest extends AbstractNarrativeResource
+class FragmentResourceCreateTest extends AbstractFragmentResource
 {
-    public function testCreateNarrative()
+    public function testCreateFragment()
     {
-        // at first, we count the number of existing narratives
-        $this->assertEquals(8, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
+        // at first, we count the number of existing fragments
+        $this->assertEquals(8, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
 
-        // and we count fragments
-        $this->assertEquals(11, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
+        // and we count the versions
+        $this->assertEquals(11, count($this->versionRepository->findAll()), 'Uncorrect number of versions');
 
-        $response = $this->client->request('POST', 'api/narratives', [
+        $response = $this->client->request('POST', 'api/fragments', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $this->data
         ]);
@@ -28,23 +28,23 @@ class NarrativeResourceCreateTest extends AbstractNarrativeResource
         $arrayResponse = $response->toArray();
         $this->assertResponseIsSuccessful("Narrative hasn't been created correctly");
         $this->assertEquals($this->data['content'], $arrayResponse['content']);
-        // createdAt must be equal to updatedAt because a new narrative is created
+        // createdAt must be equal to updatedAt because a new fragment is created
         $this->assertEquals($arrayResponse['created_at'], $arrayResponse['updated_at']);
 
         // now, we check in database if everything is correct
-        // we are supposed to have one more narrative and one more fragment
-        $this->assertEquals(9, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
-        $this->assertEquals(12, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
+        // we are supposed to have one more fragments and one more version
+        $this->assertEquals(9, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
+        $this->assertEquals(12, count($this->versionRepository->findAll()), 'Uncorrect number of versions');
 
-        // we check if we get our new narrative with a GET call
-        $response =  $this->client->request('GET', 'api/narratives', [
+        // we check if we get our new fragment with a GET call
+        $response =  $this->client->request('GET', 'api/fragments', [
             'headers' => ['Content-Type' => 'application/json']
         ]);
 
         $this->assertResponseIsSuccessful();
         $arrayResponse = $response->toArray();
 
-        // we check the first narrative test that get collection send back
+        // we check the first fragment test that get collection send back
         $this->assertEquals($this->data['content'], $arrayResponse['hydra:member'][0]['content']);
         $this->assertEquals($this->data['parent_uuid'], $arrayResponse['hydra:member'][0]['parent_uuid']);
     }
@@ -58,7 +58,7 @@ class NarrativeResourceCreateTest extends AbstractNarrativeResource
             'fiction_uuid' => '1b7df281-ae2a-40bf-ad6a-ac60409a9ce6'
         ];
 
-        $this->client->request('POST', 'api/narratives', [
+        $this->client->request('POST', 'api/fragments', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $data
         ]);
@@ -72,7 +72,7 @@ class NarrativeResourceCreateTest extends AbstractNarrativeResource
             'fiction_uuid' => '1b7df281-ae2a-40bf-ad6a-ac60409a9ce6'
         ];
 
-        $this->client->request('POST', 'api/narratives', [
+        $this->client->request('POST', 'api/fragments', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $data
         ]);
@@ -89,7 +89,7 @@ class NarrativeResourceCreateTest extends AbstractNarrativeResource
             'content' => $content,
         ];
 
-        $this->client->request('POST', 'api/narratives', [
+        $this->client->request('POST', 'api/fragments', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $data
         ]);
@@ -103,7 +103,7 @@ class NarrativeResourceCreateTest extends AbstractNarrativeResource
         $content = 'Vous vous trompez, Fernand, ce n’est pas une loi, c’est une habitude, voilà tout ; et, croyez-moi, n’invoquez pas cette habitude en votre faveur. Vous êtes tombé à la conscription, Fernand ; la liberté qu’on vous laisse, c’est une simple tolérance ; d’un moment à l’autre vous pouvez être appelé sous les drapeaux. Une fois soldat, que ferez-vous de moi, c’est-à-dire d’une pauvre fille orpheline, triste, sans fortune, possédant pour tout bien une cabane presque en ruines, où pendent quelques filets usés, misérable héritage laissé par mon père à ma mère et par ma mère à moi ? Depuis un an qu’elle est morte, songez donc, Fernand, que je vis presque de la charité publique ! Quelquefois vous feignez que je vous suis utile, et cela pour avoir le droit de partager votre pêche avec moi ; et j’accepte, Fernand, parce que vous êtes le fils d’un frère de mon père, parce que nous avons été élevés ensemble, et plus encore parce que, par-dessus tout, cela vous ferait trop de peine si je vous refusais. Mais je sens bien que ce poisson que je vais vendre et dont je tire l’argent avec lequel j’achète le chanvre que je file, je sens bien, Fernand, que c’est une charité.';
         $data['content'] = $content;
 
-        $this->client->request('POST', 'api/narratives', [
+        $this->client->request('POST', 'api/fragments', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $data
         ]);

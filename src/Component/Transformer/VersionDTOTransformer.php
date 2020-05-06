@@ -40,26 +40,26 @@ class VersionDTOTransformer extends AbstractTransformer implements TransformerIn
     }
 
     //todo : correct not supposed to be Narrative DTO here
-    public static function toEntity(DTOInterface $narrativeDTO, EntityManagerInterface $em)
+    public static function toEntity(DTOInterface $fragmentDTO, EntityManagerInterface $em)
     {
         // we check if it is the correct DTO
-        if(!$narrativeDTO instanceof NarrativeDTO)
+        if(!$fragmentDTO instanceof FragmentDTO)
         {
             throw new EdoException('Not a narrative DTO');
         }
 
         // check if narrative really exists
-        if (!$narrative = $em->getRepository(Narrative::class)->findOneByUuid($narrativeDTO->getUuid())) {
-            throw new EdoException('There are no Narrative '.$narrativeDTO->getUuid());
+        if (!$fragment = $em->getRepository(Fragment::class)->findOneByUuid($fragmentDTO->getUuid())) {
+            throw new EdoException('There are no Narrative '.$fragmentDTO->getUuid());
         }
 
-        $fragment = new Fragment();
-        $fragment->setContent($narrativeDTO->getContent());
-        $fragment->setCreatedAt(DateTimeHelper::now());
+        $version = new Version();
+        $version->setContent($fragmentDTO->getContent());
+        $version->setCreatedAt(DateTimeHelper::now());
 
-        $fragment->setNarrative($narrative);
+        $version->setFragment($fragment);
 
-        return ['fragment' => $fragment];
+        return ['version' => $version];
     }
 
 }

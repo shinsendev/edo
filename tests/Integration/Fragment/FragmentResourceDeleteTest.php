@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Integration\Narrative;
+namespace App\Tests\Integration\Fragment;
 
 /**
  * Class NarrativeResourceTest
  * @package App\Tests\Integration
  */
-class NarrativeResourceDeleteTest extends AbstractNarrativeResource
+class FragmentResourceDeleteTest extends AbstractFragmentResource
 {
     /**
      * @Description = send GET request for one specific fragment

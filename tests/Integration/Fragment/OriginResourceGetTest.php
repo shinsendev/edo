@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 
-namespace App\Tests\Integration\Narrative;
+namespace App\Tests\Integration\Fragment;
 
 
-class OriginResourceGetTest extends AbstractNarrativeResource
+class OriginResourceGetTest extends AbstractFragmentResource
 {
     /**
      * @Description = send GET request for one specific fragment

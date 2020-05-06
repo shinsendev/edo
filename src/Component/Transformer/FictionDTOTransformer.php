@@ -9,7 +9,6 @@ namespace App\Component\Transformer;
 use App\Component\Date\DateTimeHelper;
 use App\Component\DTO\Model\DTOInterface;
 use App\Component\DTO\Model\FictionDTO;
-use App\Entity\Fragment;
 use App\Entity\Position;
 use App\Entity\Version;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,7 +48,7 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
                     'position' => $position
                 ]
             );
-            $fictionsDTO[]= NarrativeDTOTransformer::fromEntity($nestedConfig); // needs fragment
+            $fictionsDTO[]= FragmentDTOTransformer::fromEntity($nestedConfig); // needs fragment
         }
 
         $originsDTO = [];
@@ -60,7 +59,7 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
                 ['nested' => true] // we don't want all the fragments of the narrative
             );
 
-             $originsDTO[]= NarrativeDTOTransformer::fromEntity($nestedConfig); // needs fragment
+             $originsDTO[]= FragmentDTOTransformer::fromEntity($nestedConfig); // needs fragment
         }
 
         $followingsDTO = [];
@@ -71,7 +70,7 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
                 ['nested' => true] // we don't want all the fragments of the narrative
             );
 
-            $followingsDTO[] = NarrativeDTOTransformer::fromEntity($nestedConfig); // needs fragment
+            $followingsDTO[] = FragmentDTOTransformer::fromEntity($nestedConfig); // needs fragment
         }
 
         $charactersDTO = [];
