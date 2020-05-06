@@ -31,7 +31,6 @@ class FictionDTOGetItem implements DTOStrategyInterface
 
         // prepare transformer conf
         $fragments = $em->getRepository(Fragment::class)->findByFiction($fiction);
-        dd($fragments);
         $origins = $em->getRepository(Fragment::class)->findOrigins($fiction, 3);
         $followings = $em->getRepository(Fragment::class)->findFollowings($fiction, 3);
         $characters = $em->getRepository(Character::class)->findLastCharacters($fiction);

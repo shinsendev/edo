@@ -25,10 +25,10 @@ class VersionRepository extends ServiceEntityRepository
      * @param int $limit
      * @return mixed
      */
-    public function findNarrativeLastFragments(string $fragmentUuid, int $limit = 10)
+    public function findFragmentLastVersions(string $fragmentUuid, int $limit = 10)
     {
         $query = $this->getEntityManager()->createQuery('
-            SELECT f FROM '.Version::class.' f JOIN f.$fragmentUuid n WHERE n.uuid = :uuid ORDER BY f.createdAt DESC
+            SELECT v FROM '.Version::class.' v JOIN v.fragment f WHERE f.uuid = :uuid ORDER BY v.createdAt DESC
         ')
             ->setParameter('uuid', $fragmentUuid)
             ->setMaxResults($limit);

@@ -9,32 +9,34 @@ use App\Component\DTO\Model\DTOInterface;
 use App\Component\DTO\Model\FragmentDTO;
 use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\Date\DateTimeHelper;
+use App\Component\DTO\Model\VersionDTO;
 use App\Component\Exception\EdoException;
 use App\Entity\EntityInterface;
 use App\Entity\Fragment;
 use App\Entity\Narrative;
+use App\Entity\Version;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Class FragmentDTOTransformer
+ * Class VersionDTOTransformer
  * @package App\Component\Transformer
  */
-class FragmentDTOTransformer extends AbstractTransformer implements TransformerInterface
+class VersionDTOTransformer extends AbstractTransformer implements TransformerInterface
 {
     public static function fromEntity(TransformerConfig $config)
     {
-        $fragment = $config->getSource();
-        if(!$fragment instanceof Fragment)
+        $version = $config->getSource();
+        if(!$version instanceof Version)
         {
-            throw new EdoException('Not a fragment');
+            throw new EdoException('Not a Version Entity.');
         }
 
-        $fragmentDTO = new FragmentDTO();
-        $fragmentDTO->setContent($fragment->getContent());
-        $fragmentDTO->setCreatedAt(DateTimeHelper::stringify($fragment->getCreatedAt()));
-        $fragmentDTO->setUuid($fragment->getUuid());
+        $versionDTO = new VersionDTO();
+        $versionDTO->setContent($version->getContent());
+        $versionDTO->setCreatedAt(DateTimeHelper::stringify($version->getCreatedAt()));
+        $versionDTO->setUuid($version->getUuid());
 
-        return $fragmentDTO;
+        return $versionDTO;
     }
 
     //todo : correct not supposed to be Narrative DTO here

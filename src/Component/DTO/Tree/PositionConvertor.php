@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Component\DTO\Tree;
 
+use App\Entity\Fragment;
 use App\Entity\Narrative;
 use App\Entity\Position;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,35 +23,35 @@ class PositionConvertor
      * @param EntityManagerInterface $em
      * @return mixed
      */
-    public static function getNarrativeUuid(Position $position, EntityManagerInterface $em)
+    public static function getFragmentUuid(Position $position, EntityManagerInterface $em)
     {
         /** Narrative Uuid */
-        return ($em->getRepository(Position::class)->findNarrative($position->getId()))->getUuid();
+        return ($em->getRepository(Position::class)->findFragment($position->getId()))->getUuid();
     }
 
     /**
      * description : extract root position from narrative
      *
-     * @param Narrative $narrative
+     * @param Fragment $fragment
      * @param EntityManagerInterface $em
      * @return mixed
      */
-    public static function getRootPosition(Narrative $narrative, EntityManagerInterface $em)
+    public static function getRootPosition(Fragment $fragment, EntityManagerInterface $em)
     {
-        return ($em->getRepository(Position::class)->findOneByNarrative($narrative))->getRoot();
+        return ($em->getRepository(Position::class)->findOneByFragment($fragment))->getRoot();
     }
 
     /**
      * description : extract parent position from narrative
      *
-     * @param string $narrativeUuid
+     * @param string $fragmentUuid
      * @param EntityManagerInterface $em
      * @return mixed
      */
-    public static function getParentPositionFromNarrativeUuid(string $narrativeUuid, EntityManagerInterface $em)
+    public static function getParentPositionFromNarrativeUuid(string $fragmentUuid, EntityManagerInterface $em)
     {
-        $parentNarrative = $em->getRepository(Narrative::class)->findOneByUuid($narrativeUuid);
-        return $em->getRepository(Position::class)->findOneByNarrative($parentNarrative);
+        $parentFragment = $em->getRepository(Fragment::class)->findOneByUuid($fragmentUuid);
+        return $em->getRepository(Position::class)->findOneByFragment($parentFragment);
     }
 
 }

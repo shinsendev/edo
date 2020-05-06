@@ -6,7 +6,7 @@ namespace App\Component\Fragment;
 
 use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\EntityManager\SaveEntityHelper;
-use App\Component\Transformer\FragmentDTOTransformer;
+use App\Component\Transformer\VersionDTOTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FragmentSaver
@@ -19,7 +19,7 @@ class FragmentSaver
     public static function save(EntityManagerInterface $em, NarrativeDTO $narrativeDTO)
     {
         // create Fragment
-        $fragment = FragmentDTOTransformer::toEntity($narrativeDTO, $em);
+        $fragment = VersionDTOTransformer::toEntity($narrativeDTO, $em);
         SaveEntityHelper::saveEntity($em, $fragment);
     }
 }
