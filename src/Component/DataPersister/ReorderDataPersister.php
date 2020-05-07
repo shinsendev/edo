@@ -8,15 +8,10 @@ use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use ApiPlatform\Core\Validator\ValidatorInterface;
 use App\Component\DTO\Model\ReorderDTO;
 use App\Component\DTO\Strategy\DTOContext;
-use App\Component\DTO\Model\NarrativeDTO;
-use App\Component\DTO\Strategy\Narrative\Save\NarrativeDTOSave;
-use App\Component\DTO\Strategy\Narrative\Update\NarrativeDTOUpdate;
 use App\Component\DTO\Strategy\Reorder\ReorderDTOPost;
 use App\Component\Exception\EdoException;
-use App\Entity\Narrative;
-use App\Repository\NarrativeRepository;
+use App\Entity\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class FragmentDataPersister
@@ -62,11 +57,11 @@ final class ReorderDataPersister implements ContextAwareDataPersisterInterface
      */
     public function persist($reorderDTO, array $context = [])
     {
-        if (!$narrative = $this->em->getRepository(Narrative::class)->findOneByUuid($reorderDTO->getNarrativeUuid())) {
-            throw new EdoException('No narrative found to reorder');
+        if (!$fragment = $this->em->getRepository(Fragment::class)->findOneByUuid($reorderDTO->getFragmentUuid())) {
+            throw new EdoException('No fragment found to reorder');
         }
 
-        $context = new DTOContext(new ReorderDTOPost(), $reorderDTO, $this->em, ['narrative' => $narrative]);
+        $context = new DTOContext(new ReorderDTOPost(), $reorderDTO, $this->em, ['fragment' => $fragment]);
 
         return $context->proceed();
     }

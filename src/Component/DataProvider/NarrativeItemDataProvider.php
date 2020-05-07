@@ -6,26 +6,26 @@ namespace App\Component\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
+use App\Component\DTO\Model\FragmentDTO;
 use App\Component\DTO\Model\NarrativeDTO;
-use App\Component\DTO\Model\OriginDTO;
 use App\Component\DTO\Strategy\DTOContext;
-use App\Component\DTO\Strategy\Narrative\GetItem\NarrativeDTOGetItemFromCollection;
-use App\Component\DTO\Strategy\Origin\GetItem\OriginDTOGetItem;
-use App\Entity\Narrative;
+use App\Component\DTO\Strategy\Narrative\GetItem\FragmentDTOGetItemFromCollection;
+use App\Component\DTO\Strategy\Origin\GetItem\NarrativeDTOGetItem;
+use App\Entity\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class OriginItemDataProvider
+ * Class NarrativeItemDataProvider
  * @package App\Component\DataProvider
  */
-class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
+class NarrativeItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
     /** @var EntityManagerInterface  */
     private $em;
 
     /**
-     * OriginItemDataProvider constructor.
+     * NarrativeItemDataProvider constructor.
      * @param EntityManagerInterface $em
      */
     public function __construct(EntityManagerInterface $em)
@@ -35,7 +35,7 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return OriginDTO::class === $resourceClass;
+        return NarrativeDTO::class === $resourceClass;
     }
 
     /**
@@ -49,25 +49,25 @@ class OriginItemDataProvider implements ItemDataProviderInterface, RestrictedDat
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {
         // check if it is a narrative
-        if (!$narrative = $this->em->getRepository(Narrative::class)->findOneOriginByNarrativeUuid($id)) {
+        if (!$fragment = $this->em->getRepository(Fragment::class)->findOneOriginByNarrativeUuid($id)) {
             throw new NotFoundHttpException("No origin narrative found for uuid " . $id);
         }
 
         // get a limit number of narratives with the same parent if
-        $narratives = $this->em->getRepository(Narrative::class)->findOriginNarratives($narrative, 100);
+        $fragments = $this->em->getRepository(Fragment::class)->findOriginNarratives($fragment, 100);
 
         // first we create a list of narratives DTO, specialy for using the narratives uuid for hierarchy and not the position
-        /** @var NarrativeDTO[] $narrativesDTO */
-        $narrativesDTO = [];
+        /** @var FragmentDTO[] $fragmentsDTO */
+        $fragmentsDTO = [];
 
-        /** @var Narrative $narrative */
-        foreach ($narratives as $narrative) {
-            /** @var NarrativeDTO */
-            $narrativesDTO[] = (new DTOContext(new NarrativeDTOGetItemFromCollection(), null, $this->em, ['narrative' => $narrative]))->proceed();
+        /** @var Fragment $fragment */
+        foreach ($fragments as $fragment) {
+            /** @var FragmentDTO */
+            $fragmentsDTO[] = (new DTOContext(new FragmentDTOGetItemFromCollection(), null, $this->em, ['fragment' => $fragment]))->proceed();
         }
 
         // then we create the payload with hierarchy
-        return (new DTOContext(new OriginDTOGetItem(), null, $this->em, ['narrativesDTO' => $narrativesDTO]))->proceed();
+        return (new DTOContext(new NarrativeDTOGetItem(), null, $this->em, ['fragmentsDTO' => $fragmentsDTO]))->proceed();
     }
 
 }

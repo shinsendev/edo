@@ -50,7 +50,7 @@ final class FragmentItemDataProvider implements ItemDataProviderInterface, Restr
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?FragmentDTO
     {
         if (!$fragment = $this->em->getRepository(Fragment::class)->findOneByUuid($id)) {
-            throw new NotFoundHttpException("Narrative not found for uuid " . $id);
+            throw new NotFoundHttpException("Fragment not found for uuid " . $id);
         }
 
         /** @var FragmentDTO */

@@ -15,11 +15,11 @@ class ReorderResourceCreateTest extends AbstractFragmentResource
     public function testCreateReorder()
     {
         // check position for a narrative before reorder
-        $narrativeUuid = "1b4705aa-4abd-4931-add0-ac11b6fff0c3";
-        $narrative = $this->narrativeRepository->findOneByUuid($narrativeUuid);
+        $fragmentUuid = "1b4705aa-4abd-4931-add0-ac11b6fff0c3";
+        $fragment = $this->fragmentRepository->findOneByUuid($fragmentUuid);
 
         $positionRepository = $this->em->getRepository(Position::class);
-        $position = $positionRepository->findOneByNarrative($narrative);
+        $position = $positionRepository->findOneByFragment($fragment);
         $parentPosition = $positionRepository->findOneById($position->getParent()->getId());
 
         $this->assertEquals(2, $position->getLft());
@@ -28,7 +28,7 @@ class ReorderResourceCreateTest extends AbstractFragmentResource
         $this->assertEquals($parentPosition, $position->getParent());
 
         $reorderData = [
-          "narrativeUuid" => $narrativeUuid,
+          "fragmentUuid" => $fragmentUuid,
           "position"=> 2,
           "parentUuid" => "de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff"
         ];
@@ -40,7 +40,7 @@ class ReorderResourceCreateTest extends AbstractFragmentResource
 
         $this->assertResponseIsSuccessful();
 
-        $updatedPosition = $positionRepository->findOneByNarrative($narrative);
+        $updatedPosition = $positionRepository->findOneByFragment($fragment);
         $updatedParentPosition = $positionRepository->findOneById($position->getParent()->getId());
 
         $this->assertEquals(4, $updatedPosition->getLft());

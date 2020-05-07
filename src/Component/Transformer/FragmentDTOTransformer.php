@@ -211,15 +211,14 @@ class FragmentDTOTransformer implements TransformerInterface
                 $fragmentDTO->setRgt($position->getRgt());
 
                 $fragmentDTO = self::setChildrenPosition($fragmentDTO, $position, $config->getEm());
-
             }
 
             $versions = [];
             $nested = $config->getNested();
 
-            // if there are nested fragments we use them to set the title and content of the narrative
+            // if there are nested versions we use them to set the title and content of the fragment
             if ($nested) {
-                // we set the content with the last fragment
+                // we set the content with the last version
                 $fragmentDTO->setContent($nested['versions'][0]->getContent());
             }
 

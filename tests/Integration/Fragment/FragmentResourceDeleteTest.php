@@ -16,7 +16,7 @@ class FragmentResourceDeleteTest extends AbstractFragmentResource
     public function testDeleteNarrative()
     {
         $uuid = '6284e5ac-09cf-4334-9503-dedf31bafdd0';
-        $this->client->request('DELETE', 'api/narratives/'.$uuid);
+        $this->client->request('DELETE', 'api/fragments/'.$uuid);
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(204);
     }

@@ -4,8 +4,10 @@
 namespace App\Tests\Unit;
 
 use App\Component\Date\DateTimeHelper;
+use App\Component\DTO\Model\FragmentDTO;
 use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Strategy\DTOContext;
+use App\Component\DTO\Strategy\Narrative\Save\FragmentDTOSave;
 use App\Component\DTO\Strategy\Narrative\Save\NarrativeDTOSave;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
@@ -14,7 +16,7 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
  * Class NarrativeCreator
  * @package App\Tests\Unit
  */
-class NarrativeDTOSaveTest extends AbstractUnitTest
+class FragmentDTOSaveTest extends AbstractUnitTest
 {
     use FixturesTrait;
 
@@ -23,17 +25,17 @@ class NarrativeDTOSaveTest extends AbstractUnitTest
         parent::setUp();
         $this->loadFixtures([
             'App\DataFixtures\FictionFixtures',
-            'App\DataFixtures\NarrativeFixtures',
+            'App\DataFixtures\FragmentFixtures',
             ]);
     }
 
-    public function testNarrativeCreatorSave()
+    public function testFragmentCreatorSave()
     {
         self::bootKernel();
         $container = self::$container;
 
         $em = $container->get(EntityManagerInterface::class);
-        $context = new DTOContext(new NarrativeDTOSave(), $this->generateNarrativeDTO(), $em);
+        $context = new DTOContext(new FragmentDTOSave(), $this->generateFragmentDTO(), $em);
         $response = $context->proceed();
 
         $this->assertEquals('Narrative content generated for test', $response->getContent());
@@ -45,11 +47,11 @@ class NarrativeDTOSaveTest extends AbstractUnitTest
     }
 
     /**
-     * @return NarrativeDTO
+     * @return FragmentDTO
      */
-    protected function generateNarrativeDTO()
+    protected function generateFragmentDTO()
     {
-        $dto = new NarrativeDTO();
+        $dto = new FragmentDTO();
         $dto->setUuid('6153ca18-47a9-4b38-ae72-29e8340060cb');
         $dto->setContent('Narrative content generated for test');
         // we use the fiction created with the fixtures

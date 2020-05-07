@@ -32,7 +32,6 @@ class VersionRepository extends ServiceEntityRepository
         ')
             ->setParameter('uuid', $fragmentUuid)
             ->setMaxResults($limit);
-
         return $query->getResult();
     }
 

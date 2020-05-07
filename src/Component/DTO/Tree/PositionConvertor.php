@@ -17,7 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class PositionConvertor
 {
     /**
-     * description : convert position into Narrative Uuid, used by Narrative DTO
+     * description : convert position into Fragment Uuid, used by Fragment DTO
      *
      * @param Position $position
      * @param EntityManagerInterface $em
@@ -25,7 +25,7 @@ class PositionConvertor
      */
     public static function getFragmentUuid(Position $position, EntityManagerInterface $em)
     {
-        /** Narrative Uuid */
+        /** Fragment Uuid */
         return ($em->getRepository(Position::class)->findFragment($position->getId()))->getUuid();
     }
 
@@ -48,7 +48,7 @@ class PositionConvertor
      * @param EntityManagerInterface $em
      * @return mixed
      */
-    public static function getParentPositionFromNarrativeUuid(string $fragmentUuid, EntityManagerInterface $em)
+    public static function getParentPositionFromFragmentUuid(string $fragmentUuid, EntityManagerInterface $em)
     {
         $parentFragment = $em->getRepository(Fragment::class)->findOneByUuid($fragmentUuid);
         return $em->getRepository(Position::class)->findOneByFragment($parentFragment);

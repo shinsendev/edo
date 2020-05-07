@@ -36,7 +36,7 @@ class ReorderDTO extends AbstractDTO
     /**
      * @ApiProperty(identifier=true)
      */
-    private $narrativeUuid;
+    private $fragmentUuid;
 
     /**
      * @var ?string
@@ -51,17 +51,17 @@ class ReorderDTO extends AbstractDTO
     /**
      * @return string
      */
-    public function getNarrativeUuid(): string
+    public function getFragmentUuid(): string
     {
-        return $this->narrativeUuid;
+        return $this->fragmentUuid;
     }
 
     /**
-     * @param string $narrativeUuid
+     * @param string $fragmentUuid
      */
-    public function setNarrativeUuid(string $narrativeUuid): void
+    public function setFragmentUuid(string $fragmentUuid): void
     {
-        $this->narrativeUuid = $narrativeUuid;
+        $this->fragmentUuid = $fragmentUuid;
     }
 
     /**

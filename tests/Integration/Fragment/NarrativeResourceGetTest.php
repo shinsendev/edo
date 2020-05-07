@@ -6,12 +6,12 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Fragment;
 
 
-class OriginResourceGetTest extends AbstractFragmentResource
+class NarrativeResourceGetTest extends AbstractFragmentResource
 {
     /**
      * @Description = send GET request for one specific fragment
      */
-    public function testGetOrigin()
+    public function testGetNarrative()
     {
         $uuid = 'de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff';
         $response = $this->client->request('GET', 'api/origins/'.$uuid);

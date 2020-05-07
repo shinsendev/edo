@@ -7,15 +7,15 @@ namespace App\Component\DTO\Model;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
 /**
- * Class OriginDTO
+ * Class NarrativeDTO
  * @package App\Component\DTO
  * @ApiResource(
- *     shortName="origin",
+ *     shortName="narrative",
  *     collectionOperations={"get"},
  *     itemOperations={"get"}
  * )
  */
-class OriginDTO extends AbstractDTO
+class NarrativeDTO extends AbstractDTO
 {
     /**
      * @ApiProperty(identifier=true)
@@ -23,8 +23,8 @@ class OriginDTO extends AbstractDTO
      */
     private $originUuid;
 
-    /** @var NarrativeDTO[] */
-    private $narratives;
+    /** @var FragmentDTO[] */
+    private $fragments;
 
     /**
      * @return string
@@ -45,17 +45,17 @@ class OriginDTO extends AbstractDTO
     /**
      * @return NarrativeDTO[]
      */
-    public function getNarratives(): array
+    public function getFragments(): array
     {
-        return $this->narratives;
+        return $this->fragments;
     }
 
     /**
-     * @param NarrativeDTO[] $narratives
+     * @param NarrativeDTO[] $fragments
      */
-    public function setNarratives(array $narratives): void
+    public function setFragments(array $fragments): void
     {
-        $this->narratives = $narratives;
+        $this->fragments = $fragments;
     }
 
 }

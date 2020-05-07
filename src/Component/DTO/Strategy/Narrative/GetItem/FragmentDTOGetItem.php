@@ -36,7 +36,6 @@ class FragmentDTOGetItem implements DTOStrategyInterface
             'parentNarrativeUuid' => $parentFragmentUUid,
             'rootNarrativeUuid' => PositionConvertor::getFragmentUuid($position->getRoot(), $strategyConfig->getEm()),
         ];
-
         //convert fragment into fragment DTO
         return FragmentDTOTransformer::fromEntity(
             FragmentDTOGetItemHelper::createTransformerConfig(

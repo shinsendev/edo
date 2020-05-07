@@ -7,41 +7,41 @@ namespace App\Component\DTO\Strategy\Narrative\GetItem;
 use App\Component\DTO\Strategy\DTOStrategyConfig;
 use App\Component\DTO\Strategy\DTOStrategyInterface;
 use App\Component\DTO\Tree\PositionConvertor;
-use App\Component\Transformer\NarrativeDTOTransformer;
-use App\Entity\Narrative;
+use App\Component\Transformer\FragmentDTOTransformer;
+use App\Entity\Fragment;
 use App\Entity\Position;
 
-class NarrativeDTOGetItemFromCollection implements DTOStrategyInterface
+class FragmentDTOGetItemFromCollection implements DTOStrategyInterface
 {
     /**
      * @param DTOStrategyConfig $strategyConfig
-     * @return \App\Component\DTO\Model\NarrativeDTO
+     * @return \App\Component\DTO\Model\FragmentDTO
      * @throws \App\Component\Exception\EdoException
      */
     public function proceed(DTOStrategyConfig $strategyConfig)
     {
-        /** @var Narrative $narrative */
-        $narrative = $strategyConfig->getData()['narrative'];
+        /** @var Fragment $fragment */
+        $fragment = $strategyConfig->getData()['fragment'];
 
         /** @var Position $position */
-        $position = $strategyConfig->getEm()->getRepository(Position::class)->findOneByNarrative($narrative);
+        $position = $strategyConfig->getEm()->getRepository(Position::class)->findOneByFragment($fragment);
 
         // set tree
         $parentNarrativeUUid =  null;
         if ($position->getParent()) {
-            $parentNarrativeUUid = PositionConvertor::getNarrativeUuid($position->getParent(), $strategyConfig->getEm());
+            $parentNarrativeUUid = PositionConvertor::getFragmentUuid($position->getParent(), $strategyConfig->getEm());
         }
 
         // we use narrative uuid in DTO, not the position Uuid
         $tree = [
             'parentNarrativeUuid' => $parentNarrativeUUid,
-            'rootNarrativeUuid' => PositionConvertor::getNarrativeUuid($position->getRoot(), $strategyConfig->getEm()),
+            'rootNarrativeUuid' => PositionConvertor::getFragmentUuid($position->getRoot(), $strategyConfig->getEm()),
         ];
 
         //convert narrative into Narrative DTO
-        return NarrativeDTOTransformer::fromEntity(
-            NarrativeDTOGetItemHelper::createTransformerConfig($strategyConfig->getEm(),
-                $narrative,
+        return FragmentDTOTransformer::fromEntity(
+            FragmentDTOGetItemHelper::createTransformerConfig($strategyConfig->getEm(),
+                $fragment,
                 [
                     'hideVersioning' => true,
                     'position' => $position,

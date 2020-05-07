@@ -9,7 +9,7 @@ use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Strategy\DTOStrategyConfig;
 use App\Component\DTO\Strategy\DTOStrategyInterface;
 
-class OriginDTOGetItem implements DTOStrategyInterface
+class NarrativeDTOGetItem implements DTOStrategyInterface
 {
     /** @var array  */
     private $currentChildrenUuid = [];
@@ -27,7 +27,7 @@ class OriginDTOGetItem implements DTOStrategyInterface
         foreach ($narrativesDTOList as  $key => $narrativeDTO) {
             // the parent of the family is lvl 0
             if ($narrativeDTO->getLvl() === 0) {
-                $result = $this->createNarrativeDTOWithChildren($narrativesDTOList, $narrativeDTO, $key);
+                $result = $this->createFragmentDTOWithChildren($narrativesDTOList, $narrativeDTO, $key);
             }
         }
 
@@ -40,7 +40,7 @@ class OriginDTOGetItem implements DTOStrategyInterface
      * @param int $key
      * @return array
      */
-    private function createNarrativeDTOWithChildren(array $narrativesDTOList, NarrativeDTO $narrativeDTO, int $key)
+    private function createFragmentDTOWithChildren(array $narrativesDTOList, NarrativeDTO $narrativeDTO, int $key)
     {
         // todo: refacto with this function and continue with recursivity
 
@@ -64,7 +64,7 @@ class OriginDTOGetItem implements DTOStrategyInterface
                     $childrenDTOPayload[] = $childDTO;
 
                     // we recursively call the function when children exist and for each child
-                    $this->createNarrativeDTOWithChildren($narrativesDTOList, $childDTO, $key);
+                    $this->createFragmentDTOWithChildren($narrativesDTOList, $childDTO, $key);
                 }
                 $narrativeDTO->setChildren($childrenDTOPayload);
             }
