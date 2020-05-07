@@ -13,17 +13,17 @@ class FragmentResourceUpdateTest extends AbstractFragmentResource
     public function testUpdateNarrative()
     {
         // at first, we count the number of existing narratives
-        $this->assertEquals(8, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
+        $this->assertEquals(8, count($this->fragmentRepository->findAll()), 'Uncorrect number of narratives');
 
         // and we count fragments
-        $this->assertEquals(11, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
+        $this->assertEquals(11, count($this->versionRepository->findAll()), 'Uncorrect number of fragments');
 
         // send request to create a new fragment for an existing narrative
         $this->data['uuid'] = '6284e5ac-09cf-4334-9503-dedf31bafdd0';
         $this->data['parent_uuid'] = '1b4705aa-4abd-4931-add0-ac11b6fff0c3';
 
         // create a new fragment for an existing narrative
-        $this->client->request('POST', 'api/narratives', [
+        $this->client->request('POST', 'api/fragments', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $this->data
         ]);
@@ -31,11 +31,11 @@ class FragmentResourceUpdateTest extends AbstractFragmentResource
         $this->assertResponseIsSuccessful();
 
         // there are no more narratives but one more fragments
-        $this->assertEquals(8, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
-        $this->assertEquals(12, count($this->fragmentRepository->findAll()), 'Uncorrect number of fragments');
+        $this->assertEquals(8, count($this->fragmentRepository->findAll()), 'Uncorrect number of narratives');
+        $this->assertEquals(12, count($this->versionRepository->findAll()), 'Uncorrect number of fragments');
 
         // get the updated narrative
-        $response = $this->client->request('GET', 'api/narratives/'.$this->data['uuid']);
+        $response = $this->client->request('GET', 'api/fragments/'.$this->data['uuid']);
         $arrayResponse = $response->toArray();
 
         // check if there is one more fragment
@@ -54,13 +54,13 @@ class FragmentResourceUpdateTest extends AbstractFragmentResource
     public function testVersionningLimitFragmentsForANarrative()
     {
         // at first, we count the number of existing narratives
-        $this->assertEquals(8, count($this->narrativeRepository->findAll()), 'Uncorrect number of narratives');
+        $this->assertEquals(8, count($this->fragmentRepository->findAll()), 'Uncorrect number of narratives');
 
         // we select an existing narrative and count the number of fragments
         $narrativeUuid = '6284e5ac-09cf-4334-9503-dedf31bafdd0';
-        $this->assertEquals(2, count($this->fragmentRepository->findNarrativeLastFragments($narrativeUuid)), 'Uncorrect number of fragments');
+        $this->assertEquals(2, count($this->versionRepository->findNarrativeLastFragments($narrativeUuid)), 'Uncorrect number of fragments');
 
-        $narrative = $this->narrativeRepository->findOneByUuid($narrativeUuid);
+        $narrative = $this->fragmentRepository->findOneByUuid($narrativeUuid);
 
         // we add 8 fragments
         for ($i=0; $i < 8; $i++) {
@@ -69,18 +69,18 @@ class FragmentResourceUpdateTest extends AbstractFragmentResource
         }
 
         // check we have 10 fragments now
-        $this->assertEquals(10, count($this->fragmentRepository->findNarrativeLastFragments($narrativeUuid)), 'Uncorrect number of fragments');
+        $this->assertEquals(10, count($this->versionRepository->findNarrativeLastFragments($narrativeUuid)), 'Uncorrect number of fragments');
 
         // send request to create a new fragment for an existing narrative
         $this->data['uuid'] = $narrativeUuid;
 
         // create a new fragment for an existing narrative
-        $this->client->request('POST', 'api/narratives', [
+        $this->client->request('POST', 'api/fragments', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $this->data
         ]);
 
         // check if we have still max numbers of fragments, VERSIONING_MAX variable in .env.test defines the limit
-        $this->assertEquals(10, count($this->fragmentRepository->findNarrativeLastFragments($narrativeUuid)), 'Uncorrect number of fragments');
+        $this->assertEquals(10, count($this->versionRepository->findNarrativeLastFragments($narrativeUuid)), 'Uncorrect number of fragments');
     }
 }

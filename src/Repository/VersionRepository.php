@@ -36,13 +36,25 @@ class VersionRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+
+    public function findOldestVersionUuid(string $fragmentUuid)
+    {
+        $query = $this->getEntityManager()->createQuery('
+            SELECT v.uuid FROM '.Version::class.' v JOIN v.fragment f WHERE f.uuid = :uuid ORDER BY v.createdAt ASC
+        ')
+            ->setParameter('uuid', $fragmentUuid)
+            ->setMaxResults(1);
+
+        return $query->getSingleScalarResult();
+    }
+
     /**
      * @param string $fragmentUuid
      * @return mixed
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function countNarrativeFragments(string $fragmentUuid)
+    public function countFragmentVersions(string $fragmentUuid)
     {
         $query = $this->getEntityManager()->createQuery('
             SELECT COUNT(f) FROM '.Version::class.' f JOIN f.fragment n WHERE n.uuid = :uuid

@@ -38,7 +38,7 @@ class FragmentDTOTransformer implements TransformerInterface
             $fragment = new Fragment();
         }
 
-        // set Narrative Uuid
+        // set Fragment Uuid
         $fragment = self::setFragmentUuid($narrativeDTO, $fragment, $isCreation);
 
         // create position
@@ -85,7 +85,7 @@ class FragmentDTOTransformer implements TransformerInterface
     }
 
     /**
-     * @param DTOInterface $narrativeDTO
+     * @param DTOInterface $fragmentDTO
      * @param bool $isCreation
      * @param Fragment $fragment
      * @param EntityManagerInterface $em
@@ -93,13 +93,13 @@ class FragmentDTOTransformer implements TransformerInterface
      * @throws \Exception
      */
     public static function createPosition (
-        DTOInterface $narrativeDTO,
+        DTOInterface $fragmentDTO,
         bool $isCreation,
         Fragment $fragment,
         EntityManagerInterface $em
     )
     {
-        $narrativeUuid = $narrativeDTO->getUuid();
+        $fragmentUuid = $fragmentDTO->getUuid();
 
         // get narrative's position
         if ($isCreation) { // if it is a new narrative we create the position
@@ -107,8 +107,8 @@ class FragmentDTOTransformer implements TransformerInterface
             $position->setFragment($fragment);
         }
         else { // if it is an update, we get the position of the narrative
-            if (!$position = $em->getRepository(Position::class)->findOneByNarrative($fragment)) {
-                throw new NotFoundHttpException('No position for the narrative '.$narrativeUuid);
+            if (!$position = $em->getRepository(Position::class)->findOneByFragment($fragment)) {
+                throw new NotFoundHttpException('No position for the fragment '.$fragmentUuid);
             }
         }
 

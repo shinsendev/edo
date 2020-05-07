@@ -9,7 +9,7 @@ use ApiPlatform\Core\Validator\ValidatorInterface;
 use App\Component\DTO\Strategy\DTOContext;
 use App\Component\DTO\Model\FragmentDTO;
 use App\Component\DTO\Strategy\Narrative\Save\FragmentDTOSave;
-use App\Component\DTO\Strategy\Narrative\Update\NarrativeDTOUpdate;
+use App\Component\DTO\Strategy\Narrative\Update\FragmentDTOUpdate;
 use App\Repository\FragmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -64,13 +64,13 @@ final class FragmentDataPersister implements ContextAwareDataPersisterInterface
      */
     public function persist($fragmentDTO, array $context = [])
     {
-        if (!$narrative = $this->repository->findOneByUuid($fragmentDTO->getUuid())) {
+        if (!$fragment = $this->repository->findOneByUuid($fragmentDTO->getUuid())) {
             // it's a new  narrative, this is an insert
             $context= new DTOContext(new FragmentDTOSave(), $fragmentDTO, $this->em);
         }
         else {
             // narrative already exists, so it is an update
-            $context = new DTOContext(new FragmentDTOUpdate(), $fragmentDTO, $this->em, ['narrative' => $narrative]);
+            $context = new DTOContext(new FragmentDTOUpdate(), $fragmentDTO, $this->em, ['fragment' => $fragment]);
         }
 
         return $context->proceed();
