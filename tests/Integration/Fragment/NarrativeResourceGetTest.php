@@ -14,7 +14,7 @@ class NarrativeResourceGetTest extends AbstractFragmentResource
     public function testGetNarrative()
     {
         $uuid = 'de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff';
-        $response = $this->client->request('GET', 'api/origins/'.$uuid);
+        $response = $this->client->request('GET', 'api/narratives/'.$uuid);
         $this->assertResponseIsSuccessful();
         $arrayResponse = $response->toArray();
         $this->assertEquals(1, count($arrayResponse['hydra:member']));

@@ -13,7 +13,7 @@ class FragmentResourceGetTest extends AbstractFragmentResource
     /**
      * @Description = send GET request for one specific fragment
      */
-    public function testGetNarrativeWithFragments()
+    public function testGetFragmentWithFragments()
     {
         $uuid = '6284e5ac-09cf-4334-9503-dedf31bafdd0';
 
@@ -29,7 +29,7 @@ class FragmentResourceGetTest extends AbstractFragmentResource
         $this->assertEquals($arrayResponse['content'], $arrayResponse['versions'][0]['content'], 'Not the correct content');
     }
 
-    public function testGetNarrativesCollection()
+    public function testGetFragmentsCollection()
     {
         // send GET request
         $response =  $this->client->request('GET', 'api/fragments', [
@@ -45,14 +45,14 @@ class FragmentResourceGetTest extends AbstractFragmentResource
         $this->assertNotNull($arrayResponse['hydra:member'][1]['content']);
     }
 
-    public function testGetNarrativeWithIncorrectUuid()
+    public function testGetFragmentWithIncorrectUuid()
     {
         $uuid = 'cakeIsALie';
         $this->client->request('GET', 'api/fragments/'.$uuid);
         $this->assertResponseStatusCodeSame(500);
     }
 
-    public function testGetNarrativeWithUnkwnonUuid()
+    public function testGetFragmentWithUnkwnonUuid()
     {
         $uuid = '9f6e6490-85f3-4d4e-82fd-e725a884fd8e';
         $this->client->request('GET', 'api/fragments/'.$uuid);

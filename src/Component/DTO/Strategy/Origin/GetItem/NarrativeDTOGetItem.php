@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Component\DTO\Strategy\Origin\GetItem;
 
-use App\Component\DTO\Model\NarrativeDTO;
+use App\Component\DTO\Model\FragmentDTO;
 use App\Component\DTO\Strategy\DTOStrategyConfig;
 use App\Component\DTO\Strategy\DTOStrategyInterface;
 
@@ -20,14 +20,14 @@ class NarrativeDTOGetItem implements DTOStrategyInterface
      */
     public function proceed(DTOStrategyConfig $config)
     {
-        $narrativesDTOList = $config->getData()['narrativesDTO'];
+        $fragmentsDTOList = $config->getData()['fragmentsDTO'];
         $childrenDTO = null;
         $result = [];
 
-        foreach ($narrativesDTOList as  $key => $narrativeDTO) {
+        foreach ($fragmentsDTOList as  $key => $fragmentDTO) {
             // the parent of the family is lvl 0
-            if ($narrativeDTO->getLvl() === 0) {
-                $result = $this->createFragmentDTOWithChildren($narrativesDTOList, $narrativeDTO, $key);
+            if ($fragmentDTO->getLvl() === 0) {
+                $result = $this->createFragmentDTOWithChildren($fragmentsDTOList, $fragmentDTO, $key);
             }
         }
 
@@ -36,11 +36,11 @@ class NarrativeDTOGetItem implements DTOStrategyInterface
 
     /**
      * @param array $narrativesDTOList
-     * @param NarrativeDTO $narrativeDTO
+     * @param FragmentDTO $fragmentDTO
      * @param int $key
      * @return array
      */
-    private function createFragmentDTOWithChildren(array $narrativesDTOList, NarrativeDTO $narrativeDTO, int $key)
+    private function createFragmentDTOWithChildren(array $narrativesDTOList, FragmentDTO $fragmentDTO, int $key)
     {
         // todo: refacto with this function and continue with recursivity
 
@@ -48,7 +48,7 @@ class NarrativeDTOGetItem implements DTOStrategyInterface
             unset($narrativesDTOList[$key]);
 
             // we get the children uuid
-            $this->currentChildrenUuid = $narrativeDTO->getChildren();
+            $this->currentChildrenUuid = $fragmentDTO->getChildren();
 
             // we get the narrativesDTO with the children uuid
             $childrenDTO = array_filter($narrativesDTOList, [ $this, 'extractChildrenByUuid' ]);
@@ -66,21 +66,21 @@ class NarrativeDTOGetItem implements DTOStrategyInterface
                     // we recursively call the function when children exist and for each child
                     $this->createFragmentDTOWithChildren($narrativesDTOList, $childDTO, $key);
                 }
-                $narrativeDTO->setChildren($childrenDTOPayload);
+                $fragmentDTO->setChildren($childrenDTOPayload);
             }
-            $result[] = $narrativeDTO;
+            $result[] = $fragmentDTO;
 
             return $result;
     }
 
     /**
-     * @param NarrativeDTO $narrativesDTO
-     * @return NarrativeDTO
+     * @param FragmentDTO $fragmentDTO
+     * @return FragmentDTO
      */
-    private function extractChildrenByUuid(NarrativeDTO $narrativesDTO) {
+    private function extractChildrenByUuid(FragmentDTO $fragmentDTO) {
         // it is a child we return the DTO
-        if (in_array($narrativesDTO->getUuid(), $this->currentChildrenUuid)) {
-            return $narrativesDTO;
+        if (in_array($fragmentDTO->getUuid(), $this->currentChildrenUuid)) {
+            return $fragmentDTO;
         }
     }
 
