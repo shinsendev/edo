@@ -96,7 +96,6 @@ class FragmentDTOUpdate implements DTOStrategyInterface
      */
     public function deleteFragment(Fragment $fragment)
     {
-        //todo = add test for deleting old versions
         $oldestVersionUuid =  $this->em->getRepository(Version::class)->findOldestVersionUuid($fragment->getUuid());
         $oldestVersion =  $this->em->getRepository(Version::class)->findOneByUuid($oldestVersionUuid);
         $this->em->remove($oldestVersion);
