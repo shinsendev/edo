@@ -21,7 +21,7 @@ class NarrativeDTO extends AbstractDTO
      * @ApiProperty(identifier=true)
      * @var string
      */
-    private $originUuid;
+    private $narrativeUuid;
 
     /** @var FragmentDTO[] */
     private $fragments;
@@ -29,17 +29,17 @@ class NarrativeDTO extends AbstractDTO
     /**
      * @return string
      */
-    public function getOriginUuid(): string
+    public function getNarrativeUuid(): string
     {
-        return $this->originUuid;
+        return $this->narrativeUuid;
     }
 
     /**
-     * @param string $originUuid
+     * @param string $narrativeUuid
      */
-    public function setOriginUuid(string $originUuid): void
+    public function setNarrativeUuid(string $narrativeUuid): void
     {
-        $this->originUuid = $originUuid;
+        $this->narrativeUuid = $narrativeUuid;
     }
 
     /**

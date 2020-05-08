@@ -49,12 +49,12 @@ class NarrativeItemDataProvider implements ItemDataProviderInterface, Restricted
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {
         // check if it is a narrative
-        if (!$fragment = $this->em->getRepository(Fragment::class)->findOneOriginByNarrativeUuid($id)) {
+        if (!$fragment = $this->em->getRepository(Fragment::class)->findNarrativeByUuid($id)) {
             throw new NotFoundHttpException("No origin narrative found for uuid " . $id);
         }
 
-        // get a limit number of narratives with the same parent if
-        $fragments = $this->em->getRepository(Fragment::class)->findOriginNarratives($fragment, 100);
+        // get a limit number of fragments with the same parent
+        $fragments = $this->em->getRepository(Fragment::class)->findAllNarrativeFragments($fragment, 100);
 
         // first we create a list of narratives DTO, specialy for using the narratives uuid for hierarchy and not the position
         /** @var FragmentDTO[] $fragmentsDTO */

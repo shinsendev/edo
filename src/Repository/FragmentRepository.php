@@ -22,6 +22,7 @@ class FragmentRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param Fiction $fiction
      * @param int $limit
      * @return mixed
      */
@@ -35,58 +36,29 @@ class FragmentRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Fiction $fiction
-     * @param int $limit
-     * @return mixed
-     */
-    public function findOrigins(Fiction $fiction, int $limit = 10)
-    {
-        $query = $this->getEntityManager()->createQuery('
-            SELECT n FROM App\Entity\Fragment n JOIN n.position p WHERE p.lvl = 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
-        ')->setParameter('fiction', $fiction)->setMaxResults($limit);
-
-        return $query->getResult();
-    }
-
-    /**
      * @param Fragment $origin
      * @param int $limit
      * @return mixed
      */
-    public function findOriginNarratives(Fragment $origin, $limit = 100)
+    public function findAllNarrativeFragments(Fragment $origin, $limit = 100)
     {
         $rootPosition = PositionConvertor::getRootPosition($origin, $this->getEntityManager());
 
         $query = $this->getEntityManager()->createQuery(
-            'SELECT n FROM App\Entity\Fragment n JOIN n.position p WHERE p.root = :origin ORDER BY p.lft ASC'
-        )->setParameter('origin', $rootPosition->getId())->setMaxResults($limit);
+            'SELECT f FROM App\Entity\Fragment f JOIN f.position p WHERE p.root = :narrativeOrigin ORDER BY p.lft ASC'
+        )->setParameter('narrativeOrigin', $rootPosition->getId())->setMaxResults($limit);
 
         return $query->getResult();
     }
 
-    /**
-     * @param Fiction $fiction
-     * @param int $limit
-     * @return mixed
-     */
-    public function findFollowings(Fiction $fiction, int $limit = 10)
+    public function findNarrativeByUuid(string $uuid)
     {
         $query = $this->getEntityManager()->createQuery('
-            SELECT n FROM App\Entity\Fragment n JOIN n.position p WHERE p.lvl != 0 AND n.fiction = :fiction ORDER BY n.updatedAt DESC
-        ')->setParameter('fiction', $fiction)->setMaxResults($limit);
-
-        return $query->getResult();
-    }
-
-    public function findOneOriginByNarrativeUuid(string $uuid)
-    {
-        $query = $this->getEntityManager()->createQuery('
-            SELECT n FROM App\Entity\Fragment n JOIN n.position p WHERE p.lvl = 0 AND n.uuid = :uuid
+            SELECT f FROM App\Entity\Fragment f JOIN f.position p WHERE p.lvl = 0 AND f.uuid = :uuid
         ')->setParameter('uuid', $uuid);
 
         return $query->getSingleResult();
     }
-
 
 //    /**
 //     * @param string $narrativeId

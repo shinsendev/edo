@@ -31,11 +31,12 @@ class FictionDTOGetItem implements DTOStrategyInterface
 
         // prepare transformer conf
         $fragments = $em->getRepository(Fragment::class)->findByFiction($fiction);
-        $origins = $em->getRepository(Fragment::class)->findOrigins($fiction, 3);
-        $followings = $em->getRepository(Fragment::class)->findFollowings($fiction, 3);
+        //todo : to delete
+//        $origins = $em->getRepository(Fragment::class)->findOrigins($fiction, 3);
+//        $followings = $em->getRepository(Fragment::class)->findFollowings($fiction, 3);
         $characters = $em->getRepository(Character::class)->findLastCharacters($fiction);
 
-        $nestedArray = ['fragments' => $fragments, 'origins' => $origins,  'followings' => $followings, 'characters' => $characters];
+        $nestedArray = ['fragments' => $fragments, 'characters' => $characters];
         $transformerConfig = new TransformerConfig($fiction, $nestedArray, $em);
 
         // convert entity narrative into Narrative DTO

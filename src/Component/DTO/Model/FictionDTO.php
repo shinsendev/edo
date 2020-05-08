@@ -42,18 +42,6 @@ class FictionDTO extends AbstractDTO
      */
     private $fragments;
 
-    //todo : to remove?
-    /**
-     * @var Fragment[]
-     */
-    private $origins;
-
-    //todo : to remove?
-    /**
-     * @var Fragment[]
-     */
-    private $followings;
-
     /**
      * @var Character[]
      */
@@ -121,38 +109,6 @@ class FictionDTO extends AbstractDTO
     public function setFragments(array $fragments): void
     {
         $this->fragments = $fragments;
-    }
-
-    /**
-     * @return Fragment[]
-     */
-    public function getOrigins(): array
-    {
-        return $this->origins;
-    }
-
-    /**
-     * @param Fragment[] $origins
-     */
-    public function setOrigins(array $origins): void
-    {
-        $this->origins = $origins;
-    }
-
-    /**
-     * @return Fragment[]
-     */
-    public function getFollowings(): array
-    {
-        return $this->followings;
-    }
-
-    /**
-     * @param Fragment[] $followings
-     */
-    public function setFollowings(array $followings): void
-    {
-        $this->followings = $followings;
     }
 
     /**

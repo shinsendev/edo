@@ -51,36 +51,12 @@ class FictionDTOTransformer extends AbstractTransformer implements TransformerIn
             $fictionsDTO[]= FragmentDTOTransformer::fromEntity($nestedConfig); // needs fragment
         }
 
-        $originsDTO = [];
-        foreach ($nested['origins'] as $fragment) {
-            $nestedConfig = new TransformerConfig(
-                $fragment, ['versions' => $em->getRepository(Version::class)->findFragmentLastVersions($fragment->getUuid())],
-                $em,
-                ['nested' => true] // we don't want all the fragments of the narrative
-            );
-
-             $originsDTO[]= FragmentDTOTransformer::fromEntity($nestedConfig); // needs fragment
-        }
-
-        $followingsDTO = [];
-        foreach ($nested['followings'] as $narrative) {
-            $nestedConfig = new TransformerConfig(
-                $narrative, ['versions' => $em->getRepository(Version::class)->findFragmentLastVersions($narrative->getUuid())],
-                $em,
-                ['nested' => true] // we don't want all the fragments of the narrative
-            );
-
-            $followingsDTO[] = FragmentDTOTransformer::fromEntity($nestedConfig); // needs fragment
-        }
-
         $charactersDTO = [];
         foreach ($nested['characters'] as $character) {
             $charactersDTO[] = CharacterDTOTransformer::fromEntity(new TransformerConfig($character));
         }
 
         $fictionDTO->setFragments($fictionsDTO);
-        $fictionDTO->setOrigins($originsDTO);
-        $fictionDTO->setFollowings($followingsDTO);
         $fictionDTO->setCharacters($charactersDTO);
 
         return $fictionDTO;
