@@ -3,18 +3,18 @@
 declare(strict_types=1);
 
 
-namespace App\Tests\Integration\Narrative;
+namespace App\Tests\Integration\Fragment;
 
 
-class OriginResourceGetTest extends AbstractNarrativeResource
+class NarrativeResourceGetTest extends AbstractFragmentResource
 {
     /**
      * @Description = send GET request for one specific fragment
      */
-    public function testGetOrigin()
+    public function testGetNarrative()
     {
         $uuid = 'de88bad6-9e5d-4af4-ba0c-bbe4dbbf82ff';
-        $response = $this->client->request('GET', 'api/origins/'.$uuid);
+        $response = $this->client->request('GET', 'api/narratives/'.$uuid);
         $this->assertResponseIsSuccessful();
         $arrayResponse = $response->toArray();
         $this->assertEquals(1, count($arrayResponse['hydra:member']));

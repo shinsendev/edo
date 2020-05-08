@@ -20,8 +20,8 @@ abstract class AbstractIntegrationTest extends AbstractEdoApiTestCase
         $this->client = static::createClient();
         $this->loadFixtures([
             'App\DataFixtures\FictionFixtures',
-            'App\DataFixtures\NarrativeFixtures',
             'App\DataFixtures\FragmentFixtures',
+            'App\DataFixtures\VersionFixtures',
             'App\DataFixtures\CharacterFixtures'
         ]);
     }

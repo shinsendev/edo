@@ -4,22 +4,37 @@ declare(strict_types=1);
 
 namespace App\Component\DTO\Model;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Component\DTO\Composition\DatableTrait;
-use Ramsey\Uuid\Uuid;
+use App\Component\DTO\Composition\TreeableTrait;
+use App\Component\DTO\Composition\UpdatableTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Fragment
+ * Class NarrativeDTO
  * @package App\Component\DTO
+ * @ApiResource(
+ *     shortName="fragment",
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "delete"}
+ * )
  */
 class FragmentDTO extends AbstractDTO
 {
-    use DatableTrait;
+    use DatableTrait, UpdatableTrait, TreeableTrait;
+
+    /**
+     * @ApiProperty(identifier=true)
+     */
+    private $uuid;
+
+    protected $children;
 
     /**
      * @var string
      */
-    private $uuid;
+    private $type;
 
     /**
      * @Assert\Length(
@@ -30,34 +45,93 @@ class FragmentDTO extends AbstractDTO
     private $content;
 
     /**
+     * @var VersionDTO[]
+     */
+    private $versions;
+
+    /**
+     * @var string
+     */
+    private $fictionUuid;
+
+    /**
      * @return mixed
      */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * @param mixed $content
-     */
-    public function setContent($content): void
-    {
-        $this->content = $content;
-    }
-
-    /**
-     * @return Uuid
-     */
-    public function getUuid(): string
+    public function getUuid()
     {
         return $this->uuid;
     }
 
     /**
-     * @param string $uuid
+     * @param mixed $uuid
      */
-    public function setUuid(string $uuid): void
+    public function setUuid($uuid): void
     {
         $this->uuid = $uuid;
     }
+
+    /**
+     * @return string
+     */
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string $content
+     */
+    public function setContent(string $content): void
+    {
+        $this->content = $content;
+    }
+
+    /**
+     * @return VersionDTO[]
+     */
+    public function getVersions(): ?array
+    {
+        return $this->versions;
+    }
+
+    /**
+     * @param VersionDTO[] $versions
+     */
+    public function setFragments(array $versions): void
+    {
+        $this->versions = $versions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFictionUuid(): string
+    {
+        return $this->fictionUuid;
+    }
+
+    /**
+     * @param string $fictionUuid
+     */
+    public function setFictionUuid(string $fictionUuid): void
+    {
+        $this->fictionUuid = $fictionUuid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
 }

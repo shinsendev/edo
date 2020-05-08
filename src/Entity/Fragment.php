@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
-use App\Entity\Abstraction\AbstractUniqueEntity;
 use App\Entity\Composition\EntityDatableTrait;
+use App\Entity\Composition\EntityUpdatableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Abstraction\AbstractUniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,41 +14,87 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Fragment extends AbstractUniqueEntity
 {
-    use EntityDatableTrait;
+    use EntityDatableTrait, EntityUpdatableTrait;
 
     /**
-     * @ORM\Column(type="string", length=1024)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Fiction", inversedBy="fragments")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $content;
+    private $fiction;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Narrative", inversedBy="fragments")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\OneToMany(targetEntity="App\Entity\Version", mappedBy="fragment", orphanRemoval=true)
      */
-    private $narrative;
+    private $versions;
 
-    public function getContent(): ?string
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Position", mappedBy="fragment", orphanRemoval=true)
+     */
+    private $position;
+
+    public function __construct()
     {
-        return $this->content;
+        parent::__construct();
+        $this->versions = new ArrayCollection();
     }
 
-    public function setContent(?string $content): self
+    public function getFiction(): ?Fiction
     {
-        $this->content = $content;
+        return $this->fiction;
+    }
+
+    public function setFiction(?Fiction $fiction): self
+    {
+        $this->fiction = $fiction;
 
         return $this;
     }
 
-    public function getNarrative(): ?Narrative
+    /**
+     * @return Collection|Version[]
+     */
+    public function getVersions(): Collection
     {
-        return $this->narrative;
+        return $this->versions;
     }
 
-    public function setNarrative(?Narrative $narrative): self
+    public function addVersion(Version $version): self
     {
-        $this->narrative = $narrative;
+        if (!$this->versions->contains($version)) {
+            $this->versions[] = $version;
+            $version->setVersion($this);
+        }
 
         return $this;
+    }
+
+    public function removeVersion(Version $version): self
+    {
+        if ($this->versions->contains($version)) {
+            $this->versions->removeElement($version);
+            // set the owning side to null (unless already changed)
+            if ($version->getFragment() === $this) {
+                $version->setFragment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param mixed $position
+     */
+    public function setPosition($position): void
+    {
+        $this->position = $position;
     }
 
 }

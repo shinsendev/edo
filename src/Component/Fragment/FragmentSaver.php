@@ -4,22 +4,22 @@
 namespace App\Component\Fragment;
 
 
-use App\Component\DTO\Model\NarrativeDTO;
+use App\Component\DTO\Model\FragmentDTO;
 use App\Component\EntityManager\SaveEntityHelper;
-use App\Component\Transformer\FragmentDTOTransformer;
+use App\Component\Transformer\VersionDTOTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FragmentSaver
 {
     /**
      * @param EntityManagerInterface $em
-     * @param NarrativeDTO $narrativeDTO
+     * @param FragmentDTO $fragmentDTO
      * @throws \App\Component\Exception\EdoException
      */
-    public static function save(EntityManagerInterface $em, NarrativeDTO $narrativeDTO)
+    public static function save(EntityManagerInterface $em, FragmentDTO $fragmentDTO)
     {
         // create Fragment
-        $fragment = FragmentDTOTransformer::toEntity($narrativeDTO, $em);
+        $fragment = VersionDTOTransformer::toEntity($fragmentDTO, $em);
         SaveEntityHelper::saveEntity($em, $fragment);
     }
 }

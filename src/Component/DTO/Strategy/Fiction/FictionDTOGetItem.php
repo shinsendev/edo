@@ -11,7 +11,7 @@ use App\Component\Transformer\FictionDTOTransformer;
 use App\Component\Transformer\TransformerConfig;
 use App\Entity\Character;
 use App\Entity\Fiction;
-use App\Entity\Narrative;
+use App\Entity\Fragment;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -30,12 +30,13 @@ class FictionDTOGetItem implements DTOStrategyInterface
         $fiction = $config->getData()['fiction'];
 
         // prepare transformer conf
-        $narratives = $em->getRepository(Narrative::class)->findByFiction($fiction);
-        $origins = $em->getRepository(Narrative::class)->findOrigins($fiction, 3);
-        $followings = $em->getRepository(Narrative::class)->findFollowings($fiction, 3);
+        $fragments = $em->getRepository(Fragment::class)->findByFiction($fiction);
+        //todo : to delete
+//        $origins = $em->getRepository(Fragment::class)->findOrigins($fiction, 3);
+//        $followings = $em->getRepository(Fragment::class)->findFollowings($fiction, 3);
         $characters = $em->getRepository(Character::class)->findLastCharacters($fiction);
 
-        $nestedArray = ['narratives' => $narratives, 'origins' => $origins,  'followings' => $followings, 'characters' => $characters];
+        $nestedArray = ['fragments' => $fragments, 'characters' => $characters];
         $transformerConfig = new TransformerConfig($fiction, $nestedArray, $em);
 
         // convert entity narrative into Narrative DTO

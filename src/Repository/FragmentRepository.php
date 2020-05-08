@@ -2,12 +2,11 @@
 
 namespace App\Repository;
 
-use App\Component\Exception\EdoException;
+use App\Component\DTO\Tree\PositionConvertor;
+use App\Entity\Fiction;
 use App\Entity\Fragment;
-use App\Repository\Helper\RawSQLQueryHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
-
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Fragment|null find($id, $lockMode = null, $lockVersion = null)
@@ -23,57 +22,86 @@ class FragmentRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $narrativeUuid
+     * @param Fiction $fiction
      * @param int $limit
      * @return mixed
      */
-    public function findNarrativeLastFragments(string $narrativeUuid, int $limit = 10)
+    public function findLastNarratives(Fiction $fiction, int $limit = 10)
     {
         $query = $this->getEntityManager()->createQuery('
-            SELECT f FROM '.Fragment::class.' f JOIN f.narrative n WHERE n.uuid = :uuid ORDER BY f.createdAt DESC
-        ')
-            ->setParameter('uuid', $narrativeUuid)
-            ->setMaxResults($limit);
+            SELECT n FROM App\Entity\Fragment n WHERE n.fiction = :fiction ORDER BY n.updatedAt DESC
+        ')->setParameter('fiction', $fiction)->setMaxResults($limit);
 
         return $query->getResult();
     }
 
-    public function countNarrativeFragments(string $narrativeUuid)
+    /**
+     * @param Fragment $origin
+     * @param int $limit
+     * @return mixed
+     */
+    public function findAllNarrativeFragments(Fragment $origin, $limit = 100)
     {
-        $query = $this->getEntityManager()->createQuery('
-            SELECT COUNT(f) FROM '.Fragment::class.' f JOIN f.narrative n WHERE n.uuid = :uuid
-        ')
-            ->setParameter('uuid', $narrativeUuid);
+        $rootPosition = PositionConvertor::getRootPosition($origin, $this->getEntityManager());
 
-        return $query->getSingleScalarResult();
+        $query = $this->getEntityManager()->createQuery(
+            'SELECT f FROM App\Entity\Fragment f JOIN f.position p WHERE p.root = :narrativeOrigin ORDER BY p.lft ASC'
+        )->setParameter('narrativeOrigin', $rootPosition->getId())->setMaxResults($limit);
+
+        return $query->getResult();
     }
 
-    // todo: keep for narration, when we'll need to connect characters, events, places, etc. with narratives, for the moment, everything is only connected to fiction
+    public function findNarrativeByUuid(string $uuid)
+    {
+        $query = $this->getEntityManager()->createQuery('
+            SELECT f FROM App\Entity\Fragment f JOIN f.position p WHERE p.lvl = 0 AND f.uuid = :uuid
+        ')->setParameter('uuid', $uuid);
+
+        return $query->getSingleResult();
+    }
+
 //    /**
-//     * @param string $narrativeUuid
+//     * @param string $narrativeId
+//     * @return mixed[]
+//     * @throws \Doctrine\DBAL\DBALException
+//     */
+//    public function findNarrativeWithFragments(string $narrativeId)
+//    {
+//        //we get by default the last 25 fragments
+//        $sql = '
+//                SELECT n.*, f.title, f.content, f.uuid as fragment_uuid, f.created_at as fragment_created_at FROM narrative n
+//            INNER JOIN qualification q ON n.uuid = q.selected_uuid
+//            INNER JOIN fragment f ON f.id = q.fragment_id
+//            WHERE n.id = :id
+//            ORDER BY f.created_at DESC
+//            LIMIT 25
+//        ';
+//
+//        $stmt = RawSQLQueryHelper::createCustomStatement($this->getEntityManager(), $sql, ['id' => $narrativeId]);
+//
+//        return $stmt->fetchAll();
+//    }
+//
+//    /**
 //     * @return mixed[]
 //     * @throws EdoException
 //     * @throws \Doctrine\DBAL\DBALException
 //     */
-//    public function findNarrativeLastFragment(string $narrativeUuid)
+//    public function findNarrativesCollectionWithLastFragments()
 //    {
 //        $sql = '
-//            SELECT * FROM fragment f
-//            INNER JOIN qualification q ON q.fragment_id = f.id
-//            WHERE q.selected_uuid = :uuid
-//            ORDER BY f.created_at ASC
-//            LIMIT 1;
+//            SELECT DISTINCT ON (n.id) n.*, f.title, f.content, f.uuid as fragment_uuid FROM narrative n
+//    INNER JOIN qualification q ON n.uuid = q.selected_uuid
+//    INNER JOIN fragment f ON f.id = q.fragment_id ORDER BY n.id, f.created_at DESC;
 //        ';
 //
 //        try {
-//            $stmt = RawSQLQueryHelper::createCustomStatement($this->getEntityManager(), $sql, ['uuid' => $narrativeUuid]);
+//            $stmt = RawSQLQueryHelper::createCustomStatement($this->getEntityManager(), $sql);
 //        }
-//        catch(EdoException $e)
-//        {
+//        catch(EdoException $e) {
 //            throw new EdoException($e);
 //        }
 //
-//        return $stmt->fetch();
+//        return $stmt->fetchAll();
 //    }
-
 }

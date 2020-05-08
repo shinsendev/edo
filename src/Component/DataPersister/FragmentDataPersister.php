@@ -7,10 +7,10 @@ namespace App\Component\DataPersister;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use ApiPlatform\Core\Validator\ValidatorInterface;
 use App\Component\DTO\Strategy\DTOContext;
-use App\Component\DTO\Model\NarrativeDTO;
-use App\Component\DTO\Strategy\Narrative\Save\NarrativeDTOSave;
-use App\Component\DTO\Strategy\Narrative\Update\NarrativeDTOUpdate;
-use App\Repository\NarrativeRepository;
+use App\Component\DTO\Model\FragmentDTO;
+use App\Component\DTO\Strategy\Narrative\Save\FragmentDTOSave;
+use App\Component\DTO\Strategy\Narrative\Update\FragmentDTOUpdate;
+use App\Repository\FragmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -18,9 +18,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Class NarrativeDataPersister
  * @package App\Component\DataPersister
  */
-final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
+final class FragmentDataPersister implements ContextAwareDataPersisterInterface
 {
-    /** @var NarrativeRepository  */
+    /** @var FragmentRepository  */
     private $repository;
 
     /** @var EntityManagerInterface */
@@ -31,12 +31,12 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
 
     /**
      * NarrativeDataPersister constructor.
-     * @param NarrativeRepository $repository
+     * @param FragmentRepository $repository
      * @param ValidatorInterface $validator,
      * @param EntityManagerInterface $em
      */
     public function __construct(
-        NarrativeRepository $repository,
+        FragmentRepository $repository,
         ValidatorInterface $validator,
         EntityManagerInterface $em
     )
@@ -47,46 +47,46 @@ final class NarrativeDataPersister implements ContextAwareDataPersisterInterface
     }
 
     /**
-     * @param $narrativeDTO
+     * @param $fragmentDTO
      * @param array $context
      * @return bool
      */
-    public function supports($narrativeDTO, array $context = []): bool
+    public function supports($fragmentDTO, array $context = []): bool
     {
-        return $narrativeDTO instanceof NarrativeDTO;
+        return $fragmentDTO instanceof FragmentDTO;
     }
 
     /**
-     * @param $narrativeDTO
+     * @param $fragmentDTO
      * @param array $context
      * @return object|void
      * @throws \Exception
      */
-    public function persist($narrativeDTO, array $context = [])
+    public function persist($fragmentDTO, array $context = [])
     {
-        if (!$narrative = $this->repository->findOneByUuid($narrativeDTO->getUuid())) {
+        if (!$fragment = $this->repository->findOneByUuid($fragmentDTO->getUuid())) {
             // it's a new  narrative, this is an insert
-            $context= new DTOContext(new NarrativeDTOSave(), $narrativeDTO, $this->em);
+            $context= new DTOContext(new FragmentDTOSave(), $fragmentDTO, $this->em);
         }
         else {
             // narrative already exists, so it is an update
-            $context = new DTOContext(new NarrativeDTOUpdate(), $narrativeDTO, $this->em, ['narrative' => $narrative]);
+            $context = new DTOContext(new FragmentDTOUpdate(), $fragmentDTO, $this->em, ['fragment' => $fragment]);
         }
 
         return $context->proceed();
     }
 
     /**
-     * @param $narrativeDTO
+     * @param $fragmentDTO
      * @param array $context
      */
-    public function remove($narrativeDTO, array $context = [])
+    public function remove($fragmentDTO, array $context = [])
     {
-        $uuid = $narrativeDTO->getUuid();
-        if (!$narrative = $this->repository->findOneByUuid($uuid)) {
+        $uuid = $fragmentDTO->getUuid();
+        if (!$fragment = $this->repository->findOneByUuid($uuid)) {
             throw new NotFoundHttpException("No narrative found with uuid" . $uuid);
         }
-        $this->em->remove($narrative);
+        $this->em->remove($fragment);
         $this->em->flush();
     }
 }
