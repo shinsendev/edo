@@ -18,8 +18,6 @@ class FictionResourceGetTest extends AbstractIntegrationTest
         $this->assertEquals($arrayResponse['title'], 'Le Comte de Monte-Christo', 'Wrong fiction title');
         $this->assertEquals($arrayResponse['content'], '', 'Wrong fiction content');
         $this->assertEquals(8, count($arrayResponse['fragments']), 'Wrong narratives number.');
-        $this->assertEquals(1, count($arrayResponse['origins']), 'Wrong origins number.');
-        $this->assertEquals(3, count($arrayResponse['followings']), 'Wrong followings number');
         $this->assertEquals(10, count($arrayResponse['characters']), 'Wrong characters number');
     }
 }
