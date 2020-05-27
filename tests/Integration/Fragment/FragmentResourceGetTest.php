@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Fragment;
 
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+
 /**
  * Class NarrativeResourceTest
  * @package App\Tests\Integration
@@ -37,7 +43,14 @@ class FragmentResourceGetTest extends AbstractFragmentResource
         ]);
 
         $this->assertResponseIsSuccessful();
-        $arrayResponse = $response->toArray();
+        try {
+            $arrayResponse = $response->toArray();
+        } catch (ClientExceptionInterface $e) {
+        } catch (DecodingExceptionInterface $e) {
+        } catch (RedirectionExceptionInterface $e) {
+        } catch (ServerExceptionInterface $e) {
+        } catch (TransportExceptionInterface $e) {
+        }
         $this->assertCount(8, $arrayResponse['hydra:member']);
         $this->assertNotNull($arrayResponse['hydra:member'][0]['uuid']);
         $this->assertNotNull($arrayResponse['hydra:member'][0]['content']);

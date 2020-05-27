@@ -9,6 +9,8 @@ namespace App\Component\DTO\Composition;
  */
 trait TreeableTrait
 {
+    protected $position;
+
     protected $lft;
 
     protected $lvl;
@@ -20,6 +22,22 @@ trait TreeableTrait
     protected $parentUuid;
 
     protected $children;
+
+    /**
+     * @return mixed
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param mixed $position
+     */
+    public function setPosition($position): void
+    {
+        $this->position = $position;
+    }
 
     /**
      * @return mixed
