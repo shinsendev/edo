@@ -5,10 +5,8 @@ namespace App\Tests\Unit;
 
 use App\Component\Date\DateTimeHelper;
 use App\Component\DTO\Model\FragmentDTO;
-use App\Component\DTO\Model\NarrativeDTO;
 use App\Component\DTO\Strategy\DTOContext;
 use App\Component\DTO\Strategy\Narrative\Save\FragmentDTOSave;
-use App\Component\DTO\Strategy\Narrative\Save\NarrativeDTOSave;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 
